@@ -1,0 +1,88 @@
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Arrays;
+import java.util.Collections;
+import java.io.InputStreamReader;
+import java.io.PrintWriter;
+import java.io.BufferedReader;
+import java.util.LinkedList;
+import java.util.Locale;
+import java.util.Iterator;
+import java.util.Stack;
+import java.util.Set;
+import java.util.HashSet;
+import java.util.TreeSet;
+import java.util.Map;
+import java.util.HashMap;
+import java.util.TreeMap;
+import java.util.BitSet;
+import java.lang.StringBuilder;
+import java.util.Queue;
+import java.util.Objects;
+import java.util.PriorityQueue;
+public class UvaProblems {
+
+    public static void main(String[] args) throws Exception {
+        BufferedReader in = new BufferedReader(new InputStreamReader(System.in));
+        PrintWriter out = new PrintWriter(System.out);
+        Locale.setDefault(new Locale("en", "US"));
+        
+        
+        int n = Integer.parseInt(in.readLine());
+        String juez, competidor, veredicto;
+        int cont = 1;
+        while(n>0) {
+        	competidor = in.readLine();
+        	veredicto = "";
+        	juez = in.readLine();	
+        	veredicto = obtenerVeredicto(competidor, juez);
+        	out.println("Case "+cont+": "+veredicto	);
+        	cont++;
+        	n--;
+        }
+        out.flush();
+    }
+    private static String obtenerVeredicto(String competidor, String juez) {
+    	String veredicto = "Yes";
+    	StringBuilder nuevoCompetidor = new StringBuilder();
+    	StringBuilder nuevoJuez = new	 StringBuilder();
+    	
+    	for(int i = 0; i<competidor.length(); i++) {
+    		if(competidor.charAt(i) != ' ') {
+    			nuevoCompetidor.append(competidor.charAt(i));
+    		}
+    	}
+    	for(int j = 0; j<juez.length(); j++) {
+    		if(juez.charAt(j) != ' ') {
+    			nuevoJuez.append(juez.charAt(j));
+    		}
+    	}
+    	//System.out.println(nuevoCompetidor+" "+nuevoJuez);
+    	if(nuevoCompetidor.length() != nuevoJuez.length()) {
+    		veredicto = "Wrong Answer";
+    		return veredicto;
+    	}
+    	else {
+    		for(int i = 0; i<nuevoCompetidor.length(); i++) {
+    			if(nuevoCompetidor.charAt(i) != nuevoJuez.charAt(i)) {
+    				veredicto = "Wrong Answer";
+    				return veredicto;
+    			}
+    		}
+    		if(juez.length()!= competidor.length()) {
+    			veredicto = "Output Format Error";
+    			return veredicto;
+    		}
+    		else {
+    			for(int j = 0; j<competidor.length();j++) {
+    				if(competidor.charAt(j) != juez.charAt(j)) {
+    					veredicto = "Wrong Answer";
+    					return veredicto;
+    				}
+    			}
+    		}
+    	}
+    	
+    	return veredicto;
+    }
+}

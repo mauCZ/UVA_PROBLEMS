@@ -1,0 +1,63 @@
+#include <cstdio>
+#include<bits/stdc++.h> 
+using namespace std;
+
+int laberinto[1000][1000];
+int distancias[1000][1000];
+
+typedef pair<int,int> ii;
+typedef pair<ii,int> iii;
+
+bool comparador(iii a, iii b){
+    return a.second > b.second;
+}
+bool posicionValida(int i,int j,int filas,int columnas){
+    return i>=0&&i<filas&&j>=0&&j<columnas;
+}
+void dijkstra(int i,int j,int filas,int columnas){
+    priority_queue<iii,vector<iii>,decltype(&comparador)> pq(comparador);
+    distancias[i][j] = laberinto[i][j];
+    pq.push({{i,j},laberinto[i][j]});
+
+    while(!pq.empty()){
+        iii actual = pq.top(); pq.pop();
+        int x = actual.first.first;
+        int y = actual.first.second;
+        int acumulado = actual.second;
+        if(acumulado > distancias[x][y]) continue;
+        for(int a = x-1; a<=x+1; a++){
+            for(int b = y-1; b<=y+1; b++){
+                if(posicionValida(a,b,filas,columnas) && ((a==x-1&&b==y)||(a==x&&b==y-1)||(a==x&&b==y+1)||(a==x+1&&b==y))){
+                    if(distancias[x][y] + laberinto[a][b] < distancias[a][b]){
+                        distancias[a][b] = distancias[x][y] + laberinto[a][b];
+                        pq.push({{a,b},distancias[a][b]});
+                    }
+                }
+            }
+        }
+    }
+}
+
+int main()
+{   
+    ofstream out("output.txt");
+    //ifstream in("input2.txt");
+
+    int n,filas,columnas;
+    cin>>n;
+    while(n--){
+        scanf("%d",&filas);
+        scanf("%d",&columnas);
+        for(int i = 0; i<filas; i++){
+            for(int j = 0; j<columnas; j++){
+                scanf("%d",&laberinto[i][j]);
+                distancias[i][j] = 1000000000;
+            }
+        }
+        dijkstra(0,0,filas,columnas);
+        cout<<distancias[filas-1][columnas-1]<<endl;
+    }
+
+    return 0;
+}
+

@@ -1,0 +1,41 @@
+#include<bits/stdc++.h>
+#include <cstdio>   
+#define pb          push_back 
+#define endl        "\n"
+#define mostrar(x,y) cout<<x<<" "<<y<<endl;
+#define f           first
+#define s           second
+#define mod         1000000007
+#define EPS         1e-9
+using namespace std;
+typedef pair<int,int> ii;
+typedef pair<pair<int,int>,int> iii;
+typedef vector<int> vi;
+typedef vector<pair<int,int>> vii;
+typedef long long ll;
+
+
+
+int main(){
+    ofstream out("output.txt");
+
+
+    string cad;
+    while(cin>>cad &&cad!="#"){
+        int ind = cad.size()-1;
+        while(cad[ind-1]>=cad[ind] && ind>=0){
+            ind--;
+        }
+        //cout<<ind<<endl;
+        if(ind == 0){
+            cout<<"No Successor\n";
+        }
+        else{
+            next_permutation(cad.begin(),cad.end());
+            cout<<cad<<endl;
+        }
+    }    
+
+    return 0;
+}
+

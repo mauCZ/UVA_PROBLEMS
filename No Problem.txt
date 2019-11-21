@@ -1,0 +1,52 @@
+#include <cstdio>
+#include<bits/stdc++.h>
+using namespace std;
+
+int main(){
+    ofstream out("output.txt");
+    int n,mes,cant,i,j;
+    int total,cont = 1;
+    while(cin>>n && n>=0){
+        vector<int> necesitas;
+        total = 0;
+        vector<int> tienes;
+        for(i = 0; i<12; i++){
+            scanf("%d",&mes);
+            tienes.push_back(mes);
+        }
+        for(i = 0; i<12; i++){
+            scanf("%d",&cant);
+            necesitas.push_back(cant);
+        }
+        cout<<"Case "<<cont<<":"<<endl;
+        out<<"Case "<<cont<<":"<<endl;
+        if(n<necesitas[0]){
+            cout<<"No problem. :("<<endl;
+            out<<"No problem. :("<<endl;
+            total += n;
+        }
+        else{
+            cout<<"No problem! :D"<<endl;
+            out<<"No problem! :D"<<endl;
+            total += n;
+            total -= necesitas[0];
+        }
+        for(i = 1; i<12; i++){
+            if(tienes[i-1]+total < necesitas[i]){
+                total += tienes[i-1];
+                cout<<"No problem. :("<<endl;
+                out<<"No problem. :(\n";
+            }
+            else{
+                total += tienes[i-1];
+                cout<<"No problem! :D"<<endl;
+                out<<"No problem! :D"<<endl;
+                total -= necesitas[i];
+            }
+        }
+        cont++;
+    }
+    return 0;
+}
+
+

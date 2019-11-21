@@ -1,0 +1,128 @@
+#include<bits/stdc++.h>
+#include <cstdio>   
+#define pb          push_back 
+#define endl        "\n"
+#define mostrar(x,y) cout<<x<<" "<<y<<endl;
+#define f           first
+#define s           second
+#define mod         1000000007
+#define EPS         1e-9
+using namespace std;
+typedef pair<int,int> ii;
+typedef pair<pair<int,int>,int> iii;
+typedef vector<int> vi;
+typedef vector<pair<int,int>> vii;
+typedef long long ll;
+
+vi tiempos;
+vi datos;
+vi estados;
+
+bool todoVerde(){
+    int l = estados.size();
+    int verdesStart = 0;
+    for(int i = 0; i<l; i++){
+        if(estados[i] != 1 && estados[i] != -1) return false;
+        if(estados[i] == -1) verdesStart++;
+    }
+    if(verdesStart == l) return false;
+    return true;
+}
+
+int main(){
+    ofstream out("output.txt");
+
+    
+    int a,b,c;
+
+    while(cin>>a>>b>>c && (a!=0||b!=0||c!=0)){
+        if(c == 0){
+            datos.pb(a);
+            datos.pb(b);
+            estados.pb(-1);
+            estados.pb(-1);
+            tiempos.pb(0);
+            tiempos.pb(0);
+        }
+        else{
+            datos.pb(a);
+            datos.pb(b);
+            datos.pb(c);
+            estados.pb(-1);
+            estados.pb(-1);
+            estados.pb(-1);
+            tiempos.pb(0);
+            tiempos.pb(0);
+            tiempos.pb(0);
+            while(cin>>a&&a!=0){
+                datos.pb(a);
+                estados.pb(-1);
+                tiempos.pb(0);
+            }
+        }
+        /*for(int i = 0; i<datos.size(); i++){
+            cout<<tiempos[i]<<" "<<estados[i]<<" "<<datos[i]<<endl;
+        }*/
+        int segundos = 0;
+        int l = datos.size();
+        while(segundos<=18001&&!todoVerde()){
+            for(int i = 0; i<l; i++){
+                if(estados[i] == -1){
+                    if(tiempos[i] == datos[i]-5){
+                        estados[i] = 2;
+                        tiempos[i] = 0;
+                    }
+                    
+                        tiempos[i]++;
+                }
+                else if(estados[i] == 1){
+                    if(tiempos[i] == datos[i]-5){
+                        estados[i] = 2;
+                        tiempos[i] = 0;
+                    }
+                      
+                        tiempos[i]++;
+                }
+                else if(estados[i] == 2){
+                    if(tiempos[i] == 5){
+                        estados[i] = 3;
+                        tiempos[i] = 0;
+                    }
+                      
+                        tiempos[i]++;
+                }
+                else if(estados[i] == 3){
+                    if(tiempos[i] == datos[i]){
+                        estados[i] = 1;
+                        tiempos[i] = 0;
+                    }
+                    
+                        tiempos[i]++;
+                }
+            }
+            segundos++;
+        }
+        segundos--;
+        int hora = segundos / 3600;
+        int minuto = (segundos%3600)/60;
+        int segundo = (segundos%3600)%60;
+
+        if(segundos>18000){
+            cout<<"Signals fail to synchronise in 5 hours\n";
+            out<<"Signals fail to synchronise in 5 hours\n";
+        }
+        else{
+            //cout<<segundos<<endl;
+            cout<<((hora<=9)?"0":"")<<hora<<":"<<((minuto<=9)?"0":"")<<minuto<<":"<<((segundo<=9)?"0":"")<<segundo<<endl;
+            out<<((hora<=9)?"0":"")<<hora<<":"<<((minuto<=9)?"0":"")<<minuto<<":"<<((segundo<=9)?"0":"")<<segundo<<endl;
+        }
+
+        tiempos.clear();
+        estados.clear();
+        datos.clear();
+    }
+
+
+    return 0;
+}
+

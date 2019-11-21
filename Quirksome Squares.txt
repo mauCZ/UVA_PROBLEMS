@@ -1,0 +1,164 @@
+import java.util.ArrayList;
+import java.util.LinkedHashMap;
+import java.util.List;
+import java.util.Arrays;
+import java.util.Collections;
+import java.io.InputStreamReader;
+import java.io.PrintWriter;
+import java.io.BufferedReader;
+import java.util.LinkedList;
+import java.util.Locale;
+import java.util.Iterator;
+import java.util.Stack;
+import java.util.Set;
+import java.util.HashSet;
+import java.util.TreeSet;
+import java.util.Map;
+import java.util.HashMap;
+import java.util.TreeMap;
+import java.util.BitSet;
+import java.lang.StringBuilder;
+import java.util.Queue;
+import java.util.Objects;
+import java.util.PriorityQueue;
+public class UvaProblems {
+
+    public static void main(String[] args) throws Exception {
+        BufferedReader in = new BufferedReader(new InputStreamReader(System.in));
+        PrintWriter out = new PrintWriter(System.out);
+        Locale.setDefault(new Locale("en", "US"));
+       
+        String a;
+        long num ;
+        long part1, part2;
+        String numero;
+        String respuesta2 = "00\n01\n81";
+        String respuesta4 = "0000\n" + "0001\n" + "2025\n" + "3025\n" + "9801";
+        String respuesta6 = "000000\n" + "000001\n" + "088209\n" + "494209\n" + "998001";
+        String respuesta8 = "00000000\n" + "00000001\n" + "04941729\n" + "07441984\n" + "24502500\n" + "25502500\n" + "52881984\n" + "60481729\n" + "99980001";
+        int n1, n2, cont = 0;
+
+        /*for(int i = 0; i<=99; i++) {
+        	numero = "";
+        	if(i<10)
+        		numero+=("0"+i);
+        	else
+        		numero+=(i);
+        	n1 = Integer.parseInt(numero.substring(0, numero.length()/2));
+        	n2 = Integer.parseInt(numero.substring((numero.length()/2), numero.length()));
+        	if(((n1+n2)*(n1+n2)) == i)
+        		if(cont == 0) {
+        			respuesta2+=(numero); cont++;}
+        		else {
+        			respuesta2+=("\n"+numero);cont++;}
+        	
+        }
+        cont = 0;
+        for(int j = 0; j<=9999; j++) {
+        	numero = "";
+        	if(j<10)
+        		numero += ("000"+j);
+        	else if(j<100)
+        		numero+= ("00"+j);
+        	else if(j<1000)
+        		numero+= ("0"+j);
+        	else
+        		numero+= (j);
+
+        	n1 = Integer.parseInt(numero.substring(0, numero.length()/2));
+        	n2 = Integer.parseInt(numero.substring((numero.length()/2), numero.length()));
+        	if(((n1+n2)*(n1+n2)) == j) {
+        		if(cont == 0) {
+        			respuesta4 += (numero);
+        			cont++;
+        		}
+        		else {
+        			respuesta4+= ("\n"+numero);
+        			cont++;
+        		}
+        	}
+        }
+        cont = 0;
+        for(int l = 0; l<= 999999; l++) {
+        	numero = "";
+        	if(l<10)
+        		numero += ("00000"+l);
+        	else if(l<100)
+        		numero+=("0000"+l);
+        	else if(l<1000)
+        		numero+=("000"+l);
+        	else if(l<10000)
+        		numero+=("00"+l);
+        	else if(l<100000)
+        		numero+=("0"+l);
+        	else
+        		numero+=(l);
+
+        	n1 = Integer.parseInt(numero.substring(0, numero.length()/2));
+        	n2 = Integer.parseInt(numero.substring((numero.length()/2), numero.length()));
+        	if(((n1+n2)*(n1+n2)) == l)
+        		if(cont == 0) {
+        			respuesta8 += numero;
+        			cont++;
+        		}
+        		else {
+        			respuesta8+=("\n"+numero);
+        			cont++;
+        		}
+        		
+        	
+        }
+        cont = 0;
+        for(long k = 0; k<= 99999999; k++) {
+        	numero = "";
+        	if(k<10)
+        		numero += ("0000000"+k);
+        	else if(k<100)
+        		numero+=("000000"+k);
+        	else if(k<1000)
+        		numero+=("00000"+k);
+        	else if(k<10000)
+        		numero+=("0000"+k);
+        	else if(k<100000)
+        		numero+=("000"+k);
+        	else if(k<1000000)
+        		numero+=("00"+k);
+        	else if(k<10000000)
+        		numero+=("0"+k);
+        	else
+        		numero+=(k);
+
+        	n1 = Integer.parseInt(numero.substring(0, numero.length()/2));
+        	n2 = Integer.parseInt(numero.substring((numero.length()/2), numero.length()));
+        	if(((n1+n2)*(n1+n2)) == k)
+        		if(cont == 0) {
+        			respuesta8 += numero;
+        			cont++;
+        		}
+        		else {
+        			respuesta8+=("\n"+numero);
+        			cont++;
+        		}
+        		
+        }*/
+        while((a = in.readLine()) != null) {
+        	
+        	num = Long.parseLong(a);
+        	if(num == 2) {
+        		System.out.println(respuesta2);
+        	}
+        	else if(num == 4) {
+        		System.out.println(respuesta4);
+        	}
+        	else if ( num == 6){
+        		System.out.println(respuesta6);
+        	}
+        	else {
+        		System.	out.println(respuesta8);
+        	}
+        	
+        }
+        
+        out.flush();
+    }
+}

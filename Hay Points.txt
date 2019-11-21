@@ -1,0 +1,31 @@
+                        #include <iostream>
+                        #include <cstdio>
+                        #include <map>
+                        #include <unordered_map>
+                        #include <fstream>
+                        #include <string>
+                        using namespace std;
+
+                        int main()
+                        {
+                            int m,n, valor;
+                            cin>>m>>n;
+                            string palabra;
+                            map<string, int> mapa;
+                            int total;
+                            for(int i = 0; i<m; i++){
+                                cin>>palabra>>valor;
+                                mapa[palabra] = valor;
+                            }
+                            cin.ignore();
+                            for(int j = 0; j<n;j++){
+                                total = 0;
+                                while(cin>>palabra,palabra != "."){
+                                    if(mapa.find(palabra) != mapa.end()){
+                                        total += mapa[palabra];
+                                    }
+                                }
+                                cout<<total<<endl;
+                            }
+                            return 0;
+                        }

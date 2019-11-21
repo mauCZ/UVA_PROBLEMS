@@ -1,0 +1,88 @@
+#include<bits/stdc++.h>
+using namespace std;
+
+char mapa[100][100];
+int visitado[100][100];
+
+void rellenar(string &fila, int filas){
+    for(int i = 0; i<fila.size(); i++){
+        mapa[filas][i] = fila[i];
+        visitado[filas][i] = -1;
+    }
+}
+void limpiar(int i, int j, int maxX, int maxY){
+    visitado[i][j] = -1;
+
+    for(int a = i-1; a<=i+1; a++){
+        for(int b = j-1; b<=j+1; b++){
+            if(a>=0 && a<maxX && b>=0 && b<maxY &&  (   a!=i || b!=j ) ){
+                if(mapa[a][b] == 'W' && visitado[a][b] == 1){
+                    limpiar(a,b,maxX,maxY);
+                }
+            }
+        }
+    }
+}
+int dfs(int i, int j, int maxX, int maxY){
+    visitado[i][j] = true;
+    int componentes = 1;
+    bool unico = true;
+    for(int a = i-1; a<=i+1; a++){
+        for(int b = j-1; b<=j+1; b++){
+            if(a>=0 && a<maxX && b>=0 && b<maxY &&  (  a!=i || b!=j ) ){
+                if(mapa[a][b] == 'W' && visitado[a][b] == -1){
+                    unico = false;
+                    componentes += dfs(a,b,maxX,maxY);
+                }
+            }
+        }
+    }
+    if(unico) return 1;
+    return componentes;
+}
+
+int main()
+{
+    ofstream out("output.txt");
+    //ifstream in("input.txt");
+    stringstream s;
+    int n,x,y,columnas,filas,wetlands,cont = 0;
+    cin>>n;
+    string fila,pares;
+    getchar();
+    getchar();
+    while(n--){
+
+        if(cont>0) cout<<"\n";
+        if(cont>0) out<<"\n";
+        filas = 0;
+        while(getline(cin,fila) && (fila[0] == 'L' || fila[0] == 'W')){
+            if(filas == 0) columnas = fila.size(); //POR LA EFICIENCIA PS :P
+            rellenar(fila,filas);
+            filas++;
+        }
+        s<<fila;
+        s>>x;
+        s>>y;
+        s.str("");
+        s.clear();
+
+        wetlands = dfs(x-1,y-1,filas,columnas);
+        limpiar(x-1,y-1,filas,columnas);
+
+        cout<<wetlands<<endl;
+        while(getline(cin,pares) && pares.size() != 0){
+            s<<pares;
+            s>>x;
+            s>>y;
+            s.str("");
+            s.clear();
+            wetlands = dfs(x-1,y-1,filas,columnas);
+            limpiar(x-1,y-1,filas,columnas);
+            cout<<wetlands<<endl;
+        }
+        cont++;
+    }
+
+    return 0;
+}

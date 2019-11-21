@@ -1,0 +1,107 @@
+import java.util.ArrayList;
+import java.util.Calendar;
+import java.util.LinkedHashMap;
+import java.util.List;
+import java.util.Arrays;
+import java.util.Collections;
+import java.util.GregorianCalendar;
+import java.io.InputStreamReader;
+import java.io.PrintWriter;
+import java.io.BufferedReader;
+import java.util.LinkedList;
+import java.util.Locale;
+import java.util.Iterator;
+import java.util.Stack;
+import java.util.Set;
+import java.util.HashSet;
+import java.util.TreeSet;
+import java.util.Map;
+import java.util.HashMap;
+import java.util.TreeMap;
+import java.util.BitSet;
+import java.util.Calendar;
+import java.lang.StringBuilder;
+import java.util.Queue;
+import java.util.Objects;
+import java.util.PriorityQueue;
+public class UvaProblems {
+
+    public static void main(String[] args) throws Exception {
+        BufferedReader in = new BufferedReader(new InputStreamReader(System.in));
+        PrintWriter out = new 	PrintWriter(System.out);
+        Locale.setDefault(new Locale("en", "US"));
+        
+        String a, verticesNoVisitados;
+        String[] b;
+        int i;
+        int nroVertices, v1, v2, verticesNoAccesibles;
+        HashMap<Integer, ArrayList<Integer>> grafo;
+        HashMap<Integer,Integer> visitados;
+        boolean primero;
+        while(!(a = in.readLine()).equals("0")) {
+        	grafo = new HashMap<>(); //DESPUES INTETAREMOS VACIAR EL GRAFO EN VEZ DE CREAR UNO NUEVO PARA VER CUANTO MEJORA EL TIEMPO DE EJECUCION
+        	nroVertices = Integer.parseInt(a);
+        	visitados = new HashMap<>();
+        	for(i = 1; i<=nroVertices; i++) {
+        		grafo.put(i,new ArrayList<>());
+        		visitados.put(i, 0);
+        	}
+        	while(!(a = in.readLine()).equals("0")) {
+        		b = a.split(" ");
+        		v1 = Integer.parseInt(b[0]);
+        		for(i = 1; i<b.length-1; i++) {
+        			v2 = Integer.parseInt(b[i]);
+        			grafo.get(v1).add(v2);
+        		}
+        	}
+        	a = in.readLine();
+        	b = a.split(" ");
+        	
+        	for(i = 1; i <= Integer.parseInt(b[0]); i++) {
+        		verticesNoAccesibles = 0;
+        		verticesNoVisitados = "";
+        		primero = false;
+        		
+        		dfs(grafo, Integer.parseInt(b[i]), visitados,Integer.parseInt(b[i]));
+        		
+        		for(int ver : visitados.keySet()) {
+        			if(ver == Integer.parseInt(b[i])) {
+        				if(visitados.get(ver) <2) {
+        					verticesNoAccesibles++;
+        					verticesNoVisitados += " "+ver;
+        				}
+        			}
+        			else {
+        				if(visitados.get(ver) == 0) {
+            				verticesNoAccesibles++;
+            				verticesNoVisitados += " "+ver;
+            			}	
+        			}
+        		}
+        		for(int ver : visitados.keySet()) {
+        			visitados.put(ver,0);
+        		}
+        		out.println(verticesNoAccesibles + verticesNoVisitados);
+        	}
+        	
+        }
+        
+        out.flush();
+	}
+    public static void dfs(HashMap<Integer,ArrayList<Integer>> grafo, int vertice, HashMap<Integer,Integer> visitados,int primero) {
+    	visitados.put(vertice, visitados.get(vertice)+1);
+    	ArrayList<Integer> vecinos = grafo.get(vertice);
+    	for(int vecino : vecinos) {
+    		if(vecino == primero) {
+    			if(visitados.get(vecino) <2) {
+    				dfs(grafo, vecino, visitados, primero);
+    			}
+    		}
+    		else {
+    			if(visitados.get(vecino) == 0) {
+            		dfs(grafo, vecino, visitados, primero);	
+        		}	
+    		}
+    	}
+    }
+}

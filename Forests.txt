@@ -1,0 +1,50 @@
+#include <cstdio>
+#include<bits/stdc++.h> 
+#define pb          push_back 
+#define endl        "\n"
+#define mostrar(x,y) cout<<x<<" "<<y<<endl;
+using namespace std;
+typedef pair<int,int> ii;
+typedef vector<int> vi;
+typedef vector<pair<int,int>> vii;
+
+map<int,set<int>> opiniones;
+map<set<int>,int> mapa;
+
+int main(){
+    ofstream out("output.txt");
+    istringstream s;
+    int n,arboles,personas,persona,arbol,cont = 0,sinOpinion;
+    cin>>n;
+    string datos;
+    while(n--){
+        if(cont>0){
+            cout<<endl;
+            out<<endl;
+        } 
+        cin>>personas>>arboles;
+        cin.ignore();
+        
+        while(getline(cin,datos)&&!datos.empty()){
+            s.str(datos);
+            s>>persona>>arbol;
+            s.clear();
+            opiniones[persona].insert(arbol);
+        }
+        sinOpinion = personas-opiniones.size();
+        if(sinOpinion>0) sinOpinion = 1;
+        for(auto it = opiniones.begin();it!=opiniones.end();it++){
+            if(mapa.find(it->second) == mapa.end()){
+                mapa[it->second] = 1;
+            }
+            else{
+                mapa[it->second]++;
+            }
+        }
+        cout<<mapa.size()+sinOpinion<<endl;
+        mapa.clear();
+        opiniones.clear();
+        cont++;
+    }
+    return 0;
+}

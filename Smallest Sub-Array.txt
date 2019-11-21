@@ -1,0 +1,88 @@
+#include <iostream>
+#include <vector>
+#include <fstream>
+#include <algorithm>
+#include <map>
+#include <set>
+#include <unordered_map>
+using namespace std;
+ 
+#define pb push_back
+#define f first
+#define s second
+#define endl '\n'
+#define EPS 1e-9
+#define PI acos(-1)
+ 
+using ll = long long;
+using ii = pair<int,int>;
+using vi = vector<int>;
+using vll = vector<ll>;
+using ui = unsigned int;
+
+int b[11000000];
+
+ll min(ll a,ll b){
+	if(a<b) return a;
+	return b;
+}
+bool correcto(int k){
+	for(int i=1;i<=k;i++){
+		if(b[i]<=0) return false;
+	}
+	return true;
+}
+int main() {
+    ofstream out("output.txt");
+    ios_base::sync_with_stdio(false);
+    
+    int t;
+    cin>>t;
+
+    for(int x =1;x<=t;x++){
+
+    	ll n,m,k;
+    	cin>>n>>m>>k;
+    	ll a[n+10];
+
+    	a[0] = -1;
+    	a[1] = 1;
+    	a[2] = 2;
+    	a[3] = 3;
+    	for(int i =4;i<=n;i++){
+    		a[i] = (a[i-1]+a[i-2]+a[i-3]) % m;
+    		a[i]++;
+    	}
+    	for(int i =1;i<=k;i++){
+    		b[i] = 0;
+    	}
+    	ll minimo = 10000000000000000;
+    	int i =1,j = 1;
+    	bool ok = true;
+    	while(i<=n && j<=n){
+    		if(ok){
+    			if(a[i]>=1 && a[i]<=k){
+    				b[a[i]]++;
+    			}
+    		}
+    		if(correcto(k)){
+    			minimo = min(minimo, i-j+1);
+    			b[a[j]]--;
+    			j++;
+    			if(j>i){
+    				i++;
+    				ok = true;
+    			}
+    			else ok = false;
+    		}
+    		else{
+    			i++;
+    			ok = true;
+    		}
+    	}
+    	if(minimo == 10000000000000000) cout<<"Case "<<x<<": sequence nai"<<endl;
+    	else cout<<"Case "<<x<<": "<<minimo<<endl;
+    }
+    
+    return 0;
+}

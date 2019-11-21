@@ -1,0 +1,77 @@
+#include<bits/stdc++.h>
+#define llenar(a,val)   memset(a,val,sizeof(a))
+#define pb          push_back 
+#define endl        "\n"
+#define mostrar(x,y) cout<<x<<" "<<y<<endl;
+#define f           first
+#define s           second
+#define mod         1000000007
+#define EPS         1e-9
+#define PI          acos(-1)
+using namespace std;
+typedef pair<int,int> ii;
+typedef pair<pair<int,int>,int> iii;
+typedef vector<int> vi;
+typedef long long ll;
+typedef vector<pair<ll,ll>> vii;
+typedef vector< pair<pair<int,int>,int> > viii;
+ 
+
+ 
+int main(){
+    ofstream out("output.txt");
+
+    int q,cont =1;
+    cin>>q;
+    while(q--){
+    	int n;
+    	cin>>n;
+    	int alturas[n],anchuras[n];
+    	int lis[n],lds[n];
+    	for(int i =0;i<n;i++){
+    		cin>>alturas[i];
+    	}
+       	for(int i =0;i<n;i++){
+    		cin>>anchuras[i];
+    		lis[i] = anchuras[i];
+    		lds[i] = anchuras[i];
+    	}
+    	for(int i =0;i<n;i++){
+    		int actual =0;
+    		for(int j =0;j<i;j++){
+    			if(alturas[j] < alturas[i]){
+    				actual = max(actual,lis[j]);
+    			}
+    		}
+    		lis[i] += actual;
+    	}
+    	for(int i =0;i<n;i++){
+    		int actual =0;
+    		for(int j =0;j<i;j++){
+    			if(alturas[j] > alturas[i]){
+    				actual = max(actual,lds[j]);
+    			}
+    		}
+    		lds[i] += actual;
+    	}
+    	int LIS = 0, LDS = 0;
+    	for(int i =0;i<n;i++){
+    		LIS = max(LIS,lis[i]);
+    	}
+    	for(int i =0;i<n;i++){
+    		LDS = max(LDS,lds[i]);
+    	}
+    	if(LIS >= LDS){
+    		cout<<"Case "<<cont<<". Increasing ("<<LIS<<"). Decreasing ("<<LDS<<")."<<endl;
+    		out<<"Case "<<cont<<". Increasing ("<<LIS<<"). Decreasing ("<<LDS<<")."<<endl;
+    	}
+    	else{
+    		cout<<"Case "<<cont<<". Decreasing ("<<LDS<<"). Increasing ("<<LIS<<")."<<endl;
+    		out<<"Case "<<cont<<". Decreasing ("<<LDS<<"). Increasing ("<<LIS<<")."<<endl;
+    	}
+    	cont++;
+    }
+
+    return 0;
+}
+

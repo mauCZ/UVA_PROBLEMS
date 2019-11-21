@@ -1,0 +1,79 @@
+#include <cstdio>
+#include<bits/stdc++.h> 
+using namespace std;
+
+int discos[100000000];
+vector<int> numeros;
+vector<int> final;
+int total;
+
+bool backtrack(int suma,int ind, int indMax, int acumulado){
+    if(acumulado == suma){
+        total = acumulado;
+        return true;
+    }
+    else if( acumulado > suma){
+        return false;
+    }
+    else if(acumulado < suma && ind == indMax){
+        if(acumulado>total){
+            final = numeros;
+            total = acumulado;
+        }
+        return false;   
+    }
+    else{
+        for(int i = ind; i< indMax; i++){
+            acumulado += discos[i];
+            numeros.push_back(discos[i]);
+            
+            bool terminado = backtrack(suma, i+1, indMax, acumulado);   
+            
+            if(terminado){
+                return true;
+            }
+            numeros.erase(numeros.begin()+numeros.size()-1);
+            acumulado -= discos[i];
+            if(acumulado > total){
+                total = acumulado;
+                final = numeros;
+            }
+        }
+        return false;
+    }
+}
+
+int main()
+{   
+    ofstream out("output.txt");
+    //ifstream in("input2.txt");
+    
+    int n,nroDiscos,ind,acumulado;
+    while(cin>>n){
+        cin>>nroDiscos;
+        
+        total = 0;
+        for(int i = 0; i<nroDiscos; i++){
+            cin>>discos[i];
+            
+        }
+        
+        bool res = backtrack(n,0,nroDiscos,0);
+
+        if(res)
+            for(int i = 0; i<numeros.size(); i++){
+                cout<<numeros[i]<<" ";
+            }
+        else
+            for(int i = 0; i<final.size(); i++){
+                cout<<final[i]<<" ";
+            }
+        cout<<"sum:"<<total<<endl;
+        
+        numeros.clear();
+        final.clear();
+    }
+
+    return 0;
+}
+

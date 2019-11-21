@@ -1,0 +1,77 @@
+#include <cstdio>
+#include<bits/stdc++.h> 
+#define pb          push_back 
+#define endl        "\n"
+#define mostrar(x,y) cout<<x<<" "<<y<<endl;
+#define f           first
+#define s           second
+using namespace std;
+typedef pair<int,int> ii;
+typedef vector<int> vi;
+typedef vector<pair<int,int>> vii;
+
+vii estaciones;
+bool criterio(ii a,ii b){
+    if(a.f < b.f) return true;
+    if(b.f<a.f)   return false;
+    return a.s>b.s;
+}
+int main()
+{   
+    ofstream out("output.txt");
+    //ifstream in("input2.txt");
+    bool hayRespuesta;
+    int l,g,puesto,radio;
+    ii estacion,actual;
+    int L,R;
+    vii segmentos;
+
+    while(cin>>l>>g &&(l!=0||g!=0)){
+        for(int i = 0; i<g; i++){
+            cin>>puesto>>radio;
+            estaciones.pb({puesto-radio,puesto+radio});
+        }
+        sort(estaciones.begin(),estaciones.end(),criterio);
+
+        hayRespuesta = true;
+        R = estaciones[0].s;
+        if(estaciones[0].f>0) hayRespuesta = false;
+        for(int i = 0; i<(g-1)&&hayRespuesta; i++){
+            if(estaciones[i+1].f > R){
+                hayRespuesta = false;
+            }
+            R = max(max(estaciones[i+1].s,estaciones[i].s),R);
+        }
+        if(R < l && hayRespuesta) hayRespuesta = false;
+
+        if(hayRespuesta){
+            L = 0; R = 0;
+            actual = estaciones[0];
+            for(int i = 0; i<g; i++){//RECORREMOS LOS SEGMENTOS PARA VER LA MEJOR RESPUESTA DE CUBRIMIENTO
+                estacion = estaciones[i];
+                if(estacion.s > R){//SI LA COLA MEJORA A LO QUE YA HAY EN R
+                    if(estacion.f > L){
+                        segmentos.pb(actual);
+                        L = actual.s;
+                    }
+                    R = estacion.s;
+                    actual = estacion;
+                }
+            }
+            if(L<l){
+                segmentos.pb(actual);
+            }
+            cout<<g-segmentos.size()<<endl;
+            out<<g-segmentos.size()<<endl;
+        }
+        else{
+            cout<<-1<<endl;
+            out<<-1<<endl;
+        }
+        segmentos.clear();
+        estaciones.clear();
+    }
+
+    return 0;
+}
+

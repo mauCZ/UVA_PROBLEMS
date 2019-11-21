@@ -1,0 +1,75 @@
+#include <cstdio>
+#include<bits/stdc++.h> 
+#define pb          push_back 
+#define endl        "\n"
+#define mostrar(x,y) cout<<x<<" "<<y<<endl;+
+#define f           first
+#define s           second
+using namespace std;
+typedef pair<int,int> ii;
+typedef pair<pair<int,int>,int> iii;
+typedef vector<int> vi;
+typedef vector<pair<int,int>> vii;
+
+bool criterio(ii a,ii b){
+    if(abs(a.f-a.s)>abs(b.f-b.s)) return true;
+    if(abs(a.f-a.s)<abs(b.f-b.s)) return false;
+    return a.f < b.f;
+}
+
+int main()
+{   
+    ofstream out("output.txt");
+    //ifstream in("input2.txt");
+    int n,paradas,num,maximo,sumAct,start,end,aux;
+    int numeros[20010];
+    vii respuestas;
+    cin>>n;
+    for(int i = 1; i<=n; i++){
+        cin>>paradas;
+        for(int i = 0; i<paradas-1; i++){
+            cin>>numeros[i];
+        }
+
+        maximo = 0;
+        sumAct = 0;
+        end = 0;
+        start = 0;
+        aux = 0;
+        //SACAMOS EL VALOR MAXIMO POSIBLE
+        for(int i = 0; i<paradas-1; i++){
+            sumAct += numeros[i];
+            maximo = max(maximo,sumAct);
+            if(sumAct<0) sumAct = 0;
+        }
+        //VOLVEMOS A ITERAR PARA SACAR LOS SUBARRAYS QUE FORMAN LA MAX SUMA, MAS DE 1 POSIBLE respuestas
+        sumAct = 0;
+        for(int i = 0; i<paradas-1; i++){
+            sumAct += numeros[i];
+            if(sumAct == maximo){
+                start = aux;
+                end = i;
+                respuestas.pb({start,end});
+            }
+            if(sumAct<0){
+                aux = i+1;
+                sumAct = 0;
+            }
+        }
+        sort(respuestas.begin(),respuestas.end(),criterio);
+        start = respuestas[0].f;
+        end   = respuestas[0].s;
+        if(maximo == 0){
+            cout<<"Route "<<i<<" has no nice parts\n";
+            out<<"Route "<<i<<" has no nice parts\n";
+        }
+        else{
+            cout<<"The nicest part of route "<<i<<" is between stops "<<start+1<<" and "<<end+2<<endl;
+            out<<"The nicest part of route "<<i<<" is between stops "<<start+1<<" and "<<end+2<<endl;
+        }
+        respuestas.clear();
+    }  
+
+    return 0;
+}
+

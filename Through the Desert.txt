@@ -1,0 +1,112 @@
+#include<bits/stdc++.h>
+#define llenar(a,val)   memset(a,val,sizeof(a))
+#define pb          push_back 
+#define endl        "\n"
+#define mostrar(x,y) cout<<x<<" "<<y<<endl;
+#define f           first
+#define s           second
+#define mod         1000000007
+#define EPS         1e-7
+#define PI          acos(-1)
+using namespace std;
+typedef pair<int,int> ii;
+typedef pair<pair<int,int>,int> iii;
+typedef vector<int> vi;
+typedef long long ll;
+typedef vector<pair<int,int>> vii;
+typedef vector< pair<pair<int,int>,int> > viii;
+
+
+bool funciona(double combustible, vector<pair<double,pair<string,int>>>& v){
+
+    int l = v.size();
+    double combustibleReal = combustible;
+    double gasto = 0,anterior = 0,actual,factor,desplazamiento;
+    int agujeros = 0;
+    for(int i =0;i<l;i++){
+        actual = v[i].f;
+        desplazamiento = actual - anterior;
+        factor = gasto/100;
+        combustibleReal -= (desplazamiento*factor + (desplazamiento* (agujeros)));
+        anterior = actual;
+        if(combustibleReal < 0){
+            return false;
+        }
+        if(v[i].s.f == "Fuel"){
+            gasto = v[i].s.s;
+        }
+        else if(v[i].s.f == "Leak"){
+            agujeros++;
+        } 
+        else if(v[i].s.f == "Mechanic"){
+            agujeros =0;
+        }
+        else if(v[i].s.f == "Gas"){
+            combustibleReal = combustible;
+        }
+    }
+    return combustibleReal >=0;
+}
+
+int main(){
+    ofstream out("output.txt");
+    
+    string dato;
+    istringstream s;
+
+    while(getline(cin,dato) && dato != "0 Fuel consumption 0"){
+        vector<pair<double,pair<string,int>>> v;
+        s.str(dato);
+        double lugar;
+        int constante;
+        s>>lugar;
+        string tipo,basura;
+        s>>tipo;
+        if(tipo == "Fuel"){
+            s>>basura;
+            s>>constante;
+            v.pb({lugar,{tipo,constante}});
+        }
+        else{
+            v.pb({lugar,{tipo,0}});
+        }
+        s.clear();
+        while(getline(cin,dato)){
+            s.str(dato);
+            s>>lugar;
+            s>>tipo;
+            if(tipo == "Goal"){
+                v.pb({lugar,{tipo,0}});
+                s.clear();
+                break;
+            }
+            else if(tipo == "Fuel"){
+                s>>basura;
+                s>>constante;
+                v.pb({lugar,{tipo,constante}});
+            }
+            else{
+                v.pb({lugar,{tipo,0}});
+            }
+            s.clear();
+        }
+
+        int n = v.size();
+        double l = 0,h = 1000000, mid,res;
+        while(abs(h-l) >= EPS){
+            mid = (l+h)/2;
+            if(funciona(mid,v)){
+                res = mid;
+                h = mid - EPS;
+            }
+            else{
+                l = mid + EPS;
+            }
+        }
+        cout<<setprecision(3)<<fixed<<mid<<endl;
+        out<<setprecision(3)<<fixed<<mid<<endl;
+
+    }
+
+    return 0;
+}

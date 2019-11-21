@@ -1,0 +1,94 @@
+#include <cstdio>
+#include<bits/stdc++.h> 
+#define pb          push_back 
+#define endl        "\n"
+#define mostrar(x,y) cout<<x<<" "<<y<<endl;
+using namespace std;
+typedef pair<int,int> ii;
+typedef vector<int> vi;
+typedef vector<pair<int,int>> vii;
+
+map<char,char> parent;
+map<char,int> lideres;
+map<char,int> ranking;
+char p1,p2;
+char Find(char a){
+    return parent[a] = (parent[a]==a?a:Find(parent[a]));
+}
+void Union(char a,char b){
+    p1 = Find(a);
+    p2 = Find(b);
+    if(p1!=p2){
+        if(ranking[p1]>ranking[p2]){
+            parent[p2] = p1;
+            lideres[p1] += lideres[p2];
+        }
+        else{
+            parent[p1] = p2;
+            lideres[p2] += lideres[p1];
+            if(ranking[p1] == ranking[p2]) ranking[p2]++;
+        }
+    }
+}
+void make_set(char a){
+    parent[a] = a;
+    lideres[a] = 1;
+    ranking[a] = 0;
+}
+int main(){
+    ofstream out("output.txt");
+    map<char,int> mapa;
+    int n,arboles,puntos;
+    cin>>n;
+    cin.ignore();
+    string arista,vertices;
+    char a,b,aux;
+    while(n--){
+        while(getline(cin,arista)&&arista[0]!='*'){
+            a = arista[1];
+            b = arista[3];
+            if(parent.find(a)==parent.end()){
+                make_set(a);
+            }
+            if(parent.find(b)==parent.end()){
+                make_set(b);
+            }
+            Union(a,b);
+        }
+        getline(cin,vertices);
+        for(int i = 0 ;i<vertices.size(); i+=2){
+            a = vertices[i];
+            if(parent.find(a)==parent.end()){
+                make_set(a);
+            }
+        }
+        for(auto it = parent.begin(); it!=parent.end();it++){//USAMOS ESTE MAPA PARA LLAMAR A FIND PATH COMPRESSION
+            aux = Find(it->first);
+        }
+
+        arboles = 0;
+        puntos = 0;
+        for(auto it = parent.begin();it!=parent.end();it++){
+            if(mapa.find(it->second) == mapa.end()){
+                mapa[it->second] = 1;
+            }
+            else{
+                mapa[it->second]++;
+            }
+        }
+        for(auto it = mapa.begin();it!=mapa.end();it++){
+            if(it->second==1) puntos++;
+            else arboles++;
+        }
+
+        cout<<"There are "<<arboles<<" tree(s) and "<<puntos<<" acorn(s)."<<endl;
+        out<<"There are "<<arboles<<" tree(s) and "<<puntos<<" acorn(s)."<<endl;
+        mapa.clear();
+        parent.clear();
+        lideres.clear();
+        ranking.clear(); 
+    }
+
+
+    return 0;
+}

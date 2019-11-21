@@ -1,0 +1,88 @@
+#include <cstdio>
+#include<bits/stdc++.h> 
+#define pb          push_back 
+#define endl        "\n"
+#define mostrar(x,y) cout<<x<<" "<<y<<endl;+
+#define f           first
+#define s           second
+using namespace std;
+typedef pair<int,int> ii;
+typedef pair<pair<int,int>,int> iii;
+typedef vector<int> vi;
+typedef vector<pair<int,int>> vii;
+
+bool criterio(iii a, iii b){
+    if(a.f.f < b.f.f) return true;
+    if(b.f.f < a.f.f) return false;
+    return a.f.s > b.f.s;
+}
+
+int LIS[1010];
+int parent[1010];
+
+int main()
+{   
+    ofstream out("output.txt");
+    //ifstream in("input2.txt");
+
+    int a,b,pos = 1;
+    vector<iii> elefantes;
+    for(int i = 0; i<1010; i++){
+        LIS[i] = 1;
+        parent[i] = i;
+    }
+    
+    while(cin>>a>>b){
+        elefantes.pb({{a,b},pos});
+        pos++;
+
+    }
+
+    sort(elefantes.begin(),elefantes.end(),criterio);
+    parent[0] = 0;
+    int masLargo,mejorInd;
+    for(int i = 1; i<elefantes.size(); i++){
+        masLargo = 0;
+        mejorInd = -1; //NO NECESARIO
+        for(int j = 0; j<i; j++){
+            if(elefantes[i].f.f > elefantes[j].f.f && elefantes[i].f.s <
+             elefantes[j].f.s){
+                if(LIS[j]>masLargo){
+                    masLargo = LIS[j];
+                    mejorInd = j;
+                }
+            }
+        }  
+        if(mejorInd != -1){
+            LIS[i] += masLargo;
+            parent[i] = mejorInd;   
+        }
+    }
+    masLargo = 0;
+    for(int i = 0; i<elefantes.size(); i++){
+        if(LIS[i]>masLargo){
+            masLargo = LIS[i];
+        }
+    }
+    int indBuscado;
+    for(int i = 0; i<elefantes.size(); i++){
+        if(LIS[i]==masLargo){
+            indBuscado = i;
+            break;
+        }   
+    }
+    cout<<masLargo<<endl;
+    vi orden;
+    while(parent[indBuscado]!=indBuscado){
+        orden.pb(elefantes[indBuscado].s);
+        indBuscado = parent[indBuscado];
+    }
+    orden.pb(elefantes[indBuscado].s);
+
+    for(int i = orden.size()-1; i>=0; i--){
+        cout<<orden[i]<<endl;
+    }
+
+    return 0;
+}
+

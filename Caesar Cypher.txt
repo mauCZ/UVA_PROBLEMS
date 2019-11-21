@@ -1,0 +1,127 @@
+#include <cstdio>
+#include <iostream>
+#include <vector>
+#include <fstream>
+#include <string>
+#include <map>
+#include <math.h>
+#include <algorithm>
+#include <set>
+#include <sstream>
+#include <queue>
+#include <unordered_map>
+#define pb          push_back 
+#define endl        "\n"
+#define mostrar(x,y) cout<<x<<" "<<y<<endl;
+#define f           first
+#define s           second
+#define mod         1000000007
+using namespace std;
+typedef pair<int,int> ii;
+typedef pair<pair<int,int>,int> iii;
+typedef vector<int> vi;
+typedef vector<pair<int,int>> vii;
+
+map<char,int> dicc;
+set<string> diccionario;
+vector<string> palabras;
+int nuevoInd;
+string abcdario = " ABCDEFGHIJKLMNOPQRSTUVWXYZ";
+
+string decript(int k, string &cad){
+    string res = "";
+
+    char aux;
+    for(int i = 0; i<cad.size(); i++){
+        aux = cad[i];
+        nuevoInd = dicc[aux]-k;
+        if(nuevoInd<0){
+            nuevoInd = 27-(k-dicc[aux]);
+        }
+        res += abcdario[nuevoInd];
+    }
+    return res;
+}
+void obtenerPalabras(string &cambio){
+    string aux = "";
+    for(int i = 0; i<cambio.size(); i++){
+        if(cambio[i] == ' '){
+            if(aux.size()>0) palabras.pb(aux);
+            aux = "";
+        }
+        else{
+            aux += cambio[i];
+        }
+    }
+    if(aux.size()>0) palabras.pb(aux);
+}
+
+int main(){
+    ofstream out("output.txt");
+    ios::sync_with_stdio(0);cin.tie(0);
+    for(int i = 0; i<27; i++){
+        dicc[abcdario[i]] = i;
+    }
+    string cad,texto;
+
+    while(cin>>cad && cad != "#"){
+        diccionario.insert(cad);
+    }
+    cin.ignore();
+    getline(cin,texto);
+    //YA TENEMOS EL DICCIONARIO Y EL TEXTO, VAMOS A BUSCAR DESDE EL 1 HASTA EL 27 CUAL ES LA K QUE MEJOR SE ACOMODA
+    string cambio,original;
+    int actual,maxCorrectas = 0;
+    for(int i = 1; i<=26; i++){
+        actual = 0;
+        cambio = decript(i,texto);
+        obtenerPalabras(cambio);
+        for(int j = 0; j<palabras.size(); j++){
+            if(diccionario.find(palabras[j]) != diccionario.end()){
+                actual++;
+            }
+        }
+        if(actual>maxCorrectas){
+            maxCorrectas = actual;
+            original = cambio;
+        }
+        palabras.clear();
+    }
+    while(original[0] == ' '){
+        original.erase(original.begin()+0);
+    }
+    while (original[original.size()-1] == ' ') {
+        original.erase(original.end()-1);
+    }
+    int ind = 1,aux = 0,cont = 0,i = 1;
+    while(i<original.size()){
+        if(ind % 60 == 0){
+            if(original[i-1]!=' '&&original[i]!=' '){
+                aux = i;
+                cont = 0;
+                while(original[aux] != ' '){
+                    aux--;
+                    cont++;
+                }
+                original[aux] = '\n';
+                ind = cont-1;
+            }
+            else if(original[i-1] == ' '){
+                original[i-1] = '\n';
+            }
+            else if(original[i-1]!=' '){
+                original[i] = '\n';
+            }
+        }   
+        i++;
+        ind++;
+    }
+    cout<<original<<endl;
+    out<<original<<endl;    
+    return 0;
+}
+
+
+
+
+

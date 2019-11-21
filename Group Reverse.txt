@@ -1,0 +1,43 @@
+#include <cstdio>
+#include<bits/stdc++.h> 
+#define pb          push_back 
+#define endl        "\n"
+#define mostrar(x,y) cout<<x<<" "<<y<<endl;
+using namespace std;
+typedef pair<int,int> ii;
+typedef vector<int> vi;
+typedef vector<pair<int,int>> vii;
+
+string reversed(string cad){
+    string r = "";
+    for(int j =  cad.size()-1; j>=0; j--){
+        r += cad[j];
+    }
+    return r;
+}
+
+int main()
+{   
+    ofstream out("output.txt");
+    //ifstream in("input2.txt");
+
+    int n;
+    string cad,actual,res;
+    while(cin>>n && n!=0){
+        cin>>cad;
+        actual = "";
+        res = "";
+        n = cad.size()/n;
+        for(int i = 0; i<cad.size(); i++){
+            actual += cad[i];
+            if(actual.size()==n){
+                res += reversed(actual);
+                actual = "";
+            }
+        }
+        cout<<res<<endl;
+        out<<res<<endl;
+    }
+
+    return 0;
+}

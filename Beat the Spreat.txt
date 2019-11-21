@@ -1,0 +1,54 @@
+#include <iostream>
+#include <fstream>
+using namespace std;
+
+int main(){
+	ofstream file("output.txt");
+	int n;
+	cin>>n;
+	long long suma, diferencia;
+	long long res1, res2;
+	while(n>0){
+		cin>>suma>>diferencia;
+		if((suma+diferencia)%2 == 0){
+			res1 = (suma+diferencia)/2;
+			res2 = suma-res1;
+			
+			if(res1<0 || res2 <0){
+				res2 = (suma+diferencia)/2;
+				res1 = suma-res2;
+				if(res1<0 || res2<0){
+					//file<<"impossible\n";
+					cout<<"impossible\n";
+				}
+				else{
+					if(res1>res2){
+						//file<<res1<<" "<<res2<<endl;
+						cout<<res1<<" "<<res2<<endl;
+					}
+					else{
+						//file<<res2<<" "<<res1<<endl;
+						cout<<res2<<" "<<res1<<endl;
+					}	
+				}
+			}
+			else{
+				if(res1>res2){
+					//file<<res1<<" "<<res2<<endl;
+					cout<<res1<<" "<<res2<<endl;
+				}
+				else{
+					//file<<res2<<" "<<res1<<endl;
+					cout<<res2<<" "<<res1<<endl;
+				}
+			}
+			
+		}
+		else {
+			//file<<"impossible\n";
+			cout	<<"impossible\n";
+		}
+		n--;	
+	}
+	file.close();
+}

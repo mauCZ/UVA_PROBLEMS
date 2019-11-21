@@ -1,0 +1,98 @@
+#include <cstdio>
+#include<bits/stdc++.h> 
+using namespace std;
+
+char mapa[25][25];
+int visitado[25][25];
+
+bool posicionValida(int i, int j, int maxX, int maxY){
+    return i>=0 && i<maxX && j>=0 && j<maxY;
+}
+
+int dfs(int i, int j, int maxX, int maxY, char tierra){
+    visitado[i][j] = 1;
+    int tamComp = 1;
+    bool unico = true;
+
+    //ARRIBA
+    if(posicionValida(i-1,j,maxX,maxY)){
+        if(visitado[i-1][j] == -1 && mapa[i-1][j] == tierra){
+            unico = false;
+            tamComp += dfs(i-1,j,maxX,maxY,tierra);
+        }
+    }
+    //IZQUIERDA
+    if(posicionValida(i,j-1,maxX,maxY)){
+        if(visitado[i][j-1] == -1 && mapa[i][j-1] == tierra){
+            unico = false;
+            tamComp += dfs(i,j-1,maxX,maxY,tierra);
+        }    
+    }
+    else{
+        if(mapa[i][maxY-1] == tierra && visitado[i][maxY-1] == -1){
+            unico = false;
+            tamComp += dfs(i,maxY-1, maxX, maxY, tierra);
+        }
+    }
+    
+    //DERECHA
+    if(posicionValida(i,j+1,maxX,maxY)){
+        if(visitado[i][j+1] == -1 && mapa[i][j+1] == tierra){
+            unico = false;
+            tamComp += dfs(i,j+1,maxX,maxY,tierra);
+        }
+    }
+    else{
+        if(mapa[i][0] == tierra && visitado[i][0] == -1){
+            unico = false;
+            tamComp += dfs(i,0,maxX, maxY, tierra);
+        }
+    }
+    //ABAJO
+    if(posicionValida(i+1,j,maxX,maxY)){
+        if(visitado[i+1][j] == -1 && mapa[i+1][j] == tierra){
+            unico = false;
+            tamComp += dfs(i+1, j, maxX, maxY, tierra);
+        }
+    }
+    if(unico){
+        return 1;
+    }
+    return tamComp;
+}
+
+int main()
+{   
+    ofstream out("output.txt");
+    //ifstream in("input2.txt");
+
+    int m,n,x,y,tamanhoMax, tamanhoAct,c;
+    string blank;
+    char tierra;
+    while(cin>>m>>n){
+        for(int i = 0; i<m; i++){
+            for(int j = 0; j<n; j++){
+                cin>>mapa[i][j];
+                visitado[i][j] = -1;
+            }
+        }
+        cin>>x>>y;
+        tierra = mapa[x][y];
+        c = dfs(x,y,m,n,tierra);      //MARCAMOS LA ISLA EN LA QUE EL EXPLORADOR YA ESTA
+        tamanhoMax = 0;
+        for(int i = 0; i<m ;i++){
+            for(int j = 0; j<n; j++){
+                if(mapa[i][j] == tierra  && visitado[i][j] == -1){
+                    tamanhoAct = dfs(i,j,m,n,tierra);
+                    if(tamanhoAct>tamanhoMax)    tamanhoMax = tamanhoAct;
+                }
+            }
+        } 
+        cout<<tamanhoMax<<endl;
+        out<<tamanhoMax<<endl;
+        getline(cin,blank);
+    }
+
+    return 0;
+}
+

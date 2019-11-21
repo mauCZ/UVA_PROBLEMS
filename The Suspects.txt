@@ -1,0 +1,59 @@
+#include<bits/stdc++.h>
+#include <cstdio>   
+#define PI              acos(-1)
+#define pb              push_back 
+#define endl            "\n"
+#define mostrar(x,y)    cout<<x<<" "<<y<<endl;
+#define f               first
+#define s               second
+#define mod             1000000007
+#define EPS             1e-9
+#define llenar(a,val)   memset(a,val,sizeof(a))
+using namespace std;
+typedef pair<int,int> ii;
+typedef pair<pair<int,int>,int> iii;
+typedef vector<int> vi;
+typedef vector<pair<int,int>> vii;
+typedef long long ll;
+    
+int parent[30005];
+int lideres[30005];
+
+void create_set(int val){
+    parent[val] = val;
+    lideres[val] = 1;
+}
+int find_set(int val){
+    return parent[val] = (parent[val] ==val?val:find_set(parent[val]));
+}
+void union_set(int a,int b){
+    int r1 = find_set(a), r2 = find_set(b);
+    if(r1!=r2){
+        parent[r1] = r2;
+        lideres[r2] += lideres[r1];
+    }
+}
+
+int main(){
+    ofstream out("output.txt");
+    ios_base::sync_with_stdio(0), cin.tie(0), cout.tie(0);
+
+    int n,m,cant,lider,val,maximo;
+
+    while(cin>>n>>m &&(n!=0||m!=0)){
+        for(int i =0; i<n; i++) create_set(i);
+        //for(int i = 0; i<n; i++) lideres[i] = 0;
+        for(int i = 0; i<m; i++){
+            cin>>cant;
+            cin>>lider;
+            for(int j=0; j<cant-1; j++){
+                cin>>val;
+                union_set(lider,val);
+            }
+        }
+        int r = find_set(0);
+        cout<<lideres[r]<<endl;
+    }
+
+    return 0;
+}

@@ -1,0 +1,56 @@
+    #include <cstdio>
+    #include<bits/stdc++.h> 
+    #define pb          push_back 
+    #define endl        "\n"
+    #define mostrar(x,y) cout<<x<<" "<<y<<endl;
+    using namespace std;
+    typedef pair<int,int> ii;
+    typedef vector<int> vi;
+    typedef vector<pair<int,int>> vii;
+    
+    int main(){
+        ofstream out("output.txt");
+
+
+        /*int n,amistades;
+        string a,b;
+        cin>>n;
+        while(n--){
+            cin>>amistades;
+            while(amistades--){
+                cin>>a>>b;
+
+            }
+        }*/
+        int n,posibles,longitud,minimo;
+        cin>>n;
+        string vecinos;
+        map<int,int> mapa;
+        vi indices;
+        while(n--){
+            cin>>posibles;
+            cin.ignore();
+            minimo = 1000000;
+            for(int i = 0; i<posibles; i++){
+                longitud = 0;
+                getline(cin,vecinos);
+                for(int i = 0; i<vecinos.size(); i++){
+                    if(vecinos[i]==' ') longitud ++;
+                }
+                mapa[i+1] = longitud+1;
+                if(longitud+1<minimo) minimo = longitud+1;
+            }
+            for(auto it = mapa.begin(); it!=mapa.end();it++){
+                //cout<<it->first<<" "<<it->second<<endl;
+                if(it->second == minimo) indices.push_back(it->first);
+            }
+            for(int i = 0; i<indices.size(); i++){
+                if(i == 0) printf("%d",indices[i]);
+                else       printf(" %d",indices[i]);
+            }
+            printf("\n");
+            mapa.clear();
+            indices.clear();
+        }
+        return 0;
+    }

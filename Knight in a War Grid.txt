@@ -1,0 +1,86 @@
+#include <cstdio>
+#include<bits/stdc++.h> 
+#define pb          push_back 
+#define endl        "\n"
+#define mostrar(x,y) cout<<x<<" "<<y<<endl;
+using namespace std;
+typedef pair<int,int> ii;
+typedef vector<int> vi;
+
+int visitado[105][105];
+
+int posible(int i,int j,int filas,int columnas){
+    if(i>=0&&i<filas&&j>=0&&j<columnas && visitado[i][j] == 1) return 1;
+    return 0;
+}
+
+int nroVecinos(int i,int j,int filas,int columnas,int a,int b){
+    return posible(i-a,j-b,filas,columnas)+posible(i-a,j+b,filas,columnas)+posible(i-b,j-a,filas,columnas)+posible(i-b,j+a,filas,columnas)+posible(i+b,j-a,filas,columnas)+posible(i+b,j+a,filas,columnas)+posible(i+a,j-b,filas,columnas)+posible(i+a,j+b,filas,columnas);
+}
+
+void rellenar(int i, int j,int filas,int columnas,int a,int b){
+    if( !(i>=0&&i<filas&&j>=0&&j<columnas)) return;
+    if(visitado[i][j] == 1) return ;
+    if(visitado[i][j] == -1){
+        visitado[i][j] = 1;
+        rellenar(i-a,j-b,filas,columnas,a,b);
+        rellenar(i-a,j+b,filas,columnas,a,b);
+        rellenar(i-b,j-a,filas,columnas,a,b);
+        rellenar(i-b,j+a,filas,columnas,a,b);
+        rellenar(i+b,j-a,filas,columnas,a,b);
+        rellenar(i+b,j+a,filas,columnas,a,b);
+        rellenar(i+a,j-b,filas,columnas,a,b);
+        rellenar(i+a,j+b,filas,columnas,a,b);
+    }
+}
+
+int main()
+{   
+    ofstream out("output.txt");
+    //ifstream in("input2.txt");
+
+    int n,charcos,x,y,vecinos,pares,impares,cont = 1,filas,columnas,a,b;
+    cin>>n;
+    bool sonIguales,hayUnCero; //CASOS ESPECIALES
+    while(n--){
+        cin>>filas>>columnas>>a>>b;
+        for(int i = 0; i<filas; i++){
+            for(int j = 0; j<columnas; j++){
+                visitado[i][j] = -1;
+            }
+        }
+        sonIguales = a == b;
+        hayUnCero = a==0 || b == 0;
+        cin>>charcos;
+        while(charcos--){
+            cin>>x>>y;
+            visitado[x][y] = -2;
+        }
+        if(a == 0 && b== 0){
+            cout<<"Case "<<cont<<": 0 1\n";
+            cont++;
+            continue;
+        }
+        rellenar(0,0,filas,columnas,a,b);
+
+        pares = 0;
+        impares = 0;
+        for(int i =0; i<filas; i++){
+            for(int j = 0; j<columnas; j++){
+                if(visitado[i][j] == 1){
+                    vecinos = nroVecinos(i,j,filas,columnas,a,b);
+                    if(sonIguales || hayUnCero ) vecinos /= 2;
+                    if(vecinos %2 == 0) pares++;
+                    else                impares++;
+
+                }
+            }
+        }
+        cout<<"Case "<<cont<<": "<<pares<<" "<<impares<<endl;
+        cont++;
+    }
+
+    return 0
+    ;
+}
+

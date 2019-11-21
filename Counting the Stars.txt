@@ -1,0 +1,51 @@
+#include<bits/stdc++.h>
+#include <iostream>
+#include <fstream>
+#include <map>
+using namespace std;
+
+char cielo[105][105];
+
+bool unico_dfs(int i,int j,int maxX, int maxY){
+    for(int a = i-1; a<=i+1; a++){
+        for(int b = j-1; b<=j+1; b++){
+            if(a>=0 && a<maxX && b>=0&&b<maxY &&(a!=i||b!=j)){
+                if(cielo[a][b] == '*') return false;
+            }
+        }
+    }
+    return true;
+}
+
+int main()
+{
+    ofstream out("output.txt");
+    //ifstream in("input.txt");
+
+    int filas,columnas,totalEstrellas;
+    bool unico;
+    while(cin>>filas>>columnas && (filas != 0 ||  columnas !=0)){
+        for(int i =0; i<filas; i++){
+            for(int j = 0; j<columnas; j++){
+                cin>>cielo[i][j];
+            }
+        }
+        totalEstrellas = 0;
+
+        for(int i= 0; i<filas; i++){
+            for(int j = 0; j<columnas; j++){
+                if(cielo[i][j] == '*'){
+                    unico = unico_dfs(i,j,filas,columnas);
+                    if(unico){ 
+                        totalEstrellas++;
+                    }
+                }
+            }
+        }
+        cout<<totalEstrellas<<endl;
+    }
+    
+    return 0;
+}
+
+

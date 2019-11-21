@@ -1,0 +1,28 @@
+#include <cstdio>
+#include<bits/stdc++.h>
+using namespace std;
+
+int main(){
+    ofstream out("output.txt");
+    int total,k;
+    vector<pair<int,int>> respuestas;
+    while(cin>>k){
+        total = 0;
+        respuestas.clear();
+        for(int i = k+1; i<= 2*k; i++){
+            if((i*k) % (i-k) == 0){
+                respuestas.push_back(make_pair((i*k)/(i-k),i));
+                total++;
+            }
+        }
+        cout<<total<<endl;
+        for(int i = 0; i<respuestas.size(); i++){
+            cout<<"1/"<<k<<" = "<<"1/"<<respuestas[i].first<<" + 1/"<<respuestas[i].second<<endl;
+        }
+    }
+
+
+    return 0;
+}
+
+

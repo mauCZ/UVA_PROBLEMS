@@ -1,0 +1,53 @@
+#include <cstdio>
+#include <iostream>
+#include <vector>
+#include <fstream>
+#include <string>
+#include <map>
+#include <math.h>
+#include <algorithm>
+#define pb          push_back 
+#define endl        "\n"
+#define mostrar(x,y) cout<<x<<" "<<y<<endl;
+#define f           first
+#define s           second
+#define mod         1000000007
+using namespace std;
+typedef pair<int,int> ii;
+typedef pair<pair<int,int>,int> iii;
+typedef vector<int> vi;
+typedef vector<pair<int,int>> vii;
+
+int melodias[10010];
+
+int main(){
+    ofstream out("output.txt");
+
+    int n,minimo,alturasTot,prom,acum;
+    while(cin>>n){
+        alturasTot = 0;
+        for(int i = 0; i<n ;i++){
+            cin>>melodias[i];
+            alturasTot += melodias[i];
+        }
+        minimo = 0;
+
+        if(alturasTot % n == 0){
+            prom = alturasTot / n;
+            acum = 0;
+            for(int i = 0; i<n; i++){
+                acum += abs(melodias[i]-prom);
+            }
+            minimo = acum / 2;
+            minimo ++;
+        }
+        else{
+            minimo = -1;
+        }
+
+
+        cout<<minimo<<endl;
+    }
+
+    return 0;
+}

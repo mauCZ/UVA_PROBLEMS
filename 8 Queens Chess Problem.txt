@@ -1,0 +1,89 @@
+#include <cstdio>
+#include<bits/stdc++.h> 
+using namespace std;
+
+vector<vector<int>> soluciones;
+vector<int> actual;
+vector<pair<int,int>> posiciones;
+
+string mostrarVector(vector<int> &v){
+    string r = "";
+    for(int i = 0; i<v.size(); i++){
+        if(i == 0) r += to_string(v[i]);
+        else       r+= (" "+to_string(v[i]));
+    }
+    r+= "\n";
+    return r;
+}
+bool sePuede(int fila, int columna){
+    for(int i = 0; i<posiciones.size(); i++){
+        if(posiciones[i].first == fila){ return false; }
+        else if(posiciones[i].second == columna){ return false; }//EN REALIDAD NO NECESITAMOS ESTA SENTENCIA PERO MEE xdddD
+        else if((fila-columna) == (posiciones[i].first-posiciones[i].second)){ return false; }
+        else if((fila+columna) == (posiciones[i].first + posiciones[i].second)){return false; }
+    }
+    return true;
+}
+void backtrack(int restantes,int columna, int iniFila, int iniCol){
+    if(restantes == 0){ //ENCONTRAMOS RESPUESTA
+        soluciones.push_back(actual);
+    }
+    else if(columna == iniCol){
+        actual.push_back(iniFila);
+        columna++;  
+        restantes--;
+        backtrack(restantes, columna,iniFila,iniCol);
+        actual.erase(find(actual.begin(),actual.end(),iniFila));
+    }
+    else{
+        for(int fila = 1; fila<=8; fila++){
+                if(sePuede(fila,columna)){
+                    actual.push_back(fila);
+                    posiciones.push_back(make_pair(fila,columna));
+                    restantes--;
+                    columna++;
+
+                    backtrack(restantes,columna,iniFila,iniCol);
+
+                    restantes++;
+                    columna--;
+                    actual.erase(find(actual.begin(),actual.end(),fila));
+                    posiciones.erase(find(posiciones.begin(),posiciones.end(),make_pair(fila,columna)));
+                }
+        }
+    }
+}
+
+int main()
+{   
+    ofstream out("output.txt");
+    //ifstream in("input2.txt");
+    
+    int n,iniFila,iniCol;
+    string blank;
+    cin>>n;
+    while(n--){
+        getline(cin,blank);
+        cin>>iniFila>>iniCol; 
+
+        posiciones.push_back(make_pair(iniFila,iniCol));
+
+        backtrack(8,1,iniFila,iniCol);
+
+        cout<<"SOLN       COLUMN\n #      1 2 3 4 5 6 7 8\n";
+        cout<<"\n";
+        for(int i = 0; i<soluciones.size(); i++){
+            if(i<9){    cout<<" "<<i+1<<"      "<<mostrarVector(soluciones[i]);}
+            else{       cout<<i+1<<"      "<<mostrarVector(soluciones[i]); }
+        }
+        if(n)    cout<<"\n";
+        
+        soluciones.clear();
+        actual.clear();
+        posiciones.clear();
+
+    }
+    
+    return 0;
+}
+

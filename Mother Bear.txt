@@ -1,0 +1,75 @@
+import java.util.ArrayList;
+import java.util.LinkedHashMap;
+import java.util.List;
+import java.util.Arrays;
+import java.util.Collections;
+import java.io.InputStreamReader;
+import java.io.PrintWriter;
+import java.io.BufferedReader;
+import java.util.LinkedList;
+import java.util.Locale;
+import java.util.Iterator;
+import java.util.Stack;
+import java.util.Set;
+import java.util.HashSet;
+import java.util.TreeSet;
+import java.util.Map;
+import java.util.HashMap;
+import java.util.TreeMap;
+import java.util.BitSet;
+import java.lang.StringBuilder;
+import java.util.Queue;
+import java.util.Objects;
+import java.util.PriorityQueue;
+public class UvaProblems {
+
+    public static void main(String[] args) throws Exception {
+        BufferedReader in = new BufferedReader(new InputStreamReader(System.in));
+        PrintWriter out = new PrintWriter(System.out);
+        Locale.setDefault(new Locale("en", "US"));
+        
+        String a;
+        String[] b;
+        String letras = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ";
+        String puntuacion = ".,!? ";
+        StringBuilder cadenaUnida ;
+        while(!(a = in.readLine()).equals("DONE")) {
+        	cadenaUnida = new StringBuilder();
+        	for(int i = 0; i<a.length(); i++) {
+        		if(!puntuacion.contains(a.charAt(i)+"")){
+        			cadenaUnida.append((a.charAt(i)+"").toLowerCase());
+        		}
+        	}
+        	//System.out.println(cadenaUnida);
+        	if(esPalindromo(cadenaUnida)) {
+        		out.println("You won't be eaten!");
+        	}
+        	else {
+        		out.println("Uh oh..");
+        	}
+        	
+        }
+        //StringBuilder a = new StringBuilder("holoh");
+       // out.println(esPalindromo(a));
+        out.flush();
+    }
+    public static boolean esPalindromo(StringBuilder cadenita) {
+    	if( cadenita.length() == 1 || cadenita.length() == 0) {
+    		return true;
+    	}
+    	else {
+    		int l = cadenita.length();
+    		if(cadenita.charAt(0) == cadenita.charAt(l-1)) {
+    			//System.out.println(cadenita.charAt(0)+" "+cadenita.charAt(cadenita.length()-1));
+    			//System.out.println("estoy aca");
+    			cadenita.delete(0, 1);
+    			cadenita.delete(cadenita.length()-1, cadenita.length());
+    			//System.out.println(cadenita);
+    			return esPalindromo(cadenita);
+    			
+    		}
+    		else
+    			return false;
+     	}
+    }
+}

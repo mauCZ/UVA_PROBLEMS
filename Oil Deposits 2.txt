@@ -1,0 +1,66 @@
+#include<bits/stdc++.h>
+#include <cstdio>   
+#define pb          push_back 
+#define endl        "\n"
+#define mostrar(x,y) cout<<x<<" "<<y<<endl;
+#define f           first
+#define s           second
+#define mod         1000000007
+#define EPS         1e-9
+using namespace std;
+typedef pair<int,int> ii;
+typedef pair<pair<int,int>,int> iii;
+typedef vector<int> vi;
+typedef vector<pair<int,int>> vii;
+typedef long long ll;
+
+char grilla[101][101];
+bool visitado[101][101];
+
+void flood_fill(int i,int j,int filas,int columnas){
+    if( !(i>=0&&i<filas&&j>=0&&j<columnas)) return;
+    if(visitado[i][j]) return;
+    if(grilla[i][j] != '@') return;
+
+    visitado[i][j] = true;
+    flood_fill(i-1,j-1,filas,columnas);
+    flood_fill(i-1,j,filas,columnas);
+    flood_fill(i-1,j+1,filas,columnas);
+    flood_fill(i,j-1,filas,columnas);
+    flood_fill(i,j+1,filas,columnas);
+    flood_fill(i+1,j-1,filas,columnas);
+    flood_fill(i+1,j,filas,columnas);
+    flood_fill(i+1,j+1,filas,columnas);
+}
+     
+int main(){
+    ofstream out("output.txt");
+
+    int filas,columnas,componentes;
+
+    while(cin>>filas>>columnas && (filas!=0||columnas!=0)){
+
+        for(int i= 0; i<filas; i++){
+            for(int j = 0;j<columnas;j++){
+                cin>>grilla[i][j];
+                visitado[i][j] = false;
+            }
+        }
+        componentes = 0;
+        for(int i= 0; i<filas; i++){
+            for(int j = 0;j<columnas;j++){
+                if(visitado[i][j] == false && grilla[i][j] == '@'){
+                    flood_fill(i,j,filas,columnas);
+                    componentes++;
+                }
+            }
+        }
+        cout<<componentes<<endl;
+
+
+    }
+
+
+    return 0;
+}
+

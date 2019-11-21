@@ -1,0 +1,37 @@
+#include <cstdio>
+#include<bits/stdc++.h> 
+using namespace std;
+
+int arreglo[50000001];
+
+int main()
+{   
+    ofstream out("output.txt");
+    //ifstream in("input2.txt");
+    string res = "";
+    int l,h,r,cont = 0,i,j,primero,ultimo = 0;
+    memset(arreglo,0,sizeof(arreglo));
+    while(cin>>l>>h>>r){
+        if(cont == 0) primero = l;
+        if(r>ultimo)  ultimo = r;
+        for(i = l; i<r; i++){
+            if(h > arreglo[i]){
+                arreglo[i] = h;
+            }
+        }
+        cont++;
+    }
+    cout<<primero<<" "<<arreglo[primero]<<" ";
+    int anterior = arreglo[primero];
+    for(i = primero+1; i<= ultimo; i++){
+        if(arreglo[i] != anterior){
+            if(i == ultimo) cout<<i<<" "<<arreglo[i];  
+            else            cout<<i<<" "<<arreglo[i]<<" ";
+        }
+        anterior = arreglo[i];
+    }
+    cout<<"\n";
+
+    return 0;
+}
+

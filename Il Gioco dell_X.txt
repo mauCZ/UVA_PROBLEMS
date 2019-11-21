@@ -1,0 +1,82 @@
+#include<bits/stdc++.h>
+#include <iostream>
+#include <fstream>
+#include <map>
+using namespace std;
+
+char tablero[205][205];
+int visitado[205][205];
+
+void limpiar(int n){
+    for(int i = 0; i<n; i++){
+        for(int j = 0; j<n; j++){
+            visitado[i][j] = -1;
+        }
+    }
+}
+
+bool floodfill(int i, int j, int maxX, int maxY, char pieza){
+    visitado[i][j] = 1;
+    bool haySolucion = false;
+    if(pieza == 'w' && j == (maxY-1))
+        haySolucion = true;
+    else if(pieza == 'b' && (i == maxX-1) )
+        haySolucion = true;
+    else{
+        for(int a = i-1; a<=i+1; a++){
+            for(int b = j-1; b<=j+1; b++){
+                if(a>=0&&a<maxX&&b>=0&&b<maxY){
+                    if( !(a == i-1 && b== j+1) && !(a == i && b== j) && !(a == i+1&&b == j-1)){
+                        if(tablero[a][b] == pieza && visitado[a][b] == -1){
+                            haySolucion = floodfill(a,b,maxX,maxY,pieza);
+                            if(haySolucion) return haySolucion;
+                        }
+                    }
+                }
+            }
+        }
+    }    
+    return haySolucion;
+}
+
+int main()
+{
+    ofstream out("output.txt");
+    //ifstream in("input.txt");
+
+    int n,cont = 1;
+    bool hayGanador ;
+    char fichaGanadora;
+    while(cin>>n && n!=0){
+        for(int i = 0; i<n; i++){
+            for(int j = 0; j<n; j++){
+                cin>>tablero[i][j];
+                visitado[i][j] = -1;
+            }
+        }
+        fichaGanadora = 'W';
+        hayGanador = false;
+        for(int fila = 0; fila<n && !hayGanador; fila++){
+            if(tablero[fila][0] == 'w'){
+                hayGanador = floodfill(fila,0,n,n,'w');
+                limpiar(n);
+            }
+        }
+        /*if(!hayGanador){ //NO NECESITAMOS ESTA PARTE DEL CODIGO EN REALIDAD, PORQUE SINO HAY GANADOR DE W SI O SI ES B
+            fichaGanadora = 'B';
+            for(int columna = 0; columna<n && !hayGanador; columna++){
+                if(tablero[0][columna] == 'b'){
+                    hayGanador = floodfill(0,columna,n,n,'b');
+                    limpiar(n);
+                }
+            }
+        }*/
+        if(!hayGanador) fichaGanadora = 'B';
+        cout<<cont<<" "<<fichaGanadora<<endl;  
+        cont++;
+    }
+
+    return 0;
+}
+
+

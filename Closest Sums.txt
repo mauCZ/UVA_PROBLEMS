@@ -1,0 +1,63 @@
+#include<bits/stdc++.h>
+#include <cstdio>   
+#define pb          push_back 
+#define endl        "\n"
+#define mostrar(x,y) cout<<x<<" "<<y<<endl;
+#define f           first
+#define s           second
+#define mod         1000000007
+#define EPS         1e-9
+using namespace std;
+typedef pair<int,int> ii;
+typedef pair<pair<int,int>,int> iii;
+typedef vector<int> vi;
+typedef vector<pair<int,int>> vii;
+typedef long long ll;
+
+vi seq;
+
+int main(){
+    ofstream out("output.txt");
+    int n,q,val,querie,mejorDif,suma,mejorSuma,cont=1;
+    while(cin>>n&&n!=0){
+        for(int i =0; i<n; i++){
+            cin>>val;
+            seq.pb(val);
+        }
+        cin>>q;
+        cout<<"Case "<<cont<<":\n";
+        for(int k =1; k<=q; k++){
+            cin>>querie;
+            mejorDif =1000000000;
+            for(int i = 0; i<n; i++){
+                for(int j = i+1;j <n; j++){
+                    suma = seq[i]+seq[j];
+                    if(abs(querie-suma)<mejorDif){
+                        mejorDif = abs(querie-suma);
+                        mejorSuma = suma;
+                    }
+                }
+            }
+            cout<<"Closest sum to "<<querie<<" is "<<mejorSuma<<"."<<endl;
+        }
+        seq.clear();
+        cont++;
+    }
+    return 0;
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

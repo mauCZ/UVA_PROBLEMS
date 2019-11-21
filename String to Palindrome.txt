@@ -1,0 +1,86 @@
+#include <cstdio>
+#include <iostream>
+#include <vector>
+#include <fstream>
+#include <string>
+#include <map>
+#include <math.h>
+#include <algorithm>
+#include <set>
+#include <queue>
+#include <unordered_map>
+#define pb          push_back 
+#define endl        "\n"
+#define mostrar(x,y) cout<<x<<" "<<y<<endl;
+#define f           first
+#define s           second
+#define mod         1000000007
+using namespace std;
+typedef pair<int,int> ii;
+typedef pair<pair<int,int>,int> iii;
+typedef vector<int> vi;
+typedef vector<pair<int,int>> vii;
+
+int dp[1005][1005];
+
+void iniciarDP(){
+    for(int i = 0; i<1005; i++){
+        for(int j = 0; j<1005; j++){
+            dp[i][j] = -1;
+        }
+    }
+}
+
+int MED_Pal(int a,int b,string &cad){
+    int res = 0;
+    if(b-a < 1) res = 0; //SI LA SUBCADENA TIENE 1 0 CERO DE LONG ES PALINDROMO
+    else{
+        if(dp[a][b] == -1){ //SI LA RESPUESTA TODAVIA NO LA HEMOS CALCULADO
+            if(cad[a] == cad[b]){
+                res = MED_Pal(a+1,b-1,cad);
+                dp[a][b] = res;
+            }
+            else{
+                res = min( min( MED_Pal(a+1,b,cad)+1,MED_Pal(a,b-1,cad)+1 ), MED_Pal(a+1,b-1,cad)+1 );
+                dp[a][b] = res;
+            }
+        }
+        else{   //SI LA RESPUESTA YA LA HEMOS CALCULADO
+            res = dp[a][b];
+        }
+    }
+    return res;
+}
+
+
+
+int main(){
+    ofstream out("output.txt");
+    ios::sync_with_stdio(0);cin.tie(0);
+
+
+
+    int t,l,ind,n,dist_min_edi,distDer,distIzq;
+    cin>>t;
+    string cad;
+    string pal1,pal2;
+
+    for(int k = 1; k<=t; k++){
+        cin>>cad;
+        l = cad.size();
+
+        iniciarDP();
+        dist_min_edi = MED_Pal(0,l-1,cad);
+        cout<<"Case "<<k<<": "<<dist_min_edi<<endl;
+        out<<"Case "<<k<<": "<<dist_min_edi<<endl;
+    }
+
+
+
+    return 0;
+}
+
+
+
+
+

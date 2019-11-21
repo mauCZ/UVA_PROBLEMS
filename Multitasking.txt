@@ -1,0 +1,61 @@
+#include<bits/stdc++.h>
+#include <cstdio>   
+#define pb          push_back 
+#define endl        "\n"
+#define mostrar(x,y) cout<<x<<" "<<y<<endl;
+#define f           first
+#define s           second
+#define mod         1000000007
+#define EPS         1e-9
+using namespace std;
+typedef pair<int,int> ii;
+typedef pair<pair<int,int>,int> iii;
+typedef vector<int> vi;
+typedef vector<pair<int,int>> vii;
+typedef long long ll;
+    
+
+
+int main(){
+    ofstream out("output.txt");
+
+    int n,m;
+    int a,b,rep,ind;
+    bool sePuede;
+    bitset<1000005> tiempo;
+    while(cin>>n>>m &&(n!=0||m!=0)){
+        tiempo.reset();
+        sePuede = true;
+        for(int i =0; i<n; i++){
+            cin>>a>>b;
+            for(int j =a; j<=b-1; j++){
+                sePuede &= !(tiempo[j]);
+                tiempo[j] = true;                
+            }
+            //cout<<sePuede<<endl;    
+        }
+        for(int i = 0; i<m; i++){
+            cin>>a>>b>>rep;
+            while(a < 1000001){
+                //cout<<a<<" "<<b<<endl;
+                for(int j = a; j<b&&j<1000001; j++){
+                    sePuede &= !(tiempo[j]);
+                    tiempo[j] = true;
+                }
+                a += rep;
+                b += rep;
+            }
+        }
+        if(sePuede){
+            cout<<"NO CONFLICT"<<endl;
+            //out<<"NO CONFLICT"<<endl;
+        }
+        else{
+            cout<<"CONFLICT"<<endl;
+            //out<<"CONFLICT"<<endl;
+        }
+    }
+
+
+    return 0;
+}

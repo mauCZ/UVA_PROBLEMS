@@ -1,0 +1,56 @@
+#include <cstdio>
+#include<bits/stdc++.h> 
+#include <algorithm>
+#define pb          push_back 
+#define endl        "\n"
+#define mostrar(x,y) cout<<x<<" "<<y<<endl;
+#define f           first
+#define s           second
+using namespace std;
+typedef pair<int,int> ii;
+typedef vector<int> vi;
+typedef vector<pair<int,int>> vii;
+typedef pair<pair<int,int>,int> iii;
+
+bool esPrefijo(string &a, string &b){
+    if(a.size()>=b.size()) return false;
+    bool prefi = true;
+    for(int i = 0; i<a.size() && prefi; i++){
+        if(a[i] != b[i]) prefi = false;
+    }
+    return prefi;
+}
+
+int main(){
+    ofstream out("output.txt");
+
+
+    int n,t;
+    bool consistente;
+    cin>>n;
+    string telefono;
+    vector<string> telefonos;
+    for(int j = 0; j<n; j++){
+        cin>>t;
+        for(int i = 0; i<t; i++){
+            cin>>telefono;
+            telefonos.push_back(telefono);
+        }
+        sort(telefonos.begin(),telefonos.end());
+        consistente = true;
+        for(int i = 0; i<t-1 && consistente; i++){
+            if(esPrefijo(telefonos[i],telefonos[i+1])){
+                consistente = false;
+            }
+        }        
+        if(consistente) cout<<"YES\n";
+        else            cout<<"NO\n";
+
+        telefonos.clear();
+
+    }
+
+        
+
+    return 0;
+}

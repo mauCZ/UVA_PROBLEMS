@@ -1,0 +1,35 @@
+#include<cstdio>
+#include<iostream>
+#include<cstring>
+#include<unordered_map>
+#include<set>
+#include<map>
+#include<queue>
+#include<stack>
+#include<string>
+#include<fstream>
+
+using namespace std;
+
+int main() {
+    string score;
+    int n,total,actual;
+    cin>>n;
+    while(n--){
+        cin>>score;
+        total = 0;
+        actual = 0;
+        for(int i = 0; i<score.size(); i++){
+            if(score[i] == 'O'){
+                actual++;
+                total += actual;
+            }
+            else{
+                actual = 0;
+            }
+        }
+        cout<<total<<endl;
+    }
+
+    return 0;
+}

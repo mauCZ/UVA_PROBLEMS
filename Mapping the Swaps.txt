@@ -1,0 +1,76 @@
+#include <iostream>
+#include <vector>
+#include <fstream>
+#include <algorithm>
+#include <map>
+#include <set>
+#include <unordered_map>
+#include <iomanip>
+#include <math.h>
+using namespace std;
+ 
+#define pb push_back
+#define f first
+#define s second
+#define endl '\n'
+#define EPS 1e-9
+#define PI acos(-1)
+ 
+using ll = long long;
+using pll = pair<ll,ll>;
+using ii = pair<int,int>;
+using vi = vector<int>;
+using vii = vector<ii>;
+using vll = vector<ll>;
+using ui = unsigned int;
+
+int a[5];
+int maximo,total,n;
+bool sorted(){
+    for(int i =0;i<n-1;i++){
+        if(a[i]>a[i+1]) return false;
+    }
+    return true;
+}
+void bfs(int depth){
+    if(depth > maximo){
+        return;
+    }
+    if(sorted()){
+        if(depth < maximo){
+            total = 1;
+            maximo = depth;
+        }
+        else if(depth == maximo){
+            total++;
+        }
+    }
+    for(int i =0;i<n-1;i++){
+        swap(a[i],a[i+1]);
+        bfs(depth+1);
+        swap(a[i],a[i+1]);
+    }
+}
+
+int main() {
+    ofstream out("output.txt");
+    ios_base::sync_with_stdio(false);
+    
+    int cont = 1;
+
+    while(cin>>n && n!=0){
+        for(int i=0;i<n;i++) cin>>a[i];
+        maximo = n*(n-1);
+        if(sorted()){
+            total = 0;
+        }
+        else
+        bfs(0);
+
+
+        cout<<"There are "<<total<<" swap maps for input data set "<<cont++<<".\n";
+    }
+
+    return 0;
+}   
+

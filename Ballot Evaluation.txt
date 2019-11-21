@@ -1,0 +1,58 @@
+#include <cstdio>
+#include<bits/stdc++.h> 
+using namespace std;
+
+map<string,double> m;
+double eps = 1e-9;
+bool casiIguales(double a, double b){
+    return abs(a-b)<eps;
+}
+bool casiMayor(double a, double b){
+    return (a-b)>eps;
+}
+bool casiMenor(double a, double b){
+    return (b-a)>eps;
+}
+
+int main()
+{   
+    ofstream out("output.txt");
+
+    int p,g;
+    cin>>p>>g;
+    string nombre,dato;
+    double porc,suma = 0.0,tot;
+
+    for(int i= 0; i<p; i++){
+        cin>>nombre>>porc;
+        m[nombre] = porc;
+    }
+    for(int i = 0; i<g;i++){
+        suma = 0;
+        while(cin>>dato && (dato!=">"&&dato!="<"&&dato!="="&&dato!="<="&&dato!=">=")){
+            if(dato!="+")
+                suma += m[dato];
+        }
+        cin>>tot;
+        if(dato == ">"){
+            if(casiMayor(suma,tot)) {cout<<"Guess #"<<i+1<<" was correct.\n";}
+            else           {cout<<"Guess #"<<i+1<<" was incorrect.\n";}
+        }
+        else if(dato == "<")
+            if(casiMenor(suma,tot)) {cout<<"Guess #"<<i+1<<" was correct.\n";}
+            else           {cout<<"Guess #"<<i+1<<" was incorrect.\n";}
+        else if(dato == "=")
+            if(casiIguales(suma,tot)) {cout<<"Guess #"<<i+1<<" was correct.\n";}
+            else           {cout<<"Guess #"<<i+1<<" was incorrect.\n";}
+        else if(dato == "<=")
+            if(casiMenor(suma,tot)  ||casiIguales(suma,tot)) {cout<<"Guess #"<<i+1<<" was correct.\n";}
+            else           {cout<<"Guess #"<<i+1<<" was incorrect.\n";}
+        else if(dato == ">=")
+            if(casiMayor(suma,tot) || casiIguales(suma,tot)) {cout<<"Guess #"<<i+1<<" was correct.\n";}
+            else           {cout<<"Guess #"<<i+1<<" was incorrect.\n";}
+
+    }
+
+    return 0;
+}
+

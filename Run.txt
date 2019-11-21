@@ -1,0 +1,84 @@
+#include<bits/stdc++.h>
+#include <cstdio>   
+#define pb          push_back 
+#define endl        "\n"
+#define mostrar(x,y) cout<<x<<" "<<y<<endl;
+#define f           first
+#define s           second
+#define mod         1000000007
+#define EPS         1e-9
+using namespace std;
+typedef pair<int,int> ii;
+typedef pair<pair<int,int>,int> iii;
+typedef vector<int> vi;
+typedef vector<pair<int,int>> vii;
+typedef long long ll;
+
+
+bool valido(int num){
+    int d[10] = {0};
+    while(num>0){
+        if(d[num%10] || (num%10 == 0)) return false;
+        d[num%10] = 1;
+        num /= 10;
+    }
+    return true;
+}
+int l;
+vector<ll> num_round;
+bool esRunAround(int num){
+    
+    if(!valido(num)) return false;
+
+    char v[20];
+    l = sprintf(v,"%d",num);
+    int ind = 0,val = v[0]-'0',control[20] = {0};
+    for(int i = 0; i<l; i++){
+        ind = (ind + val) % l;
+        if(control[ind]) return false;
+        control[ind] = 1;
+        val = v[ind]-'0';
+    }
+    return true;
+}
+
+void precalcular(){
+    for(int num = 1; num< 9876543; num++){
+        if(esRunAround(num)){
+            num_round.pb(num);
+            //cout<<num<<endl;
+        }
+    }
+}
+int lv;
+int binary_search(ll num){
+    int low = 0,high = lv,mid,ind;
+    while(low<high){
+        mid = (low+high)/2;
+        if(num_round[mid]<num){
+            low = mid + 1;
+        }
+        else if(num_round[mid]>=num){
+            high = mid;
+            ind = mid;
+        }
+    }
+    return ind;
+}
+int main(){
+    ofstream out("output.txt");
+
+
+    precalcular();
+    lv = num_round.size();
+    int num,caso = 1;
+    int b;
+    while(cin>>num&&num!=0){
+        b = binary_search(num);
+        cout<<"Case "<<caso++<<": "<<num_round[b]<<endl;
+    }
+
+
+    return 0;
+}
+

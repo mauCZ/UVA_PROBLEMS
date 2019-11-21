@@ -1,0 +1,70 @@
+#include <cstdio>
+#include<bits/stdc++.h> 
+using namespace std;
+
+pair<int,int> binarySearch(int arr[], int n, int x){
+    int low = 0, high = n-1,mid;
+    bool encontrado = false;
+    while((high-low)>1){
+        mid = (low+high)/2;
+        if(arr[mid] == x)       encontrado = true;
+        if(arr[mid] >= x)       high = mid;     
+        else if(arr[mid] < x)   low = mid;
+    }
+    if(arr[0] == x || arr[n-1]==x) encontrado = true;//el primer y ultimo elemento nunca son verificados
+    if(encontrado){
+        if(arr[0] == x)
+            low = -1;
+        else if(arr[n-1] == x)
+            high = -1;
+        else
+            high++;
+    }
+    else{
+        if(arr[n-1]<x){low = high; high = -1;}
+        else if(arr[0]>x){high = low; low = -1;}
+    }
+    return make_pair(low,high);
+}
+int main()
+{   
+    ofstream out("output.txt");
+    int n,q,altura,mona,j;
+    cin>>n;
+    set<int> monasNoRepetidas;
+    long long  min, max,difAltMin, difAltMax;
+    for(int i = 0; i<n; i++){
+        cin>>mona;
+        monasNoRepetidas.insert(mona);
+    }
+    int monas[monasNoRepetidas.size()];
+    j = 0;
+    for(auto it = monasNoRepetidas.begin(); it!=monasNoRepetidas.end();it++){
+        monas[j] = *it;
+        j++;
+    }
+    n = sizeof(monas)/sizeof(monas[0]);
+    cin>>q;
+    pair<int,int> indices;
+    int l,h;
+    while(q--){
+        cin>>altura; 
+        indices = binarySearch(monas,n,altura);
+        l = indices.first;
+        h = indices.second;
+        if(l!=-1 && h!=-1){
+            cout<<monas[l]<<" "<<monas[h]<<"\n";
+            out<<monas[l]<<" "<<monas[h]<<"\n";
+        }
+        else if(l==-1 && h!=-1){
+            cout<<"X "<<monas[h]<<"\n";
+            out<<"X "<<monas[h]<<"\n";
+        }
+        else if(l != -1 && h == -1){
+            cout<<monas[l]<<" X\n";
+            out<<monas[l]<<" X\n";
+        }
+    }
+    return 0;
+}
+-----------------------------------------------------------------------------------------

@@ -1,0 +1,56 @@
+#include<bits/stdc++.h>
+#include <cstdio>   
+#define pb          push_back 
+#define endl        "\n"
+#define mostrar(x,y) cout<<x<<" "<<y<<endl;
+#define f           first
+#define s           second
+#define mod         1000000007
+#define EPS         1e-9
+using namespace std;
+typedef pair<int,int> ii;
+typedef pair<pair<int,int>,int> iii;
+typedef vector<int> vi;
+typedef vector<pair<int,int>> vii;
+typedef long long ll;
+
+vector<char> s;
+set<char> se;
+
+bool esta(char c){
+    for(int i = 0; i<s.size(); i++){
+        if(s[i] == c) return true;
+    }   
+    return false;
+}
+
+int main(){
+    ofstream out("output.txt");
+
+    int t,n,k,recuerdos;  
+    string nombres;
+    cin>>t;
+    for(int i =1; i<=t; i++){
+        cin>>n>>k>>nombres; 
+        recuerdos = 0;
+        for(int j = 0; j<min(n,k); j++){
+            s.pb(nombres[j]);
+            se.insert(nombres[j]);
+        }
+        int aux = se.size();
+        recuerdos += (abs(min(n,k)-aux));
+        for(int j = k; j<n; j++){
+            if(esta(nombres[j]))
+                recuerdos++;
+            s.pb(nombres[j]);
+            s.erase(s.begin());
+        }
+
+        cout<<"Case "<<i<<": "<<recuerdos<<endl;
+        s.clear();
+        se.clear();
+    }
+
+    return 0;
+}
+

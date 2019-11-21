@@ -1,0 +1,22 @@
+#include <iostream>
+#include <sstream>
+#include <iomanip>
+#include <fstream>
+#include<bits/stdc++.h>
+using namespace std;
+
+int main(){
+    ofstream out("output.txt");
+    ifstream in("input.txt");
+
+    int n;
+    long long nro;
+    cin>>n;
+    while(n--){
+        cin>>nro;
+        int buscado = (-1 + sqrt(1-4*(-2*nro)))/ 2;
+        cout<<buscado<<endl;
+    }
+    return 0;
+}
+

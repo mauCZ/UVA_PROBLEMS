@@ -1,0 +1,261 @@
+#include <iostream>
+#include <vector>
+#include <fstream>
+#include <algorithm>
+#include <map>
+#include <set>
+#include <unordered_map>
+#include <iomanip>
+#include <math.h>
+using namespace std;
+ 
+#define pb push_back
+#define f first
+#define s second
+#define endl '\n'
+#define EPS 1e-9
+#define PI acos(-1)
+ 
+using ll = long long;
+using pll = pair<ll,ll>;
+using ii = pair<int,int>;
+using vi = vector<int>;
+using vii = vector<ii>;
+using vll = vector<ll>;
+using ui = unsigned int;
+
+int x,y,z;
+set<ii> s;
+vector<string> pasos;
+bool backtrack(int ca,int cb,int a,int b,int n){
+    bool res = false;
+    if(b == n){
+        pasos.pb("success");
+        return true;
+    }
+    if(s.find({a,b}) != s.end()){
+        return false;
+    }
+    //printf("ca %d cb %d a %d b %d n %d \n",ca,cb,a,b,n);
+    s.insert({a,b});
+    if(a == 0){ //SI A ESTA VACIO
+        a = ca; //LLENAMOS A
+        res = backtrack(ca,cb,a,b,n);
+        if(res){
+            pasos.pb("fill A"); return res;
+        }
+        a = 0;
+
+        if(b == 0){ // SI B ESTA VACIO
+            b = cb;
+            res = backtrack(ca,cb,a,b,n);
+            if(res){
+                pasos.pb("fill B"); return res;
+            }
+            b = 0;
+        }
+        else{ //SI B ESTA NO VACIO, NO IMPORTA SI ESTA PARCIAL O TOTALMENTE LLENO
+            int aux = b;
+            b = 0;
+            res = backtrack(ca,cb,a,b,n);
+            if(res){
+                pasos.pb("empty B"); return res;
+            }   
+            b = aux;
+            if(b<cb){
+                aux = b;
+                b = cb;
+                res = backtrack(ca,cb,a,b,n);
+                if(res){
+                    pasos.pb("fill B"); return res;
+                }
+                b = aux;
+
+                int m = min(b,ca);
+                a += m;
+                b -= m;
+                res = backtrack(ca,cb,a,b,n);
+                if(res){
+                    pasos.pb("pour B A"); return res;
+                }
+                a-=m;
+                b+=m;
+            }
+            else if(b == cb){
+                int m = min(b,ca);
+                a += m;
+                b -= m;
+                res = backtrack(ca,cb,a,b,n);
+                if(res){
+                    pasos.pb("pour B A"); return res;
+                }
+                a-=m;
+                b+=m;   
+            }
+        }
+    }
+    else if(a < ca){ //SI A NO ESTA VACIO PERO TAMPOCO LLENO
+        int aux = a;
+        a = 0; //PRIMERO VACIAMOS
+        res = backtrack(ca,cb,a,b,n);
+        if(res){
+            pasos.pb("empty A"); return res;
+        }
+        a = aux;
+
+        aux = a;
+        a = ca; //AHORA LLENAMOS
+        res = backtrack(ca,cb,a,b,n);
+        if(res){
+            pasos.pb("fill A"); return res;
+        }
+        a = aux;
+
+        if(b == 0){ //SI B ESTA VACIO
+            b = cb;
+            res = backtrack(ca,cb,a,b,n);
+            if(res){
+                pasos.pb("fill B"); return res;
+            }
+            b = 0;
+
+            int m = min(a,cb);
+            b += m;
+            a -= m;
+            res = backtrack(ca,cb,a,b,n);
+            if(res){
+                pasos.pb("pour A B"); return res;
+            }
+            b -= m;
+            a += m;
+        }
+        else{
+            int aux = b;
+            b = 0;
+            res = backtrack(ca,cb,a,b,n);
+            if(res){
+                pasos.pb("empty B"); return res;
+            }
+            b = aux;
+
+            if(b<cb){
+                aux = b;
+                b = cb;
+                res = backtrack(ca,cb,a,b,n);
+                if(res){
+                    pasos.pb("fill B"); return res;
+                }
+                b = aux;
+
+                int m = min(a,cb-b);
+                a -= m;
+                b += m;
+                res = backtrack(ca,cb,a,b,n);
+                if(res){
+                    pasos.pb("pour A B"); return res;
+                }
+                a += m;
+                b -= m;
+
+                m = min(b,ca-a);
+                a += m;
+                b -= m;
+                res = backtrack(ca,cb,a,b,n);
+                if(res){
+                    pasos.pb("pour B A"); return res;
+                }
+                a -= m;
+                b += m;
+            }
+            else if(b == cb){
+                int m = min(b,ca-a);
+                a += m;
+                b -= m;
+                res = backtrack(ca,cb,a,b,n);
+                if(res){
+                    pasos.pb("pour B A"); return res;
+                }
+                a -= m;
+                b += m;
+            }
+        }
+    }
+    else if(a == ca){ //SI A ESTA LLENAMOS
+        a = 0;
+        res = backtrack(ca,cb,a,b,n);
+        if(res){
+            pasos.pb("empty A"); return res;
+        }
+        a = ca;
+
+        if(b == 0){ //SI B ESTA VACIO
+            b = cb;
+            res = backtrack(ca,cb,a,b,n);
+            if(res){
+                pasos.pb("fill B"); return res;
+            }
+            b = 0;
+
+            int m = min(a,cb);
+            a -= m;
+            b += m;
+            res = backtrack(ca,cb,a,b,n);
+            if(res){
+                pasos.pb("pour A B"); return res;
+            }
+            a += m;
+            b -= m;
+        }
+        else{
+            int aux = b;
+            b = 0;
+            res = backtrack(ca,cb,a,b,n);
+            if(res){
+                pasos.pb("empty B"); return res;
+            }
+            b = aux;
+
+            if(b < cb){
+                aux = b;
+                b = cb;
+                res = backtrack(ca,cb,a,b,n);
+                if(res){
+                    pasos.pb("fill B"); return res;
+                }
+                b = aux;
+
+                int m = min(cb-b,a);
+                a -= m;
+                b += m;
+                res = backtrack(ca,cb,a,b,n);
+                if(res){
+                    pasos.pb("pour A B"); return res;
+                }
+                a += m;
+                b -= m;
+            }
+            else if(b == cb){
+
+            }
+        }
+    }
+    return false;
+}
+
+int main() {
+    ofstream out("output.txt");
+    ios_base::sync_with_stdio(false);
+    
+    while(cin>>x>>y>>z){
+        pasos.clear();
+        s.clear();
+        bool aux = backtrack(x,y,0,0,z);
+        reverse(pasos.begin(),pasos.end());
+        for(int i=0;i<pasos.size();i++){
+            cout<<pasos[i]<<endl;
+        }
+    }
+
+    return 0;
+}   
+

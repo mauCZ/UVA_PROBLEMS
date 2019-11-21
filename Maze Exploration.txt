@@ -1,0 +1,64 @@
+#include<bits/stdc++.h>
+using namespace std;
+
+char laberinto[100][100];
+int visitado[100][100];
+int longColumnas[100];
+int x,y;
+
+void rellenar(string &fila,int filas){
+    for(int i = 0; i<fila.size();i++){
+        if(fila[i] == '*'){
+            x = filas;
+            y = i;
+        }
+        visitado[filas][i] = -1;
+        laberinto[filas][i] = fila[i];
+    }
+}
+
+void pintar(int i,int j){
+    visitado[i][j] = 1;
+    laberinto[i][j] = '#';
+
+    for(int a = i-1; a<=i+1; a++){
+        for(int b = j-1; b<=j+1; b++){
+            if(  (a!=i||b!=j) &&( (a==i&&b==j-1) ||(a==i-1&&b==j) ||(a==i&&b==j+1)||(a==i+1&&b==j) )){
+                if(laberinto[a][b] == ' ' && visitado[a][b] == -1){
+                    pintar(a,b);
+                }
+            }
+        }
+    }
+
+}
+
+int main()
+{
+    ofstream out("output.txt");
+    //ifstream in("input.txt");
+    
+    int n,filas,columnas;
+    cin>>n;
+    cin.ignore();
+    string fila;
+    for(int i = 1; i<=n; i++){
+        filas = 0;
+
+        while(getline(cin,fila) && fila[0]!='_'){
+            columnas = fila.size();
+            rellenar(fila,filas);
+            longColumnas[filas] = columnas;
+            filas++;
+        }
+        pintar(x,y);
+        for(int i = 0; i<filas; i++){
+            for(int j = 0; j<longColumnas[i];j++){
+                cout<<laberinto[i][j];
+            }
+            cout<<endl;
+        }
+        cout<<fila<<endl;
+    }
+    return 0;
+}

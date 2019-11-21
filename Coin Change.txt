@@ -1,0 +1,55 @@
+#include <iostream>
+#include <vector>
+#include <fstream>
+#include <algorithm>
+#include <map>
+#include <set>
+#include <unordered_map>
+using namespace std;
+ 
+#define pb push_back
+#define f first
+#define s second
+#define endl '\n'
+#define EPS 1e-9
+#define PI acos(-1)
+ 
+using ll = long long;
+using ii = pair<int,int>;
+using vi = vector<int>;
+using vii = vector<ii>;
+using vll = vector<ll>;
+using ui = unsigned int;
+
+#define maxCoins 6
+#define maxCap   8000
+
+int valor[maxCoins] = {0,1,5,10,25,50};
+int dp[maxCoins][maxCap];
+
+ll coin_change(int ind,int cap){
+	if(ind == 0) return 0;
+	if(cap == 0) return 1;
+	if(dp[ind][cap] != -1) return dp[ind][cap];
+	if(valor[ind] > cap) return dp[ind][cap] = coin_change(ind-1,cap);
+	else   return dp[ind][cap] = coin_change(ind-1,cap) + coin_change(ind,cap-valor[ind]);
+}
+
+int n;
+
+
+int main() {
+    ofstream out("output.txt");
+    ios_base::sync_with_stdio(false);
+    
+    for(int i =0;i<maxCoins;i++){
+    	for(int j =0;j<maxCap;j++){
+    		dp[i][j] = -1;
+    	}
+    }
+	while(cin>>n){
+		cout<<coin_change(5,n)<<endl;
+	}
+    
+    return 0;
+}

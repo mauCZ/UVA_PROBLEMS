@@ -1,0 +1,76 @@
+#include <cstdio>
+#include<bits/stdc++.h> 
+#define pb          push_back 
+#define endl        "\n"
+#define mostrar(x,y) cout<<x<<" "<<y<<endl;
+using namespace std;
+typedef pair<int,int> ii;
+typedef vector<int> vi;
+typedef vector<pair<int,int>> vii;
+
+unordered_map<string,vector<string>> grafo;
+unordered_map<string,int> distancias;
+unordered_map<string,bool> visitado;
+string actual,vecino;
+void bfs(string origen){
+    queue<string> colita;
+    distancias[origen] = 0;
+    colita.push(origen);
+    while(!colita.empty()){
+        actual = colita.front(); colita.pop();
+        if(visitado[actual]) continue;
+        visitado[actual] = true;
+
+        for(int i = 0; i<grafo[actual].size(); i++){
+            vecino = grafo[actual][i];
+            if(!visitado[vecino]){
+                colita.push(vecino);
+                if(distancias[vecino] == -1)distancias[vecino] = distancias[actual]+1;
+            }
+        }
+    }
+}
+
+int main()
+{   
+    ofstream out("output.txt");
+    //ifstream in("input2.txt");
+    
+    int t,nodos,aristas,requests,costo;
+    string a,b,nodo;
+    cin>>t;
+    cout<<"SHIPPING ROUTES OUTPUT\n\n";
+    for(int j = 1; j<=t; j++){
+        cout<<"DATA SET  "<<j<<endl<<endl;
+        cin>>nodos>>aristas>>requests;
+        for(int i = 0; i<nodos; i++){
+            cin>>nodo;
+            grafo[nodo].pb(nodo);
+        }
+        for(int i = 0; i<aristas; i++){
+            cin>>a>>b;
+            grafo[a].pb(b);
+            grafo[b].pb(a);
+        }
+        for(int i  =0; i<requests; i++){
+            cin>>costo>>a>>b;
+            for(auto it = grafo.begin(); it!=grafo.end();it++){
+                distancias[it->first] = -1;
+                visitado[it->first] = false;
+            }
+            bfs(a);
+            if(distancias[b] == -1){
+                cout<<"NO SHIPMENT POSSIBLE\n";
+            }
+            else{
+                cout<<"$"<<distancias[b]*costo*100<<endl;
+            }
+        }
+        cout<<endl;
+        out<<endl;
+        grafo.clear();
+        distancias.clear(); 
+    }
+    cout<<"END OF OUTPUT\n";
+    return 0;
+}

@@ -1,0 +1,55 @@
+#include <cstdio>
+#include<bits/stdc++.h> 
+#define pb          push_back 
+#define endl        "\n"
+#define mostrar(x,y) cout<<x<<" "<<y<<endl;
+using namespace std;
+typedef pair<int,int> ii;
+typedef vector<int> vi;
+typedef vector<pair<int,int>> vii;
+
+bool sePuede(char contenedor,vector<stack<char>> &pilas){
+    for(int i = 0; i<pilas.size(); i++){
+        if(pilas[i].top() >= contenedor){
+            pilas[i].push(contenedor);
+            return true;
+        }
+    }
+    return false;
+}
+void vaciar(stack<char> &pila){
+    while(!pila.empty()){
+        pila.pop();
+    }
+}
+int main()
+{   
+    ofstream out("output.txt");
+    //ifstream in("input2.txt");
+
+    string contenedores;
+    vector<stack<char>> pilas;
+    stack<char> pila;
+    int cont  =1;
+    while(cin>>contenedores&&contenedores!="end"){
+        pila.push(contenedores[0]);
+        pilas.pb(pila);
+        for(int i = 1; i<contenedores.size(); i++){
+            if(sePuede(contenedores[i],pilas)){
+
+            }
+            else{
+                vaciar(pila);
+                pila.push(contenedores[i]);
+                pilas.pb(pila);
+            }
+        }
+        cout<<"Case "<<cont<<": "<<pilas.size()<<endl;
+        out<<"Case "<<cont<<": "<<pilas.size()<<endl;
+        pilas.clear();
+        vaciar(pila);
+        cont++;
+    }
+
+    return 0;
+}

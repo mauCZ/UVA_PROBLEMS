@@ -1,0 +1,52 @@
+#include<bits/stdc++.h>
+using namespace std;
+
+unordered_map<int,vector<int>> grafo;
+unordered_map<int,int> visitado;
+
+bool bicolorable(int inicio){
+    bool bipartido = true;
+    queue<int> colita;
+    colita.push(inicio);
+    visitado[inicio] = 0;
+
+    while(!colita.empty() && bipartido){
+        int actual = colita.front(); colita.pop();
+
+        for(int i = 0; i<grafo[actual].size();i++){
+            int vecino = grafo[actual][i];
+            if(visitado[vecino] == -1){
+                colita.push(vecino);
+                visitado[vecino] = 1-visitado[actual];
+            }
+            else if(visitado[vecino] == visitado[actual]){  
+                bipartido = false;
+            }
+        }
+    }
+    return bipartido;
+}
+
+int main()
+{
+    ofstream out("output.txt");
+    //ifstream in("input.txt");
+
+    int v,a,b;
+    while(cin>>v && v!=0){
+        for(int i = 1; i<=v; i++){
+            visitado[i] = -1;
+        }
+        while(cin>>a>>b && a != 0 || b != 0){
+            grafo[a].push_back(b);
+            grafo[b].push_back(a);
+        }
+        if(bicolorable(1)) cout<<"YES\n";
+        else               cout<<"NO\n";
+
+        grafo.clear();
+        visitado.clear();
+
+    }
+    return 0;
+}

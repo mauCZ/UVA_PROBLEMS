@@ -1,0 +1,96 @@
+    #include <cstdio>
+    #include<bits/stdc++.h> 
+    #include <iostream>
+    #include <vector>
+    #include <fstream>
+    #include <string>
+    #include <map>
+    #include <math.h>
+    #include <unordered_map>
+    #define pb          push_back 
+    #define endl        "\n"
+    #define mostrar(x,y) cout<<x<<" "<<y<<endl;
+    #define f           first
+    #define s           second
+    #define mod         1000000007
+    using namespace std;
+    typedef pair<int,int> ii;
+    typedef pair<pair<int,int>,int> iii;
+    typedef vector<int> vi;
+    typedef vector<pair<int,int>> vii;
+
+    long long dp[305][305];
+
+    void preCalcular(){
+        //EN VES DE HACER RECURSIVIDAD VAMOS A RELLENAR LA MATRIZ ANTES Y LUEGO HACER CONSULTAS, BOTTOM-UP
+
+        //CASOS BASE: NO TENER MONEDA Y MONTO MAYOR A CERO, CERO POSIBILIDADES
+        for(int i = 1; i<305; i++){
+            dp[0][i] = 0;
+        }
+        //CASOS BASE: TENER 0 MAS MONEDAS Y TENER MONTO IGUAL A CERO, SIEMPRE SE PUEDE DE UNA SOLA VEZ, CERO MONEDAS
+        for(int j = 0; j<305; j++){
+            dp[j][0] = 1;
+        }
+
+        for(int i = 1; i<305; i++){
+            for(int j = 1; j<305; j++){
+                if(i>j){
+                    dp[i][j] = dp[i-1][j];
+                }
+                else{
+                    dp[i][j] = dp[i-1][j] + dp[i][j-i];
+                }
+            }   
+        }
+    }
+    int main()
+    {   
+        ofstream out("output.txt");
+        //ifstream in("input2.txt");
+
+        string datos;
+        istringstream s;
+        int a,b,c;
+        vi dat;
+        preCalcular();
+
+        while(getline(cin,datos)){
+            s.str(datos);
+            while(s>>a){
+                dat.pb(a);
+            }
+            if(dat.size()==1){
+                cout<<dp[dat[0]][dat[0]]<<endl;
+                out<<dp[dat[0]][dat[0]]<<endl;
+            }
+            else if(dat.size()==2){
+
+                cout<<dp[min(dat[1],300)][dat[0]]<<endl;
+                out<<dp[min(dat[1],300)][dat[0]]<<endl;
+            }
+            else{
+                a = dat[0];
+                b = min(dat[1],300);
+                c = min(dat[2],300);
+                if(a == 0 && b == 0){
+                    cout<<1<<endl;
+                    out<<1<<endl;
+                }
+                else if(b == 0){
+                    cout<<dp[ c ][ a ] - dp[ b ][ a ]<<endl;
+                    out<<dp[ c ][ a ] - dp[ b ][ a ]<<endl;   
+                }
+                else{
+                    cout<<dp[ c ][ a ] - dp[ b-1 ][ a ]<<endl;
+                    out<<dp[ c ][ a ] - dp[ b-1 ][ a ]<<endl;   
+                }
+            }
+            s.clear();
+            dat.clear();
+        }
+        
+        
+        return 0;
+    }
+

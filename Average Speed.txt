@@ -1,0 +1,47 @@
+#include <iostream>
+#include <sstream>
+#include <iomanip>
+#include <fstream>
+#include<bits/stdc++.h>
+using namespace std;
+
+int main(){
+    ofstream out("output.txt");
+
+    string dato,fecha;
+    int velocidad = 0;
+    int hora = 0, minuto = 0, segundo = 0,horaFinal = 0, minutoFinal = 0, segundoFinal = 0;
+    double distanciaRecorrida = 0,distanciaActualRecorrida = 0;
+    while(getline(cin,dato)){
+        stringstream s(dato);
+        if(dato.size() != 8 ){
+            s>>fecha;
+            stringstream ss(fecha);
+            char basura1,basura2;
+            ss>>hora>>basura1>>minuto>>basura2>>segundo;
+            distanciaActualRecorrida = velocidad*(  (hora+minuto/60.0+segundo/3600.0) -(horaFinal+minutoFinal/60.0 + segundoFinal/3600.0));
+            distanciaRecorrida += distanciaActualRecorrida;
+            horaFinal = hora;
+            minutoFinal = minuto;
+            segundoFinal = segundo;
+            s>>velocidad;
+        }
+        else{
+            s>>fecha;
+            stringstream ss(fecha);
+            char basura1,basura2;
+            ss>>horaFinal>>basura1>>minutoFinal>>basura2>>segundoFinal;
+            distanciaActualRecorrida = velocidad*( - (hora+minuto/60.0+segundo/3600.0) + (horaFinal+minutoFinal/60.0 + segundoFinal/3600.0));
+            distanciaRecorrida += distanciaActualRecorrida;
+            cout<<fecha<<" "<<setprecision(2)<<fixed<<distanciaRecorrida<<" km\n";
+            out<<fecha<<" "<<setprecision(2)<<fixed<<distanciaRecorrida<<" km\n";
+            hora = horaFinal;
+            minuto = minutoFinal;
+            segundo = segundoFinal;
+        }
+    }
+
+
+    return 0;
+}
+

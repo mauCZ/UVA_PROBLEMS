@@ -1,0 +1,46 @@
+#include<cstdio>
+#include<iostream>
+#include<cstring>
+#include<unordered_map>
+#include<set>
+#include<map>
+#include<queue>
+#include<stack>
+#include<string>
+#include<fstream>
+
+using namespace std;
+
+void imprimirPila(stack<string> &pila){
+    while(!pila.empty()){
+            cout<<pila.top()+" ";
+            pila.pop();
+        }
+        cout<<endl;
+}
+
+int main(){
+    ofstream out("output.txt");
+    int n, numero, minimo,suma,a,b;
+    while(cin>>n && n!= 0){
+        minimo = 0;
+        priority_queue<int,vector<int>,greater<int>> colitaPriori;
+        while(n--){
+            cin>>numero;
+            colitaPriori.push(numero);
+        }
+        while(colitaPriori.size() != 1){
+            a = colitaPriori.top();
+            colitaPriori.pop();
+            b = colitaPriori.top();
+            colitaPriori.pop();
+            suma = a+b;
+            minimo += suma;
+            colitaPriori.push(suma);
+        }
+        cout<<minimo<<endl;
+        out<<minimo<<endl;
+    }
+    return 0;
+}
+

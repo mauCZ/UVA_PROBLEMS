@@ -1,0 +1,69 @@
+#include<bits/stdc++.h>
+#define llenar(a,val)   memset(a,val,sizeof(a))
+#define pb          push_back 
+#define endl        "\n"
+#define mostrar(x,y) cout<<x<<" "<<y<<endl;
+#define f           first
+#define s           second
+#define mod         1000000007
+#define EPS         1e-9
+using namespace std;
+typedef pair<int,int> ii;
+typedef pair<pair<int,int>,int> iii;
+typedef vector<int> vi;
+typedef vector<pair<int,int>> vii;
+typedef long long ll;
+typedef vector< pair<pair<int,int>,int> > viii;
+
+vector<stack<int>> v;
+
+bool sePuede(int ball, int n){
+    for(int i =0;i<n;i++){
+        if(v[i].size()>0){
+            int raiz = sqrt(ball+v[i].top());
+            if(raiz * raiz == (ball+v[i].top())){
+                v[i].push(ball);
+                return true;
+            }
+        }
+    }
+    for(int i =0;i<n;i++){
+        if(v[i].size()==0){
+            v[i].push(ball);
+            return true;
+        }
+    }
+    return false;
+}
+
+int main(){
+    ofstream out("output.txt");
+    
+    int t,n;
+    cin>>t;
+    while(t--){
+        cin>>n;
+        stack<int> s;
+        for(int i =0;i<n;i++){
+            v.pb(s);
+        }
+        int ball = 1;
+        while(sePuede(ball,n)){
+            ball++;
+        }
+        cout<<ball-1<<endl;
+        out<<ball-1<<endl;
+
+        v.clear();
+    }
+
+    return 0;
+}
+
+ 
+ 
+
+
+
+
+

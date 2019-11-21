@@ -1,0 +1,99 @@
+#include <cstdio>
+#include<bits/stdc++.h> 
+#define pb          push_back 
+#define endl        "\n"
+#define mostrar(x,y) cout<<x<<" "<<y<<endl;+
+
+#define f           first
+#define s           second
+using namespace std;
+typedef pair<int,int> ii;
+typedef vector<int> vi;
+typedef vector<pair<int,int>> vii;
+
+int dp[25][210];
+
+void inicializarMatrizDP(int filas,int columnas){
+    for(int i = 0; i<25; i++){
+        for(int j = 0; j<210; j++){
+            dp[i][j] = -1;
+        }
+    }
+}
+
+int DP(int suma, int indice,vi &numeros){
+    int res = 0;
+    if(suma == 0){
+        res = 1;
+    }
+
+    else if(suma < 0) {
+        res = 0;
+    }
+
+    else if(indice == 0 && suma > 0){
+        res = 0;
+    }
+
+    else if(dp[indice][suma]!=-1){
+        res = dp[indice][suma];
+    }
+
+    else{
+        res = DP(suma-numeros[indice],indice-1,numeros) || DP(suma,indice-1,numeros);
+        dp[indice][suma] = res;
+    }
+    return res;
+}
+    
+int main()
+{   
+    ofstream out("output.txt");
+    //ifstream in("input2.txt");
+
+    //dado un numero y una secuencia de elementos, ver si existe algun subsegmento que sume el numero introducido
+
+    int n,num,total;
+    vi numeros;
+    cin>>n;
+    string datos;
+    istringstream s;
+    cin.ignore();
+    for(int i = 0; i<n; i++){
+
+        getline(cin,datos);
+        s.str(datos);
+        numeros.pb(0);
+        total = 0;
+        while(s>>num){
+            numeros.pb(num);
+            total += num;
+        }
+
+        inicializarMatrizDP(numeros.size(),total/2);
+
+
+        if(total%2==0){
+            if(DP(total/2,numeros.size()-1,numeros)){
+                cout<<"YES"<<endl;
+                out<<"YES"<<endl;
+            }
+            else{
+                cout<<"NO\n";
+                out<<"NO\n";
+            }
+        }
+        else{
+            cout<<"NO\n";
+            out<<"NO\n";
+        }
+        s.clear();
+        numeros.clear();
+    }   
+
+
+                
+
+    return 0;
+}
+

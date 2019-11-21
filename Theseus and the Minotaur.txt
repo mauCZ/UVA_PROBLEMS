@@ -1,0 +1,170 @@
+import java.util.ArrayList;
+import java.util.Calendar;
+import java.util.LinkedHashMap;
+import java.util.List;
+import java.util.Arrays;
+import java.util.Collections;
+import java.util.GregorianCalendar;
+import java.io.InputStreamReader;
+import java.io.PrintWriter;
+import java.io.BufferedReader;
+import java.util.LinkedList;
+import java.util.Locale;
+import java.util.Iterator;
+import java.util.Stack;
+import java.util.Set;
+import java.util.HashSet;
+import java.util.TreeSet;
+import java.util.Map;
+import java.util.HashMap;
+import java.util.TreeMap;
+import java.util.BitSet;
+import java.util.Calendar;
+import java.lang.StringBuilder;
+import java.util.Queue;
+import java.util.Objects;
+import java.util.PriorityQueue;
+public class UvaProblems {
+
+    public static void main(String[] args) throws Exception {
+        BufferedReader in = new BufferedReader(new InputStreamReader(System.in));
+        PrintWriter out = new 	PrintWriter(System.out);
+        Locale.setDefault(new Locale("en", "US"));
+        
+        HashMap<Character, ArrayList<Character>> grafo = new HashMap<>();
+        int i,j;
+        String a, respuesta;
+        String[] b,c,d;
+        String posTeseo, minotauro;
+        int k,cont;
+        HashMap<Character, Boolean> posibles = new HashMap<>();	
+        Boolean encontrado, hayCamino;
+        Stack<Character> pilita = new Stack<>();
+        ArrayList<Character> vecinos;
+        HashSet<Character> vertices = new HashSet<>();;
+        while(!(a = in.readLine()).equals("#")) {
+        	posibles.clear();
+        	vertices.clear();
+        	grafo.clear();
+        	pilita.clear();
+        	b = a.split(" ");
+        	c = b[0].split(";");
+        	encontrado = false;
+        	for(i = 0; i<c.length; i++) {
+        		for(j = 0; j<c[i].length(); j++) {
+        			if(j == 0) {
+        				grafo.put(c[i].charAt(j), new ArrayList<>());
+        			}
+        			if(j>1)
+        				if(c[i].charAt(j) != '.') {
+        					grafo.get(c[i].charAt(0)).add(c[i].charAt(j));
+        					vertices.add(c[i].charAt(j));
+        				}
+        		}
+        	}
+        	posTeseo = b[2];
+        	minotauro = b[1];
+        	k = Integer.parseInt(b[3]);
+        	cont = 1;
+        	for(char ch : grafo.keySet()) {
+        		posibles.put(ch, false);
+        	}
+        	for(char ch : vertices) {
+        		if(!grafo.containsKey(ch)) {
+        			grafo.put(ch, new ArrayList<>());
+        		}
+        		posibles.put(ch,false);
+        	}
+        	char anterior = posTeseo.charAt(0), actual;
+        	pilita.push(minotauro.charAt(0));
+        	respuesta = "";
+
+        	while(!pilita.isEmpty()) {
+        		actual = pilita.pop();
+        		vecinos = grafo.get(actual);
+        		hayCamino = false;
+            	for(char vecino : vecinos) {
+            		if(vecino != anterior) {
+            			if(posibles.get(vecino) == false) {
+                			hayCamino = true;
+                			break;
+                		}	
+            		}
+            	}
+            	if(!hayCamino) {
+            		respuesta += "/"+actual;
+            		pilita.clear();
+            	}
+            	else {
+            		if(cont == k) {
+            			posibles.put(actual,true);
+            			respuesta += actual + " ";
+            			cont = 0;
+            		}
+            		for(int t = vecinos.size()-1; t>= 0; t--) {
+            			char vecino = vecinos.get(t);
+            			if(posibles.get(vecino) == false && vecino != anterior) {
+            				pilita.push(vecino);
+            			}
+            		}
+            		anterior = actual;
+            		cont++;
+            	}
+        		
+        	}
+        	System.out.println(respuesta);
+        }
+        out.flush();
+	}
+    /*public static String dfs(HashMap<Character,ArrayList<Character>> grafo, char vertice, HashMap<Character,Boolean> posibles, int k, int actual, char anterior) {
+    	String res = "";
+    	ArrayList<Character> vecinos = grafo.get(vertice);
+    	boolean hayCamino = false;
+    	for(char vecino : vecinos) {
+    		if(vecino != anterior) {
+    			if(posibles.get(vecino) == false) {
+        			hayCamino = true;
+        			break;
+        		}	
+    		}
+    	}	
+    	if(!hayCamino) {
+    		res = "/"+vertice;
+    		//CUANDO LLEGAMOS ACA, MARCAMOS TODOS, TODOS LOS VERTICES DEL GRAFO COMO VISITADOS PARA EVITAR
+    		//FUTUROS BUGS QUE SE PUDA TENER
+    		for(char v : grafo.keySet()) {
+    			posibles.put(v, true);
+    		}
+    	}
+    	else {
+    		if(k == actual) {
+    			posibles.put(vertice, true);
+    			res = vertice + " ";
+    			actual = 0;
+    		}
+    		for(char vecino : vecinos) {
+    			if(posibles.get(vecino) == false && vecino != anterior) {
+    				res += dfs(grafo, vecino, posibles, k,actual+1, vertice);
+    			}
+    		}
+    	}
+    	return res;
+    }*/
+}
+
+
+
+
+
+
+
+
+//PROBLEMA RESUELTO USANDO DFS ITERATIVO, DFS RECURSIVO GENERA STACKOVERFLOW, NO ES TAN
+//EFICIENTE
+
+
+
+
+
+
+

@@ -1,0 +1,42 @@
+#include<bits/stdc++.h>
+#include <cstdio>	
+using namespace std;
+
+int soldados[100005];
+int izquierda[100005];
+int derecha[100005];
+
+int main(){
+    ofstream out("output.txt");
+    //ifstream in("input.txt");
+    
+	int s,b,l,r;
+	int ind,sr,sl;
+	while(cin>>s>>b && (s!=0 || b!=0)){
+		memset(soldados,0,sizeof(soldados));
+		izquierda[0] = -1;
+		derecha[s-1] = -1;
+		for(int i = 1; i<=s-1; i++){
+			izquierda[i] = i;
+		}
+		for(int i = 2; i<=s; i++){
+			derecha[i-2] = i;
+		}
+		while(b--){
+			cin>>l>>r;
+			sl = izquierda[l-1];
+			sr = derecha[r-1];
+			if(sl == -1 && sr == -1){      cout<<"* *\n";out<<"* *\n";}
+			else if(sl == -1 && sr != -1){ cout<<"* "<<sr<<endl;out<<"* "<<sr<<endl;}
+			else if(sl != -1 && sr == -1){ cout<<sl<<" *\n";out<<sl<<" *\n";}
+			else                         { cout<<sl<<" "<<sr<<endl;out<<sl<<" "<<sr<<endl;}
+			derecha[izquierda[l-1]-1] = derecha[r-1];
+			izquierda[derecha[r-1]-1] = izquierda[l-1];
+		}
+		cout<<"-\n";
+		out<<"-\n";
+	}
+
+    return 0;
+}
+

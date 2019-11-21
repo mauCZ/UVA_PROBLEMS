@@ -1,0 +1,96 @@
+#include<bits/stdc++.h>
+#define llenar(a,val)   memset(a,val,sizeof(a))
+#define pb          push_back 
+#define endl        "\n"
+#define mostrar(x,y) cout<<x<<" "<<y<<endl;
+#define f           first
+#define s           second
+#define mod         1000000007
+#define EPS         1e-9
+using namespace std;
+typedef pair<int,int> ii;
+typedef pair<pair<int,int>,int> iii;
+typedef vector<int> vi;
+typedef vector<pair<int,int>> vii;
+typedef long long ll;
+typedef vector< pair<pair<int,int>,int> > viii;
+
+viii datos;
+
+string permutar(string &p){
+    string sgte = p;
+    int l = p.size();
+    int x = l-2;
+    while(x>=0&&p[x]>=p[x+1]){
+        x--;
+    }
+    if(x == -1) return sgte;
+    else{
+        int y = l-1;
+        while(p[x]>=p[y]){
+            y--;
+        }
+        char aux = sgte[x];
+        sgte[x] = sgte[y];
+        sgte[y] = aux;
+        reverse(sgte.begin()+x+1,sgte.end());
+        return sgte;
+    }
+}
+int indexOf(char a,string &s){
+    for(int i =0;i<s.size();i++){
+        if(s[i]==a) return i;
+    }
+}
+bool cumple(string &grupo){
+    bool res = true;
+    int a,b,c;
+    for(int i =0;i<datos.size();i++){
+        a = datos[i].f.f;
+        b = datos[i].f.s;
+        c = datos[i].s;
+        //cout<<grupo<<" "<<a<<" "<<b<<" "<<c<<" "<<indexOf(a+'0',grupo)<<" "<<indexOf(b+'0',grupo)<<endl;
+        if(c<0) res&=( abs(indexOf(a+'0',grupo)-indexOf(b+'0',grupo)) >= abs(c) );
+        else    res&=( abs(indexOf(a+'0',grupo)-indexOf(b+'0',grupo)) <= abs(c) );
+    }
+    return res;
+}
+
+int main(){
+    ofstream out("output.txt");
+
+    
+    int n,m;
+    int a,b,c;
+    while(cin>>n>>m&&(n!=0||m!=0)){
+        for(int i =0;i<m;i++){
+            cin>>a>>b>>c;
+            datos.pb({{a,b},c});
+        }
+        string grupo = "",aux;
+        for(char i =0;i<n;i++) grupo+=('0'+i);
+        //cout<<"grupo "<<grupo<<endl;
+        int cont = 0;
+        if(cumple(grupo)) cont++;
+        while(true){
+            aux = permutar(grupo);
+            if(aux==grupo){
+                break;
+            }
+            grupo = aux;
+            if(cumple(aux)){cont++; /*cout<<aux<<endl;*/} 
+        }
+        cout<<cont<<endl;
+        datos.clear();
+    }
+    
+    return 0;
+}
+
+ 
+ 
+
+
+
+
+

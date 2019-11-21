@@ -1,0 +1,44 @@
+#include<bits/stdc++.h>
+#include <cstdio>   
+#define pb          push_back 
+#define endl        "\n"
+#define mostrar(x,y) cout<<x<<" "<<y<<endl;
+#define f           first
+#define s           second
+#define mod         1000000007
+#define EPS         1e-9
+using namespace std;
+typedef pair<int,int> ii;
+typedef pair<pair<int,int>,int> iii;
+typedef vector<int> vi;
+typedef vector<pair<int,int>> vii;
+typedef long long ll;
+    
+int f(int n,int k){
+    if(n == 1) return k;
+    else{
+        if(k<pow(2,n-1)){
+            return f(n-1,k);
+        }
+        else{
+            return pow(2,n-1) + f(n-1,pow(2,n)-k-1);
+        }
+    }
+}
+
+int main(){
+    ofstream out("output.txt");
+    int res;
+    int t,n,k;
+    cin>>t;
+    while(t--){
+        cin>>n>>k;
+        res = f(n,k);
+        cout<<res<<endl;
+        out<<res<<endl;
+        //cout<<f(n,k)<<endl;
+    }
+
+
+    return 0;
+}

@@ -1,0 +1,42 @@
+#include <cstdio>
+#include<bits/stdc++.h> 
+#define pb          push_back 
+#define endl        "\n"
+#define mostrar(x,y) cout<<x<<" "<<y<<endl;+
+#define f           first
+#define s           second
+using namespace std;
+typedef pair<int,int> ii;
+typedef pair<pair<int,int>,int> iii;
+typedef vector<int> vi;
+typedef vector<pair<int,int>> vii;
+
+
+int main()
+{   
+    ofstream out("output.txt");
+    //ifstream in("input2.txt");
+
+    int n,maximo,sumaAct;  
+    int numeros[10010];
+    while(cin>>n && n != 0){
+        for(int i = 0; i<n; i++){
+            cin>>numeros[i];
+        }
+
+        maximo = 0;
+        sumaAct = 0;
+
+        for(int i = 0; i<n; i++){
+            sumaAct += numeros[i];
+            maximo = max(maximo,sumaAct);
+            if(sumaAct<0) sumaAct = 0;
+        }
+
+        maximo==0?cout<<"Losing streak.\n":cout<<"The maximum winning streak is "<<maximo<<".\n";
+
+    }
+
+    return 0;
+}
+

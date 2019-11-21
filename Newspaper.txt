@@ -1,0 +1,46 @@
+#include <iostream>
+#include <string>
+#include <map>
+#include <sstream>
+#include <set>
+#include <iomanip>
+#include <fstream>
+#include <set>
+using namespace std;
+
+int main(){
+    int n,nroLetras,nroArticulos,costo ,total;
+    double costoReal;
+    map<char,int> mapa;
+    set<char> chars;
+    char letra;
+    string linea;
+    cin>>n;
+    while(n--){
+        total = 0;
+        cin>>nroLetras;
+        while(nroLetras--){
+            cin>>letra>>costo;
+            mapa[letra] = costo;
+            chars.insert(letra);
+        }
+        cin>>nroArticulos;
+        cin.ignore();
+        while(nroArticulos--){
+            getline(cin,linea);
+            for(int i = 0; i<linea.size(); i++){
+                if(chars.find(linea[i]) != chars.end()){
+                    total += mapa[linea[i]];
+                }
+            }
+        }
+        costoReal = total /100.0;
+        cout<<setprecision(2)<<fixed<<costoReal;
+        cout<<'$'<<endl;
+        mapa.clear();
+        chars.clear();
+    }
+    return 0;
+}
+
+

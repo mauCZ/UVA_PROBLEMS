@@ -1,0 +1,88 @@
+#include <cstdio>
+#include<bits/stdc++.h> //ESTA LINEA HACE ALGO
+using namespace std;
+
+bool seSalioDeLaMatriz(int limiteX, int limiteY, int x, int y ){
+    if(( x>=0 && x<=limiteX ) && ( y>=0 && y<=limiteY )){
+        return false;
+    }
+    return true;;
+}
+
+int main(){
+    ofstream out("output.txt");
+
+    string instruccion;
+    char direccion;
+    int i,j,a,b, iniX, iniY;
+    bool perdido;
+    cin>>a>>b;
+    int matriz[a+1][b+1];
+    for(i = 0; i<=a; i++){
+        for(j = 0; j<=b; j++){
+            matriz[i][j] = 0;
+        }
+    }
+    int x,y;
+    while(cin>>iniX>>iniY>>direccion>>instruccion){
+        x = iniX;
+        y = iniY;
+        perdido = false;
+        for(i = 0; i<instruccion.size() && !perdido; i++){
+            if(instruccion[i] == 'L'){
+                if(direccion == 'N')
+                    direccion = 'W';
+                else if(direccion == 'S')
+                    direccion = 'E';
+                else if(direccion == 'W')
+                    direccion = 'S';
+                else if(direccion == 'E')
+                    direccion = 'N';
+            }
+            else if(instruccion[i] == 'R'){
+                if(direccion == 'N')
+                    direccion = 'E';
+                else if(direccion == 'S')
+                    direccion = 'W';
+                else if(direccion == 'W')
+                    direccion = 'N';
+                else if(direccion == 'E')
+                    direccion = 'S';
+            }
+            else if(instruccion[i] == 'F'){
+                if(direccion == 'N')
+                    y = y + 1;
+                if(direccion == 'S')
+                    y = y - 1;
+                if(direccion == 'W')
+                    x = x - 1;
+                if(direccion == 'E')
+                    x = x + 1;
+            }
+            if(seSalioDeLaMatriz(a,b,x,y)){
+                if(x > a)
+                    x = x - 1;
+                else if(x<0)
+                    x = x + 1;
+                else if(y>b)
+                    y = y - 1;
+                else if(y<0)
+                    y = y + 1;
+                if(matriz[x][y] == 1){
+                    continue;
+                }
+                else{
+                    matriz[x][y] = 1;
+                    cout<<x<<" "<<y<<" "<<direccion<<" LOST\n";
+                    out<<x<<" "<<y<<" "<<direccion<<" LOST\n";
+                    perdido = true;
+                }
+            }
+        }
+        if(!perdido){
+            cout<<x<<" "<<y<<" "<<direccion<<endl;
+            out<<x<<" "<<y<<" "<<direccion<<endl;
+        }
+    }
+    return 0;
+}

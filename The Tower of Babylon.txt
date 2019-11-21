@@ -1,0 +1,72 @@
+#include <cstdio>
+#include<bits/stdc++.h> 
+#define pb          push_back 
+#define endl        "\n"
+#define mostrar(x,y) cout<<x<<" "<<y<<endl;+
+#define f           first
+#define s           second
+using namespace std;
+typedef pair<int,int> ii;
+typedef pair<pair<int,int>,int> iii;
+typedef vector<int> vi;
+typedef vector<pair<int,int>> vii;
+
+bool criterio(iii a, iii b){
+    if((a.f.f * a.f.s)<(b.f.f * b.f.s)) return true;
+    if((a.f.f * a.f.s)>(b.f.f * b.f.s)) return false;
+    return a.s < b.s;
+}
+int alturas[100];
+void iniciarAlturas(){
+    for(int i = 0; i<100; i++){
+        alturas[i] = 1;
+    }
+}
+int main()
+{   
+    ofstream out("output.txt");
+    //ifstream in("input2.txt");
+
+
+    int n,a,b,c,ind,cont = 1;
+    vector<iii> bloques;
+    iii x,y;
+    while(cin>>n && n!=0){
+        ind = 0;
+        for(int i = 0; i<n; i++){
+            cin>>a>>b>>c;
+
+            bloques.pb({{a,b},c});
+            bloques.pb({{a,c},b});
+            bloques.pb({{b,c},a});
+
+        }
+        sort(bloques.begin(),bloques.end(),criterio);
+        for(int i = 0; i<n*3; i++){
+            alturas[i] = bloques[i].s;
+        }
+        int altMax;
+        for(int i = 1; i<bloques.size(); i++){
+            altMax = 0;
+            x = bloques[i];
+            for(int j = 0; j<i; j++){
+                y = bloques[j];
+                if(min(y.f.f,y.f.s)<min(x.f.f,x.f.s) && max(y.f.f,y.f.s)<max(x.f.f,x.f.s) ){
+                    if(y.s > altMax) altMax = y.s;
+                }
+            }
+            bloques[i].s += altMax;
+        }
+        altMax = 0;
+        for(int i = 0; i<bloques.size(); i++){
+            x = bloques[i];
+            if(x.s > altMax) altMax = x.s;
+        }
+        cout<<"Case "<<cont<<": maximum height = "<<altMax<<endl;
+        cont++;
+        bloques.clear();
+    }   
+
+    return 0;
+}
+

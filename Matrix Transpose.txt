@@ -1,0 +1,94 @@
+#include<bits/stdc++.h>
+#include <cstdio>   
+#define pb          push_back 
+#define endl        "\n"
+#define mostrar(x,y) cout<<x<<" "<<y<<endl;
+#define f           first
+#define s           second
+#define mod         1000000007
+#define EPS         1e-9
+using namespace std;
+typedef pair<int,int> ii;
+typedef pair<pair<int,int>,int> iii;
+typedef vector<int> vi;
+typedef vector<pair<int,int>> vii;
+typedef long long ll;
+    
+
+int matriz[10005][10005];
+int transpuesta[10005][10005];
+vi indices;
+void iniciarMatrices(int filas,int columnas){
+    for(int i = 0; i<filas; i++){
+        for(int j = 0; j<columnas; j++){
+            matriz[i][j] = 0;
+        }
+    }
+    for(int i = 0; i<columnas; i++){
+        for(int j = 0; j<filas; j++){
+            transpuesta[i][j] = 0;
+        }
+    }
+}
+
+int main(){
+    ofstream out("output.txt");
+
+    int filas,columnas,ceros,ind,val;
+
+    while(cin>>filas>>columnas){
+        iniciarMatrices(filas,columnas);
+        for(int i = 0; i<filas; i++){
+            cin>>ceros;
+            for(int j = 0; j<ceros; j++){
+                cin>>ind;
+                indices.pb(ind-1);
+            }
+            for(int j = 0; j<ceros;j++){
+                cin>>val;
+                matriz[i][indices[j]] = val;
+            }
+            indices.clear();
+        }
+        for(int i = 0; i<filas; i++){
+            for(int j = 0; j<columnas; j++){
+                transpuesta[j][i] = matriz[i][j];
+            }
+        }
+        cout<<columnas<<" "<<filas<<endl;
+
+        for(int i = 0; i<columnas; i++){
+            for(int j = 0; j<filas; j++){
+                if(transpuesta[i][j] != 0){
+                    indices.pb(j+1);
+                }
+            }
+            cout<<indices.size();
+            for(int indice : indices){
+                cout<<" "<<indice;
+            }
+            cout<<endl;
+            for(int k = 0; k<indices.size(); k++){
+                if(k == 0) cout<<transpuesta[i][indices[k]-1];
+                else       cout<<" "<<transpuesta[i][indices[k]-1];
+            }
+            cout<<endl;
+            indices.clear();
+        }
+        /*for(int i = 0; i<filas; i++){
+            for(int j = 0; j<columnas; j++){
+                cout<<matriz[i][j]<<" ";
+            }
+            cout<<endl;
+        }
+        cout<<"////////////////\n";
+        for(int i = 0; i<columnas; i++){
+            for(int j = 0; j<filas; j++){
+                cout<<transpuesta[i][j]<<" ";
+            }
+            cout<<endl;
+        }*/
+    }    
+
+    return 0;
+}

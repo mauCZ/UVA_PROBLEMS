@@ -1,0 +1,92 @@
+#include <iostream>
+#include <vector>
+#include <fstream>
+#include <algorithm>
+#include <map>
+#include <set>
+#include <unordered_map>
+#include <iomanip>
+#include <math.h>
+using namespace std;
+ 
+#define pb push_back
+#define f first
+#define s second
+#define endl '\n'
+#define EPS 1e-9
+#define PI acos(-1)
+ 
+using ll = long long;
+using pll = pair<ll,ll>;
+using ii = pair<int,int>;
+using vi = vector<int>;
+using vii = vector<ii>;
+using vll = vector<ll>;
+using ui = unsigned int;
+
+int n;
+bool usado[20];
+vector<vi> respuestas;
+bool esPrimo(int a){
+    for(int i =2;i<=sqrt(a);i++){
+        if(a % i == 0) return false;
+    }
+    return true;
+}
+void backtrack(int ind,int tam,vi &actual){
+    if(ind == tam-1){
+        for(int i =2;i<=tam;i++){
+            if(usado[i] == false){
+                if(esPrimo(i+actual[ind-1])  && esPrimo(i+actual[0])){
+                    actual.pb(i);
+                    respuestas.pb(actual);
+                    actual.erase(actual.end()-1);
+                }
+            }
+        }
+        return ;
+    }
+
+    for(int i =2;i<=tam;i++){
+        if(usado[i] == false){
+            if(esPrimo(i+actual[ind-1])){
+                usado[i] = true;
+                actual.pb(i);
+                backtrack(ind+1,tam,actual);
+                actual.erase(actual.end()-1);
+                usado[i] = false;
+            }
+        }
+    }
+
+}
+
+int main() {
+    ofstream out("output.txt");
+    ios_base::sync_with_stdio(false);
+    int cont = 1;
+    while(cin>>n){
+        respuestas.clear();
+        for(int i=0;i<20;i++){
+            usado[i] = false;
+        }
+        vi actual;
+        actual.pb(1);
+        usado[1] = true;
+        backtrack(1,n,actual);
+        if(cont > 1){
+            cout<<endl;
+        }
+        cout<<"Case "<<cont<<":\n";
+        for(int i=0;i<respuestas.size();i++){
+            for(int j =0;j<respuestas[i].size();j++){
+                if(j == 0){ cout<<respuestas[i][j];}
+                else      { cout<<" "<<respuestas[i][j];}
+            }
+            cout<<endl;
+        }
+        cont++;
+    }
+    return 0;
+}   
+

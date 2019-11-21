@@ -1,0 +1,77 @@
+#include<bits/stdc++.h>
+#include <cstdio>   
+#define pb          push_back 
+#define endl        "\n"
+#define mostrar(x,y) cout<<x<<" "<<y<<endl;
+#define f           first
+#define s           second
+#define mod         1000000007
+#define EPS         1e-9
+using namespace std;
+typedef pair<int,int> ii;
+typedef pair<pair<int,int>,int> iii;
+typedef vector<int> vi;
+typedef vector<pair<int,int>> vii;
+typedef long long ll;
+
+map<int,int> parent;
+map<int,int> ranking;
+map<int,int> lideres;
+int p1,p2;
+void create_set(int a){
+    parent[a] = a;
+    ranking[a] = 0;
+    lideres[a] = 1;
+}
+int find_set(int x){
+    return parent[x] = (parent[x]==x? x:find_set(parent[x]));
+}
+void union_set(int x,int y){
+    p1 = find_set(x);
+    p2 = find_set(y);
+    if(p1!=p2){
+        if(ranking[p1]>ranking[p2]){
+            parent[p2] = p1;
+            lideres[p1] += lideres[p2];
+        }
+        else{
+            parent[p1] = p2;
+            lideres[p2] += lideres[p1];
+            if(ranking[p1] == ranking[p2]) ranking[p2]++;
+        }
+    }
+}
+
+int main(){
+    ofstream out("output.txt");
+
+    int n,m,a,b,cont  =1;
+    set<int> res;
+    while(cin>>n>>m && (n!=0||m!=0)){
+        for(int i = 1; i<=n; i++){
+            create_set(i);
+        }
+        for(int i = 0; i<m; i++){
+            cin>>a>>b;
+            union_set(a,b);
+        }
+        for(int i = 1; i<=n; i++){
+            int aux = find_set(i);
+        }
+        for(int i = 0; i<n; i++){
+            res.insert(parent[i+1]);
+        }
+
+        cout<<"Case "<<cont<<": "<<res.size()<<endl;
+        out<<"Case "<<cont<<": "<<res.size()<<endl;
+        cont++;
+        res.clear();
+        ranking.clear();
+        lideres.clear();
+        parent.clear();
+    }
+
+
+
+    return 0;
+}

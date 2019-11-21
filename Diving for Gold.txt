@@ -1,0 +1,111 @@
+#include <iostream>
+#include <vector>
+#include <fstream>
+#include <sstream>
+#include <algorithm>
+#include <map>
+#define pb push_back
+#define f first
+#define s second
+#define endl '\n'
+#define EPS 1e-9
+#define PI acos(-1)
+ 
+using namespace std;
+using ll = long long;
+using pll = pair<ll,ll>;
+using ii = pair<int,int>;
+using vi = vector<int>;
+using vll = vector<ll>;
+using ui = unsigned int;    
+
+#define x 10001
+#define y 3001
+
+int dp[x][y];
+ll tiempoBuceo[100];
+ll oro[100];
+
+ll knapsack(ll cap, ll ind){
+    ll res = 0;
+    if(cap == 0){
+    }
+    else if(ind == 0){
+    }
+    else{
+        if(dp[cap][ind] == -1){
+            if(tiempoBuceo[ind] > cap) res = knapsack(cap,ind-1);
+            else res = max(knapsack(cap-tiempoBuceo[ind],ind-1)+oro[ind],knapsack(cap,ind-1));
+            dp[cap][ind] = res;
+        }
+        else
+            res = dp[cap][ind];
+    }
+
+    return res;
+}
+void iniciar(){
+    for(int i =0;i<x;i++){
+        for(int j =0;j<y;j++){
+            dp[i][j] = -1;
+        }
+    }
+}
+ 
+int main() {
+    ofstream out("output.txt");
+    ios_base::sync_with_stdio(false);
+    
+    ll t,w;
+    int cont = 0;
+    while(cin>>t>>w){
+        iniciar();
+        if(cont > 0){
+            cout<<endl;
+            out<<endl;
+        }
+        ll n,depth,gold;
+        vector<pll> v;
+        cin>>n;
+        v.pb({-1,-1});
+        for(int i =1;i<=n;i++){
+            cin>>depth>>gold;
+            v.pb({depth,gold});
+        }
+        oro[0] = -1;
+        tiempoBuceo[0] = -1;
+        for(int i =1;i<=n;i++){
+            oro[i] = v[i].s;
+            tiempoBuceo[i] = w*v[i].f + 2*w*v[i].f;
+        }
+        ll res = knapsack(t,n);        
+        cout<<res<<endl;
+        out<<res<<endl;
+
+        vector<pll> tesoros;
+        int tesoro = n,tiempo = t;
+        while(tesoro >0){
+            if(dp[tiempo][tesoro] == 0) break;
+            if(dp[tiempo][tesoro] == dp[tiempo][tesoro-1]){
+                tesoro--;
+            }
+            else{
+                tesoros.pb(v[tesoro]);
+                tiempo -= (tiempoBuceo[tesoro]);
+                tesoro--;
+            }
+        }
+        reverse(tesoros.begin(),tesoros.end());
+        cout<<tesoros.size()<<endl;
+        out<<tesoros.size()<<endl;
+
+        for(int i =0;i<tesoros.size();i++){
+            cout<<tesoros[i].f<<" "<<tesoros[i].s<<endl;
+            out<<tesoros[i].f<<" "<<tesoros[i].s<<endl;
+        }
+        cont++;
+    }    
+
+
+    return 0;
+}

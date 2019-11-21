@@ -1,0 +1,90 @@
+#include <cstdio>
+#include<bits/stdc++.h> 
+#define pb          push_back 
+#define endl        "\n"
+using namespace std;
+typedef pair<int,int> ii;
+typedef vector<int> vi;
+
+char arena[105][105];
+
+
+int main()
+{   
+    ofstream out("output.txt");
+    //ifstream in("input2.txt");
+
+    string instrucciones;
+    int filas,columnas,nroIns,xActual,yActual,stickersRec;
+    char dirActual,instruccion;
+    while(cin>>filas>>columnas>>nroIns &&(filas!=0||columnas!=0||nroIns!=0)){
+        for(int i = 0; i<filas; i++){
+            for(int j = 0; j<columnas ; j++){
+                cin>>arena[i][j];
+                if(arena[i][j] == 'N' || arena[i][j] == 'S' ||arena[i][j]=='L'||arena[i][j]=='O'){
+                    dirActual = arena[i][j];
+                    xActual = i;
+                    yActual = j;
+                }
+            }
+        }
+        stickersRec = 0;
+        cin>>instrucciones;
+        for(char instruccion : instrucciones){
+            arena[xActual][yActual] = '.';
+            if(instruccion == 'D'){
+                if(dirActual == 'N')        dirActual = 'L';
+                else if(dirActual == 'S')   dirActual = 'O';
+                else if(dirActual == 'L')   dirActual = 'S';
+                else if(dirActual == 'O')   dirActual = 'N';
+            }
+            else if(instruccion == 'E'){
+                if(dirActual == 'N')        dirActual = 'O';
+                else if(dirActual == 'S')   dirActual = 'L';
+                else if(dirActual == 'L')   dirActual = 'N';
+                else if(dirActual == 'O')   dirActual = 'S';   
+            }
+            else if(instruccion == 'F'){
+                if(dirActual=='N'&&(xActual-1)>=0){
+                    if(arena[xActual-1][yActual] == '.' && arena[xActual-1][yActual]!='#')
+                        xActual--;
+                    else if(arena[xActual-1][yActual]=='*' && arena[xActual-1][yActual]!='#'){
+                        xActual--;
+                        stickersRec++;
+                    }
+                }
+                else if(dirActual=='S'&&(xActual+1)<filas){
+                    if(arena[xActual+1][yActual]=='.' && arena[xActual+1][yActual]!='#')
+                        xActual++;
+                    else if(arena[xActual+1][yActual]=='*' && arena[xActual+1][yActual]!='#'){
+                        xActual++;
+                        stickersRec++;
+                    }
+                }
+                else if(dirActual=='L'&&(yActual+1)<columnas){
+                    if(arena[xActual][yActual+1]=='.' && arena[xActual][yActual+1]!='#'){
+                        yActual++;
+                    }
+                    else if(arena[xActual][yActual+1]=='*' && arena[xActual][yActual+1]!='#'){
+                        yActual++;
+                        stickersRec++;
+                    }
+                }
+                else if(dirActual=='O'){
+                    if(arena[xActual][yActual-1]=='.' && arena[xActual][yActual-1]!='#'){
+                        yActual--;
+                    }
+                    else if(arena[xActual][yActual-1]=='*' && arena[xActual][yActual-1]!='#'){
+                        yActual--;
+                        stickersRec++;
+                    }
+                }
+            }
+
+        }
+        cout<<stickersRec<<endl;
+    }
+
+    return 0;
+}
+

@@ -1,0 +1,65 @@
+#include <cstdio>
+#include<bits/stdc++.h> 
+#define pb          push_back 
+#define endl        "\n"
+#define mostrar(x,y) cout<<x<<" "<<y<<endl;
+using namespace std;
+typedef pair<int,int> ii;
+typedef pair<pair<int,int>,int> iii;
+typedef vector<int> vi;
+typedef vector<pair<int,int>> vii;
+
+
+unordered_map<string,iii> datos;
+
+bool esMayor(iii actual,iii menor){
+    if(actual.second<menor.second) return true;
+    else if(actual.second == menor.second){
+        if(actual.first.second<menor.first.second) return true;
+        else if(actual.first.second == menor.first.second){
+            if(actual.first.first<menor.first.first)return true;
+        }
+    }
+    return false;
+}
+bool esMenor(iii actual,iii mayor){
+    if(actual.second>mayor.second) return true;
+    else if(actual.second ==mayor.second){
+        if(actual.first.second>mayor.first.second) return true;
+        else if(actual.first.second == mayor.first.second){
+            if(actual.first.first>mayor.first.first)return true;
+        }
+    }
+    return false;
+}
+
+int main()
+{   
+    ofstream out("output.txt");
+    //ifstream in("input2.txt");
+
+    int n,dia,mes,anho;
+    string nombre,mayor = "a",menor="b";
+    iii datosMenor = {{0,0},0};
+    iii datosMayor = {{100000,1000000},100000};
+    iii actual;
+    cin>>n; 
+    while(n--){
+        cin>>nombre>>dia>>mes>>anho;
+        datos[nombre] = {{dia,mes},anho};
+    }
+    for(auto it = datos.begin();it!=datos.end(); it++){
+        actual = it->second;
+        if(esMenor(actual,datosMenor)){
+            datosMenor = actual; 
+            menor = it->first;
+        }
+        else if(esMayor(actual,datosMayor)){
+            datosMayor = actual;
+            mayor = it->first;   
+        }
+    }
+    cout<<menor<<endl<<mayor<<endl;
+
+    return 0;
+}

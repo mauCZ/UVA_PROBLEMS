@@ -1,0 +1,93 @@
+#include<bits/stdc++.h>
+#include <cstdio>   
+#define pb          push_back 
+#define endl        "\n"
+#define mostrar(x,y) cout<<x<<" "<<y<<endl;
+#define f           first
+#define s           second
+#define mod         1000000007
+#define EPS         1e-9
+using namespace std;
+typedef pair<int,int> ii;
+typedef pair<pair<int,int>,int> iii;
+typedef vector<int> vi;
+typedef vector<pair<int,int>> vii;
+typedef long long ll;
+    
+multiset<int,greater<int>> verdes;
+multiset<int,greater<int>> azules;
+vi verdesReserva;
+vi azulesReserva;
+int min3(int a,int b, int c){
+    return min(a,min(b,c));
+}
+
+int main(){
+    ofstream out("output.txt");
+
+    int actVerde,actAzul,cont = 0;
+    int t,poder,arenas,ejerVerdes,ejerAzules,minimo;
+    cin>>t;
+    for(int i =0 ; i<t; i++){
+        cin>>arenas>>ejerVerdes>>ejerAzules;
+        if(cont++>0){
+            cout<<endl;
+            out<<endl;
+        }
+        for(int j = 0; j<ejerVerdes; j++){
+            cin>>poder;
+            verdes.insert(poder);
+        }
+        for(int j = 0; j<ejerAzules; j++){
+            cin>>poder;
+            azules.insert(poder);
+        }
+        multiset<int>::iterator itV,itA;
+
+        while(!verdes.empty() && !azules.empty()){
+            minimo = min3(verdes.size(),azules.size(),arenas);
+            itV = verdes.begin(),itA = azules.begin();
+            for(int i = 0; i<minimo; i++){
+                if(*itV > *itA){
+                    verdesReserva.pb(*itV - *itA);
+                }
+                else if(*itA > *itV){
+                    azulesReserva.pb(*itA - *itV);
+                }
+                itV++;
+                itA++;
+                verdes.erase(verdes.begin());
+                azules.erase(azules.begin());
+                
+            }
+            for(int k = 0; k<verdesReserva.size(); k++){
+                verdes.insert(verdesReserva[k]);
+            }
+            for(int k = 0; k<azulesReserva.size(); k++){
+                azules.insert(azulesReserva[k]);
+            }
+            verdesReserva.clear();
+            azulesReserva.clear();
+        }
+        int v = verdes.size(),a = azules.size();
+        if(v == a){
+            cout<<"green and blue died\n";
+        }
+        else if(v>a){
+            cout<<"green wins\n";
+            for(auto val : verdes){
+                cout<<val<<endl;
+            }
+        }
+        else{
+            cout<<"blue wins\n";
+            for(auto val : azules){
+                cout<<val<<endl;
+            }
+        }
+        verdes.clear();
+        azules.clear();
+    }
+
+    return 0;
+}

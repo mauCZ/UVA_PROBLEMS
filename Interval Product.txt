@@ -1,0 +1,131 @@
+#include <cstdio>
+#include<bits/stdc++.h> 
+#define pb          push_back 
+#define endl        "\n"
+#define mostrar(x,y) cout<<x<<" "<<y<<endl;
+using namespace std;
+typedef pair<int,int> ii;
+typedef vector<int> vi;
+typedef vector<pair<int,int>> vii;
+typedef pair<pair<int,int>,char> iii;
+
+int elementos[100010];
+iii segment_tree[4*100000];//EL ARBOL DE SEGMENTOS
+int l,r,m;
+void construir_arbolito(int l,int r,int i){ //i es indice
+    char izq,der;
+    if(l == r){
+        segment_tree[i].first.first = l;
+        segment_tree[i].first.second = r;
+        if(elementos[l]>0)       segment_tree[i].second = '+';
+        else if(elementos[l]==0) segment_tree[i].second = '0';
+        else                     segment_tree[i].second = '-';
+    }
+    else{
+        segment_tree[i].first.first = l;
+        segment_tree[i].first.second = r;
+        construir_arbolito(l,(l+r)/2,2*i);  //CONSTRUIMOS LAS RAMAS IZQ-DER
+        construir_arbolito(((l+r)/2)+1,r,(2*i)+1);
+
+        izq = segment_tree[2*i].second;    //UNA VEZ CONTRUIDOS, SALVAMOS SUS VALORES
+        der = segment_tree[(2*i)+1].second;
+        if(izq=='0'||der=='0') segment_tree[i].second = '0';
+        if(izq=='+'){
+            if(der=='+')   segment_tree[i].second = '+';
+            else if(der=='-')         segment_tree[i].second = '-';
+        }
+        else if(izq=='-'){
+            if(der=='+')   segment_tree[i].second = '-';
+            else if(der=='-')          segment_tree[i].second = '+';
+        }
+    }
+}
+
+int querie(int i,int j,int ind){
+    l = segment_tree[ind].first.first;
+    r = segment_tree[ind].first.second;
+    char izq,der; //NO ES BUENA IDEA USAR IZQ DER COMO GLOBALES YA QUE VARIOS ARBOLES LAS ESTARAN USANDO 
+                 //Y LA INF DEL ARBOL PADRE SE PIERDE
+    if(l>=i&&r<=j){ //[l,r] esta en [i,j]
+        return segment_tree[ind].second;  
+    }
+    else if(r<i || l>j){ //si [l,r] esta a la izq. de [i,j]
+        return '+';        //o si [l,r] esta a la der. de [i,j]
+    }
+    else{
+        izq = querie(i,j,2*ind);
+        der = querie(i,j,(2*ind)+1);
+        if(izq=='0'||der=='0') return '0';
+        if(izq=='+'){
+            if(der=='+')       return '+';
+            else if(der=='-')  return '-';
+        }
+        else if(izq=='-'){
+            if(der=='+')       return '-';
+            else if(der=='-')  return '+';   
+        }
+    }
+}
+void actualizar(int k, int i, char nuevo){
+    l = segment_tree[i].first.first;
+    r = segment_tree[i].first.second;
+    char izq,der;
+    if(l == r){
+        segment_tree[i].second = nuevo;
+    }
+    else{
+        m = (l+r)/2;
+        if(k<=m) actualizar(k,2*i,nuevo);//NO ESTA EN DER, VAMOS A LA IZQ
+        else     actualizar(k,2*i+1,nuevo);//NO ESTA EN IZQ VAMOS A DER
+        izq = segment_tree[2*i].second;
+        der = segment_tree[2*i+1].second;
+        if(izq=='0'||der=='0') segment_tree[i].second = '0';
+        if(izq=='+'){
+            if(der=='+')       segment_tree[i].second = '+';
+            else if(der=='-')  segment_tree[i].second = '-';
+        }
+        else if(izq=='-'){
+            if(der=='+')       segment_tree[i].second = '-';
+            else if(der=='-')  segment_tree[i].second = '+';   
+        }
+    }
+}
+int main(){
+    ofstream out("output.txt");
+    int rondas,nroEl,a,b,nuevoVal,ind;
+    char opcion,resConsul,nuevo;
+    string res;
+    while(cin>>nroEl>>rondas){
+        elementos[0] = -1; //EL INDICE 0 NO LO USAREMOS, SINO MAS BIEN DESDE EL 1
+        for(int i = 1; i<=nroEl; i++){
+            cin>>elementos[i];
+        }
+        construir_arbolito(1,nroEl,1);//CONSTRUIMOS EL ARBOL CON LA INFORMACION DADA
+
+        /*cout<<"--------\n";
+        for(int i = 1; i<=2*nroEl-1; i++){
+            printf("ind: %d rango: {%d,%d} val: %c\n",i,segment_tree[i].first.first,segment_tree[i].first.second,segment_tree[i].second);
+        }
+        cout<<"--------\n";*/
+
+        res = "";
+        while(rondas--){
+            cin>>opcion;
+            if(opcion=='C'){
+                cin>>ind>>nuevoVal;
+                if(nuevoVal>0)       nuevo = '+';
+                else if(nuevoVal==0) nuevo='0';
+                else                 nuevo='-';
+                actualizar(ind,1,nuevo);
+            }
+            else if(opcion=='P'){
+                cin>>a>>b;
+                resConsul = querie(a,b,1);
+                res += resConsul;
+            }
+        }
+        cout<<res<<endl;
+    }   
+    
+    return 0;
+}

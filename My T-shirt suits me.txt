@@ -1,0 +1,170 @@
+#include <cstdio>
+#include<bits/stdc++.h> 
+#define pb          push_back 
+#define endl        "\n"
+#define mostrar(x,y) cout<<x<<" "<<y<<endl;
+#define f           first
+#define s           second
+using namespace std;
+typedef pair<int,int> ii;
+typedef vector<int> vi;
+typedef vector<pair<int,int>> vii;
+typedef pair<pair<int,int>,char> iii;
+
+//FLUJO EN LISTA DE ADYASCENCIA, SOLO NOS SERVIRA PARA UN BFS EFICIENTE
+map<int,vector<pair<int,int>>> flujo;
+//FLUJO EN MATRIZ DE ADYASCENCIA, SERA MUY UTIL PARA IR CALCULANDO LOS FLUJOS
+int flujoCapacidades[101][101];
+//IR RECORDANDO LOS ANTECESORES
+map<int,int>    parent;
+//MARCAR VISITADOS EN BFS
+map<int,bool>   visitado;
+//HASHING DE TALLA A INT PARA NO USAR STRINGS EN EL FLUJOS
+map<string,int> tallas;
+//TODAS LAS TALLAS QUE SE USAN ACTUALMENTE EN EL FLUJO
+vector<string> todasTallas;
+
+
+int actual;
+pair<int,int> vecino;
+
+void bfs(int source,int personas){
+    //LA FUENTE TENDRA EL NODO 0
+    visitado[0] = false;
+    parent[0] = -1;
+    //EL SUMIDERO TENDRA EL NODO -1
+    visitado[100] = false;
+    parent[100] = -1;
+    for(int i = 1; i<=personas; i++){
+        visitado[i+6] = false;  
+        parent[i+6]   = -1;
+    }
+    for(int i = 1; i<=6; i++){
+        visitado[i] = false;
+        parent[i]  = -1;
+    }
+    queue<int> colita;
+    colita.push(0);
+    while(!colita.empty()){
+        actual = colita.front();
+        colita.pop();
+
+        if(visitado[actual]) continue;
+        visitado[actual] = true;
+        for(int i = 0; i<flujo[actual].size(); i++){
+            vecino = flujo[actual][i];
+            if(!visitado[vecino.f] && flujoCapacidades[actual][vecino.f]>0){
+                colita.push(vecino.f);
+                parent[vecino.f] = actual;
+            }
+        }
+    }
+}
+
+int flujo_maximo(int personas){
+
+    int bottleneck,flujoMaximo = 0;
+
+    while(true){
+
+        bfs(0,personas); //HACEMOS RECORRIDO BFS DESDE LA FUENTE
+
+        //SI EL BFS NO LLEGO AL SUMIDERO ENTONCES YA NO HAY CAMINOS
+        if(visitado[100] == false) break;
+
+        int nodoAux = 100;
+        bottleneck = 100000000;
+
+        //BUSCAMOS EL CUELLO DE BOTELLA EN EL CAMINO MAS CORTO
+        while(nodoAux != 0){
+            bottleneck = min ( bottleneck , flujoCapacidades[parent[nodoAux]][nodoAux]);
+            nodoAux = parent[nodoAux];
+        }
+
+        nodoAux = 100;
+        //ACTUALIZAMOS VALORES DE FLUJOS Y ANTIFLUJOS DEL CAMINO MAS CORTO
+        while(nodoAux != 0){
+            flujoCapacidades[parent[nodoAux]][nodoAux] -= bottleneck;
+            flujoCapacidades[nodoAux][parent[nodoAux]] += bottleneck;
+            nodoAux = parent[nodoAux];
+        }
+        flujoMaximo += bottleneck;
+    }
+    return flujoMaximo;
+}
+
+int main(){
+    ofstream out("output.txt");
+    
+    tallas["XXL"] = 1;
+    tallas["XL"]  = 2;
+    tallas["L"]   = 3;
+    tallas["M"]   = 4;
+    tallas["S"]   = 5;
+    tallas["XS"]  = 6;
+
+    int t,n,m,polerasXTalla,flujoMax;
+    cin>>t;
+    string talla1,talla2;
+    while(t--){
+        cin>>n>>m;
+
+        for(int i = 0; i<101; i++){
+            for(int j = 0; j<101; j++){
+                flujoCapacidades[i][j] = 0;
+            }
+        }
+        flujo.clear();
+        for(int i = 1; i<=m; i++){
+            cin>>talla1>>talla2;
+
+            //LA FUENTE SERA EL NODO 0 Y EL SUMIDERO SERA NODO 100
+            //ARMAMOS FLUJO(LISTA DE ADYASCENCIA)
+            flujo[ tallas[talla1] ].pb({i+6,1});
+            flujo[ tallas[talla2] ].pb({i+6,1});
+            //ARMAMOS FLUJO(MATRIZ DE ADYASCENCIA)
+            flujoCapacidades[ tallas[talla1] ][ i+6 ] = 1;
+            flujoCapacidades[ tallas[talla2] ][ i+6 ] = 1;
+
+            //ANTIFLUJOS LISTA ADYAS
+            flujo[i+6].pb({ tallas[talla1] ,0});
+            flujo[i+6].pb({ tallas[talla2] ,0});
+            //ANTIFLUJOS MATRIZ ADYAS
+            flujoCapacidades[ i+6 ][ tallas[talla1] ] = 0;
+            flujoCapacidades[ i+6 ][ tallas[talla2] ] = 0;
+
+        }
+        //ahora vamos a conectar el grafo bipartito con la fuente y el sumidero
+        polerasXTalla = n/6;
+        //aristas flujo y antiflujo desde fuente hasta tallas, lista adyas y matriz adyas
+        for(int i = 1; i<=6; i++){
+            flujo[0].pb({i,polerasXTalla});
+            flujo[i].pb({0,0});
+
+            flujoCapacidades[0][i] = polerasXTalla;
+            flujoCapacidades[i][0] = 0;
+        }
+        //aristas flujo y antiflujo desde personas hasta sumidero, lista adyas y matriz adyas (sumidero = 100)
+        for(int i = 1; i<=m; i++){
+            flujo[i+6].pb({100,1});
+            flujo[100].pb({i+6,0});
+
+            flujoCapacidades[i+6][100] = 1;
+            flujoCapacidades[100][i+6] = 0;
+        }
+
+        flujoMax = flujo_maximo(m);
+
+        if(flujoMax == m){
+            cout<<"YES\n";
+        }
+        else{
+            cout<<"NO\n";
+        }
+
+        flujo.clear();
+        visitado.clear();
+        parent.clear();
+    }
+    return 0;
+}

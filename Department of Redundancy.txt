@@ -1,0 +1,19 @@
+LinkedHashMap<Integer,Integer> mapita = new LinkedHashMap<>();
+        String a;
+        String[] b;
+        int numero;
+        while((a = in.readLine()) != null) {
+        	b = a.split(" ");
+        	for(int i = 0; i<b.length; i++) {
+        		numero = Integer.parseInt(b[i]);
+        		if(mapita.containsKey(numero)) {
+        			mapita.put(numero, mapita.get(numero)+1);
+        		}
+        		else {
+        			mapita.put(numero, 1);
+        		}
+        	}
+        }
+        for(int n : mapita.keySet()) {
+        	out.println(n+" "+mapita.get(n));
+        }

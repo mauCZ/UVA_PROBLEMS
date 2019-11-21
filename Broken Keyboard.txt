@@ -1,0 +1,42 @@
+#include <cstdio>
+#include<bits/stdc++.h> 
+#define pb          push_back 
+#define endl        "\n"
+#define mostrar(x,y) cout<<x<<" "<<y<<endl;
+using namespace std;
+typedef pair<int,int> ii;
+typedef vector<int> vi;
+typedef vector<pair<int,int>> vii;
+
+
+
+int main()
+{   
+    ofstream out("output.txt");
+    //ifstream in("input2.txt");
+
+    string cad,res;
+    list<char> listita;
+    list<char>::iterator indice;
+    while(cin>>cad){
+        indice = listita.begin();;
+        for(int i = 0; i<cad.size(); i++){
+            if(cad[i]=='['){
+                indice = listita.begin();
+            }
+            else if(cad[i]==']'){
+                indice = listita.end();
+            }
+            else{
+                listita.insert(indice,cad[i]);
+            }
+        }
+        for(indice = listita.begin(); indice!=listita.end();indice++){
+            cout<<*indice;
+        }
+        listita.clear();
+        cout<<endl;
+    }
+
+    return 0;
+}

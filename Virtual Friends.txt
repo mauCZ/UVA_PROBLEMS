@@ -1,0 +1,63 @@
+#include <cstdio>
+#include<bits/stdc++.h> 
+#define pb          push_back 
+#define endl        "\n"
+#define mostrar(x,y) cout<<x<<" "<<y<<endl;
+using namespace std;
+typedef pair<int,int> ii;
+typedef vector<int> vi;
+typedef vector<pair<int,int>> vii;
+
+map<string,string> parent;
+map<string,int> ranking;
+map<string,int> lideres;
+string p1,p2;
+void create_set(string a){
+    parent[a] = a;
+    ranking[a] = 0;
+    lideres[a] = 1;
+}
+string find_set(string x){
+    return parent[x] = (parent[x]==x? x:find_set(parent[x]));
+}
+void union_set(string x,string y){
+    p1 = find_set(x);
+    p2 = find_set(y);
+    if(p1!=p2){
+        if(ranking[p1]>ranking[p2]){
+            parent[p2] = p1;
+            lideres[p1] += lideres[p2];
+        }
+        else{
+            parent[p1] = p2;
+            lideres[p2] += lideres[p1];
+            if(ranking[p1] == ranking[p2]) ranking[p2]++;
+        }
+    }
+}
+int main(){
+    ofstream out("output.txt");
+    
+    int n,amistades;
+    string a,b;
+    cin>>n;
+    while(n--){
+        cin>>amistades;
+        while(amistades--){
+            cin>>a>>b;
+            if(parent.find(a)==parent.end())
+                create_set(a);
+            if(parent.find(b)==parent.end())
+                create_set(b);
+            union_set(a,b);
+            cout<<lideres[find_set(a)]<<endl;
+            out<<lideres[find_set(a)]<<endl;
+        }
+        ranking.clear();
+        lideres.clear();
+        parent.clear();
+    }
+
+
+    return 0;
+}

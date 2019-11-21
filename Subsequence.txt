@@ -1,0 +1,67 @@
+#include <iostream>
+#include <vector>
+#include <fstream>
+#include <algorithm>
+using namespace std;
+ 
+#define pb push_back
+#define f first
+#define s second
+#define endl '\n'
+#define EPS 1e-9
+#define PI acos(-1)
+ 
+using ll = long long;
+using ii = pair<int,int>;
+using vi = vector<int>;
+using vll = vector<ll>;
+using ui = unsigned int;
+ 
+ll min(ll a,ll b){
+	if(a<b) return a;
+	return b;
+}
+ 
+int main() {
+    ofstream out("output.txt");
+    ios_base::sync_with_stdio(false);
+    
+    int n,s;
+
+    while(cin>>n>>s){
+    	int a[n];
+    	for(int i =0;i<n;i++) cin>>a[i];
+
+    	ll actual = 0, minimo = 1000000000000000;
+    	int i =0,j = 0;
+    	bool moviI = true;
+
+    	while(i<n && j<n){
+    		if(moviI){
+    			actual += a[i];
+    		}
+    		if(actual < s){
+    			i++;
+    			moviI = true;
+    		}
+    		else{
+    			minimo = min(minimo,i-j+1);
+    			actual -= a[j];
+    			j++;
+    			if(j>i){
+    				i++;
+    				moviI = true;
+    			}
+    			else moviI = false;
+    		}
+    	}
+    	if(minimo == 1000000000000000){
+    		minimo = 0;
+    	}
+    	cout<<minimo<<endl;
+    	out<<minimo<<endl;
+
+    }
+    
+    return 0;
+}

@@ -1,0 +1,107 @@
+//DFS
+#include<bits/stdc++.h>
+using namespace std;
+
+map<int,vector<int>> grafo;
+map<int,int> visitado;
+
+bool bicolorable(int origen,bool band){
+    bool res = true;
+    if(band) visitado[origen] = 0;
+    else     visitado[origen] = 1;
+
+    for(int i = 0; i<grafo[origen].size(); i++){
+        int vecino = grafo[origen][i];
+        if(visitado[vecino] != -1){
+            if(visitado[vecino] == visitado[origen]) res = false;
+        }
+        else{ 
+            res = bicolorable(vecino,!band); 
+        }
+    }
+    return res;
+}
+
+int main()
+{
+    ofstream out("output.txt");
+    ifstream in("input.txt");
+
+    int n,l,a,b;
+    while(cin>>n && n != 0){
+        cin>>l;
+        
+        while(l--){
+            cin>>a>>b;
+            grafo[a].push_back(b);
+            grafo[b].push_back(a);
+        }
+        for(int i = 0; i<n; i++){
+            visitado[i] = -1;
+        }
+        if(bicolorable(0,true)){ cout<<"BICOLORABLE.\n";out<<"BICOLORABLE.\n";}
+        else{              cout<<"NOT BICOLORABLE.\n";out<<"NOT BICOLORABLE.\n";}
+        grafo.clear();
+        visitado.clear();
+    }
+    return 0;
+}
+//BFS
+#include<bits/stdc++.h>
+using namespace std;
+
+map<int,vector<int>> grafo;
+map<int,int> visitado;
+
+bool bicolorable(int origen,bool band){
+    queue<int> colita;
+    colita.push(origen);
+    bool bipartite = true;
+    int cont = 0;
+    visitado[origen] = 0;
+    while(!colita.empty() && bipartite){
+        int actual = colita.front(); colita.pop();
+
+        for(int i =0; i<grafo[actual].size(); i++){
+            int vecino = grafo[actual][i];
+            if(visitado[vecino] == -1){
+                visitado[vecino] = 1-visitado[actual];
+                colita.push(vecino);
+            }
+            else{
+                if(visitado[vecino] == visitado[actual]) bipartite = false;
+            }
+        }
+
+    }
+    return bipartite;
+}
+
+int main()
+{
+    ofstream out("output.txt");
+    ifstream in("input.txt");
+
+    int n,l,a,b;
+    while(cin>>n && n != 0){
+        cin>>l;
+        
+        while(l--){
+            cin>>a>>b;
+            grafo[a].push_back(b);
+            grafo[b].push_back(a);
+        }
+        for(int i = 0; i<n; i++){
+            visitado[i] = -1;
+        }
+        if(bicolorable(0,true)){ cout<<"BICOLORABLE.\n";out<<"BICOLORABLE.\n";}
+        else{              cout<<"NOT BICOLORABLE.\n";out<<"NOT BICOLORABLE.\n";}
+        grafo.clear();
+        visitado.clear();
+    }
+    return 0;
+}
+
+
+
+

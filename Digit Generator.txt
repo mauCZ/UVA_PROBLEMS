@@ -1,0 +1,50 @@
+#include <cstdio>
+#include<bits/stdc++.h>
+using namespace std;
+
+int suma(int n){
+    int total = 0;
+    total += n;
+    while(n>0){
+        total += n % 10;
+        n = n/10;
+    }
+    return total;
+}
+int main(){
+    int n, numero;
+    cin>>n;
+    bool encontrado;
+    while(n--){
+        scanf("%d",&numero);
+        encontrado = false;
+            if(numero>99){
+                for(int i = numero-100; i<=numero && !encontrado; i++){
+                    if(suma(i) == numero){
+                        printf("%i\n",i);
+                        //out<<i<<endl;
+                        encontrado = true;
+                    }
+                }
+                if(!encontrado){
+                  printf("0\n");
+                }
+            }
+            else{
+                for(int i = 0; i<= numero && !encontrado; i++){
+                    if(suma(i) == numero){
+                        printf("%i\n",i);
+                        encontrado = true;
+                    }
+                }
+                if(!encontrado){
+                    printf("0\n");
+                }
+            }
+    }
+    return 0;
+}
+
+
+
+----------------------------------------------------------------------------------------

@@ -1,0 +1,80 @@
+#include <cstdio>
+#include<bits/stdc++.h> 
+#define pb          push_back 
+#define endl        "\n"
+#define mostrar(x,y) cout<<x<<" "<<y<<endl;
+#define f           first
+#define s           second
+using namespace std;
+typedef pair<int,int> ii;
+typedef vector<int> vi;
+typedef vector<pair<int,int>> vii;
+typedef pair<pair<int,int>,int> iii;
+
+int grado[60][60];
+
+void iniciar(){
+    for(int i = 0; i<60; i++){
+        for(int j = 0; j<60; j++){
+            if(i==j)   grado[i][j] = 0;
+            else       grado[i][j] = 100000;
+        }
+    }
+}
+bool desconectado(int n){
+    for(int i = 0; i<n; i++){
+        for(int j = 0; j<n; j++){
+            if(grado[i][j] == 100000) return true;
+        }
+    }
+    return false;
+}
+int main(){
+    ofstream out("output.txt");
+    
+
+    int personas,relaciones,aux,cont = 1,gradoSeparacion;
+    string per1,per2;
+    map<string,int> indices;
+    while(cin>>personas>>relaciones && (personas!=0||relaciones!=0)){
+        aux = 0;
+        gradoSeparacion = 0;
+        iniciar();
+        for(int i = 0; i<relaciones; i++){
+            cin>>per1>>per2;
+            if(indices.find(per1)==indices.end()){
+                indices[per1] = aux++;
+            }
+            if(indices.find(per2)==indices.end()){
+                indices[per2] = aux++;
+            }
+            grado[indices[per1]][indices[per2]] = 1;
+            grado[indices[per2]][indices[per1]] = 1;
+        }
+        //FLOYD WARSHALL
+        for(int k = 0; k<personas; k++){
+            for(int i = 0; i<personas; i++){
+                for(int j = 0; j<personas; j++){
+                    grado[i][j] = min(grado[i][j],grado[i][k]+grado[k][j]);
+                }
+            }
+        }
+        if(desconectado(personas)){
+            cout<<"Network "<<cont<<": DISCONNECTED\n";
+        }
+        else{
+            for(int i = 0; i<personas; i++){
+                for(int j = 0; j<personas; j++){
+                    if(grado[i][j]>gradoSeparacion) gradoSeparacion = grado[i][j];
+                }
+            }   
+            cout<<"Network "<<cont<<": "<<gradoSeparacion<<endl;
+        }
+        cout<<endl;
+        cont++;
+        indices.clear();
+    }
+
+
+    return 0;
+}

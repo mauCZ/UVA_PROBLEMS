@@ -1,0 +1,118 @@
+#include <cstdio>
+#include<bits/stdc++.h> 
+#define pb          push_back 
+#define endl        "\n"
+#define mostrar(x,y) cout<<x<<" "<<y<<endl;
+#define f           first
+#define s           second
+using namespace std;
+typedef pair<int,int> ii;
+typedef vector<int> vi;
+typedef vector<pair<int,int>> vii;
+typedef pair<pair<int,int>,int> iii;
+
+bool grafo1[1000][1000];
+
+bool grafo2[1000][1000];
+
+void iniciarGrafo1(int n){
+    for(int i = 0; i<n; i++){
+        for(int j = 0; j<n; j++){
+            grafo1[i][j] = false;
+        }
+    }
+}
+void iniciarGrafo2(int n){
+    for(int i = 0; i<n; i++){
+        for(int j = 0; j<n; j++){
+            grafo2[i][j] = false;
+        }
+    }
+}
+bool grafosIguales(int n){
+    for(int i = 0; i<n; i++){
+        for(int j = 0; j<n; j++){
+            if(grafo1[i][j] != grafo2[i][j]) return false;
+        }
+    }
+    return true;
+}
+
+int main(){
+    ofstream out("output.txt");
+    
+    int n,ae1,ae2,vertices1,vertices2;
+    char a,b;
+    bool sonIguales;
+    cin>>n;
+    for(int i = 0; i<n; i++){
+        
+        cin>>ae1;
+        iniciarGrafo1(ae1);
+        vertices1 = 0;
+        vertices2 = 0;
+        while(ae1--){
+            cin>>a>>b;
+            if((b-'A')>vertices1) vertices1 = b-'A';
+            if((a-'A')>vertices1) vertices1 = a-'A' ;
+            grafo1[a-'A'][a-'A'] = true;
+            grafo1[b-'A'][b-'A'] = true;
+
+            grafo1[a-'A'][b-'A'] = true;
+        }
+        vertices1++;
+        //FLOYD WARSHALL
+        for(int k = 0; k<vertices1; k++){
+            for(int i = 0; i<vertices1; i++){
+                for(int j = 0; j<vertices1; j++){
+                    grafo1[i][j] = grafo1[i][j] || (grafo1[i][k] && grafo1[k][j]);
+                }
+            }
+        }
+        cin>>ae2;
+        iniciarGrafo2(ae2);
+        while(ae2--){
+            cin>>a>>b;
+
+            if((b-'A')>vertices2) vertices2 = b-'A';
+            if((a-'A')>vertices2) vertices2 = a-'A' ;
+
+            grafo2[a-'A'][a-'A'] = true;
+            grafo2[b-'A'][b-'A'] = true;
+            
+            grafo2[a-'A'][b-'A'] = true;
+        }
+        vertices2++;
+        //FLOYD WARSHALL
+        for(int k = 0; k<vertices2; k++){
+            for(int i = 0; i<vertices2; i++){
+                for(int j = 0; j<vertices2; j++){
+                    grafo2[i][j] = grafo2[i][j] || (grafo2[i][k] && grafo2[k][j]);
+                }
+            }
+        }
+        if(vertices2!=vertices1){
+            sonIguales = false;
+        }
+        else{
+            if(grafosIguales(vertices1)){
+                sonIguales = true;
+            }
+            else{
+                sonIguales = false;
+            }
+        }
+        if(i >0){
+            cout<<endl;
+        }
+        if(sonIguales){
+            cout<<"YES\n";
+        }
+        else{
+            cout<<"NO\n";
+        }
+    }
+    
+
+    return 0;
+}

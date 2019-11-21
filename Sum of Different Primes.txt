@@ -1,0 +1,96 @@
+    #include <iostream>
+    #include <vector>
+    #include <fstream>
+    #include <algorithm>
+    using namespace std;
+     
+    #define pb push_back
+    #define f first
+    #define s second
+    #define endl '\n'
+    #define EPS 1e-9
+    #define PI acos(-1)
+     
+    using ll = long long;
+    using ii = pair<int,int>;
+    using vi = vector<int>;
+    using vll = vector<ll>;
+    using ui = unsigned int;
+
+    #define x 1200
+    #define y 1300
+    #define z 20
+
+    bool criba[1200];
+    int dp[x][y][z];
+    vi primos;
+    int n,k;
+
+    ll knapsack(int ind,int n,int k){
+        if(n == 0 && k == 0){
+            return 1;
+        }
+        else if(ind == 0) return 0;
+        else if(n == 0) return 0;
+        else if(k == 0) return 0;
+
+        if(dp[ind][n][k] == -1){
+            int a = 0,b;
+            b = knapsack(ind-1,n,k);
+            if(n>=primos[ind]){
+                a = knapsack(ind-1,n-primos[ind],k-1);
+            }
+            dp[ind][n][k] = a+b;
+            return dp[ind][n][k];
+
+        }
+        else return dp[ind][n][k];
+    }
+
+
+    void iniCriba(){
+        criba[0] = true;
+        criba[1] = true;
+        for(int i =2;i<1200;i++){
+            if(!criba[i]){
+                for(int j = 2*i;j<1200;j+=i){
+                    criba[j] = true;
+                }
+            }
+        }   
+        primos.pb(-1);
+        for(int i =2;i<1200;i++){
+            if(!criba[i]){
+                primos.pb(i);
+            }
+        }
+    }
+    void iniDP(){
+        for(int i =0;i<x;i++){
+            for(int j =0;j<y;j++){
+                for(int k =0;k<z;k++){
+                    dp[i][j][k] = -1;
+                }
+            }
+        }
+    }
+     
+    int main() {
+        ofstream out("output.txt");
+        ios_base::sync_with_stdio(false);
+        
+        iniCriba();
+        iniDP();
+        
+        while(cin>>n>>k && (n!=0 || k != 0)){
+            int ind = 1;
+            while(n>=primos[ind]){
+                ind++;
+            }
+            ind--;
+            cout<<knapsack(ind,n,k)<<endl;;
+        }
+
+
+        return 0;
+    }

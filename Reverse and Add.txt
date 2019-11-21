@@ -1,0 +1,91 @@
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Arrays;
+import java.util.Collections;
+import java.io.InputStreamReader;
+import java.io.PrintWriter;
+import java.io.BufferedReader;
+import java.util.LinkedList;
+import java.util.Locale;
+import java.util.Iterator;
+import java.util.Stack;
+import java.util.Set;
+import java.util.HashSet;
+import java.util.TreeSet;
+import java.util.Map;
+import java.util.HashMap;
+import java.util.TreeMap;
+import java.util.BitSet;
+import java.lang.StringBuilder;
+import java.util.Queue;
+import java.util.Objects;
+import java.util.PriorityQueue;
+public class UvaProblems {
+
+    public static void main(String[] args) throws Exception {
+        BufferedReader in = new BufferedReader(new InputStreamReader(System.in));
+        PrintWriter out = new PrintWriter(System.out);
+        Locale.setDefault(new Locale("en", "US"));
+        
+        int n = Integer.parseInt(in.readLine());
+        int a, reversed,cont;
+        long suma, aux;
+        boolean palindromoEncontrado;
+        while(n>0) {
+        	a = Integer.parseInt(in.readLine());
+        	palindromoEncontrado = false;
+        	cont = 1;
+        	aux = a;
+        	while(!palindromoEncontrado) {
+            	reversed = darVuelta(aux);
+            	suma = aux+reversed;
+            	if(esPalindromo(suma)) {
+            		out.println(cont+" " + suma);
+            		palindromoEncontrado = true;
+            	}
+            	else {	
+            		aux = suma;
+            		cont++;
+            	}
+            	//System.out.println(suma);
+        	}
+        	n--;
+        }
+
+        
+        out.flush();
+    }
+    private static int darVuelta(long n) {
+    	String numero = "";
+    	long residuo;
+    	if(n == 0) {
+    		return 0;
+    	}
+    	while(n>0) {
+    		residuo = n%10;
+    		n = n/10;
+    		numero+=residuo;
+    	}
+    	return Integer.parseInt(numero);
+    }
+    private static boolean esPalindromo(long n) {
+    	String x = String.valueOf(n);
+    	StringBuilder b = new StringBuilder(x);
+    	return esPalindromoAux(b);
+    }
+    private static boolean esPalindromoAux(StringBuilder n) {
+    	if(n.length()==0||n.length()==1) {
+    		return true;
+    	}
+    	else {
+    		if(n.charAt(0) == n.charAt(n.length()-1)) {
+    			n.delete(0, 1);
+    			n.delete(n.length()-1, n.length());
+    			return esPalindromoAux(n);
+    		}
+    		else {
+    			return false;
+    		}
+    	}
+    }
+}

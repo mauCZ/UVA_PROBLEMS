@@ -1,0 +1,49 @@
+#include<bits/stdc++.h>
+#include <cstdio>   
+#define pb          push_back 
+#define endl        "\n"
+#define mostrar(x,y) cout<<x<<" "<<y<<endl;
+#define f           first
+#define s           second
+#define mod         1000000007
+#define EPS         1e-9
+using namespace std;
+typedef pair<int,int> ii;
+typedef pair<pair<int,int>,int> iii;
+typedef vector<int> vi;
+typedef vector<pair<int,int>> vii;
+typedef long long ll;
+    
+map<int,int> rep;
+map<int,vi> indices;
+
+
+int main(){
+    ofstream out("output.txt");
+
+    int n,m,k,v,val;
+
+    while(cin>>n>>m){
+        for(int i = 0; i<n ;i++){
+            cin>>val;
+            rep[val]++;
+            indices[val].pb(i+1);
+        }
+        for(int i =0; i<m; i++){
+            cin>>k>>v;
+            if(k>rep[v]){
+                cout<<0<<endl;
+                out<<0<<endl;
+            }
+            else{
+                cout<<indices[v][k-1]<<endl;
+                out<<indices[v][k-1]<<endl;
+            }
+        }
+        indices.clear();
+        rep.clear();
+    }
+    
+
+    return 0;
+}

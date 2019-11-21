@@ -1,0 +1,41 @@
+#include <cstdio>
+#include<bits/stdc++.h> 
+#define pb          push_back 
+#define endl        "\n"
+#define mostrar(x,y) cout<<x<<" "<<y<<endl;
+using namespace std;
+typedef pair<int,int> ii;
+typedef vector<int> vi;
+
+bool comparador(int i,int j){
+    return i>j;
+}
+int main()
+{   
+    ofstream out("output.txt");
+    //ifstream in("input2.txt");
+    int n,t,acumulado,actual,maximo;
+    cin>>n;
+    while(n--){
+        cin>>t;
+        int monedas[t];
+        for(int i = 0; i<t; i++){
+            cin>>monedas[i];
+        }
+
+        acumulado = 1;
+        maximo = t>1? 2:1;
+        for(int i = 1; i<t-1; i++){
+            if(acumulado + monedas[i] < monedas[i+1]){
+                acumulado += monedas[i];
+                maximo++;
+            }
+        }
+        cout<<maximo<<endl;
+        out<<maximo<<endl;
+    }
+    
+
+    return 0;
+}
+

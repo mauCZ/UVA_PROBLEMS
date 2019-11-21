@@ -1,0 +1,137 @@
+#include <iostream>
+#include <string>
+#include <map>
+#include <sstream>
+#include <set>
+#include <iomanip>
+#include <fstream>
+#include <set>
+#include <queue>
+#include <stack>
+#include<vector>
+
+using namespace std;
+int main(){
+     bool terminamos;
+     int n, primer, demas,i,j,aux;
+
+     while(cin>>n && n!= 0){
+        while(scanf("%d",&primer) && primer != 0){
+            vector<int> deseado;
+            queue<int> numeros;
+            stack<int> pila;
+            deseado.push_back(primer);
+            for(i = 0; i<n-1; i++){
+                scanf("%d",&demas);
+                deseado.push_back(demas);
+            }
+            for(i = 1; i<=n; i++){
+                numeros.push(i);
+            }
+            terminamos = false;
+            for(i = 0; i<deseado.size(); i++){
+                if(pila.empty()){
+                    aux = numeros.front();
+                    numeros.pop();
+                    pila.push(aux);
+                }
+                while(pila.top() != deseado[i]){
+                    if(numeros.empty()){
+                        terminamos = true;
+                        break;
+                    }
+                    else{
+                        aux = numeros.front();
+                        numeros.pop();
+                        pila.push(aux);
+                    }
+                }
+                if(!terminamos)
+                    pila.pop();
+                else
+                    break;
+            }
+            if(terminamos){printf("No\n");}
+            else          {printf("Yes\n");}
+        }
+        cout<<""<<endl;
+    }
+    return 0;
+}
+
+
+----------------------------------------------------------------------------------------
+import java.util.ArrayList;
+import java.util.LinkedHashMap;
+import java.util.List;
+import java.util.Arrays;
+import java.util.Collections;
+import java.io.InputStreamReader;
+import java.io.PrintWriter;
+import java.io.BufferedReader;
+import java.util.LinkedList;
+import java.util.Locale;
+import java.util.Iterator;
+import java.util.Stack;
+import java.util.Set;
+import java.util.HashSet;
+import java.util.TreeSet;
+import java.util.Map;
+import java.util.HashMap;
+import java.util.TreeMap;
+import java.util.BitSet;
+import java.lang.StringBuilder;
+import java.util.Queue;
+import java.util.Objects;
+import java.util.PriorityQueue;
+public class UvaProblems {
+
+    public static void main(String[] args) throws Exception {
+        BufferedReader in = new BufferedReader(new InputStreamReader(System.in));
+        PrintWriter out = new PrintWriter(System.out);
+        Locale.setDefault(new Locale("en", "US"));
+        
+        String a,b;
+        String[] c;
+        Queue<Integer> numeros = new LinkedList<>();;
+        ArrayList<Integer> deseado = new ArrayList<>();
+        Stack<Integer> pila = new Stack<>();;
+        boolean terminamos;
+        while(!(a = in.readLine()).equals("0")) {
+        	while(!(b = in.readLine()).equals("0")) {
+            	for(int i = 1; i<= Integer.parseInt(a); i++) {
+            		numeros.add(i);
+            	}
+        		c = b.split(" ");
+        		terminamos = false;
+        		for(String str : c) {
+        			deseado.add(Integer.parseInt(str));
+        		}
+        		for(int n : deseado) {
+        			if(pila.isEmpty()) {
+        				pila.push(numeros.poll());
+        			}
+        			while(pila.peek() != n) {
+        				if(numeros.isEmpty()) {
+        					terminamos = true;
+        					break;
+        				}
+        				else
+        					pila.push(numeros.poll());
+        			}
+        			if(!terminamos) 
+        				pila.pop();
+        			else
+        				break;
+        		}
+        		if(terminamos) out.println("No");
+        		else           out.println("Yes");
+        		pila.clear();
+        		deseado.clear();
+        		numeros.clear();
+        	}
+        	out.println("");
+        }
+        out.flush();
+	}
+}

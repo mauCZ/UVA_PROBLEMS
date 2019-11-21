@@ -1,0 +1,38 @@
+#include <cstdio>
+#include<bits/stdc++.h> 
+#define pb          push_back 
+#define endl        "\n"
+#define mostrar(x,y) cout<<x<<" "<<y<<endl;
+using namespace std;
+typedef pair<int,int> ii;
+typedef vector<int> vi;
+
+int main()
+{   
+    ofstream out("output.txt");
+    //ifstream in("input2.txt");
+
+    int casos,tamanho,minimo,cont = 1,i;
+    cin>>casos;
+    while(casos--){
+        cin>>tamanho;
+        char campo[tamanho];
+        for(int i = 0; i<tamanho; i++){
+            cin>>campo[i];
+        }
+        minimo = 0;
+        i = 0;
+        while(i<tamanho){
+            if(campo[i]=='#') i++;
+            else{
+                minimo++;
+                i += 3; 
+            }
+        }
+        cout<<"Case "<<cont<<": "<<minimo<<endl;
+        cont++;
+    }
+
+    return 0;
+}
+

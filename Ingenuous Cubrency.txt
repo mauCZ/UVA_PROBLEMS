@@ -1,0 +1,74 @@
+#include <cstdio>
+#include<bits/stdc++.h> 
+#define pb          push_back 
+#define endl        "\n"
+#define mostrar(x,y) cout<<x<<" "<<y<<endl;+
+#define f           first
+#define s           second
+using namespace std;
+typedef pair<int,int> ii;
+typedef vector<int> vi;
+typedef vector<pair<int,int>> vii;
+
+long long dp[22][10010];
+
+void iniciarMemo(){
+    for(int i = 0; i<22; i++){
+        for(int j = 0; j<10010; j++){
+            dp[i][j] = -1;
+        }
+    }
+}
+
+long long DP(int monto, int indice, vi &monedas){
+    //printf("monto: %d\n",monto);
+    long long res = 0;
+    if(indice == 0){
+        res = 1;
+    }
+    else if(monto == 0){
+        res = 1;
+    }
+    else if(monto<0){
+        res = 0;
+    }
+    else{
+        if(dp[indice][monto]==-1){
+            res = DP(monto-monedas[indice],indice,monedas) + DP(monto,indice-1,monedas);
+            dp[indice][monto] = res;
+        }
+        else{
+            res = dp[indice][monto];
+        }
+    }   
+    return res;
+}
+
+int main()
+{   
+    ofstream out("output.txt");
+    //ifstream in("input2.txt");
+
+    //dado un numero y una secuencia de elementos, ver si existe algun subsegmento que sume el numero introducido
+
+    long long monto;
+    vi monedas;
+    long long minimo;
+    while(cin>>monto){
+        minimo = cbrt(monto);
+        for(int i = 1; i<=minimo; i++){
+            monedas.pb(i*i*i);
+        }
+        iniciarMemo();
+
+        minimo = DP(monto,monedas.size()-1,monedas);
+        cout<<minimo<<endl;
+        out<<minimo<<endl;
+        monedas.clear();
+    }
+
+                
+
+    return 0;
+}
+

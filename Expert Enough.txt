@@ -1,0 +1,43 @@
+#include <cstdio>
+#include<bits/stdc++.h> 
+using namespace std;
+
+int main()
+{   
+    ofstream out("output.txt");
+    
+    int t,s,l,h,q,precio,cant,cont = 0;
+    string m,marca;
+    cin>>t;
+    map<string,pair<int,int>> base_datos;
+    while(t--){
+        cin>>s;
+        base_datos.clear();
+        while(s--){
+            cin>>m>>l>>h;
+            base_datos[m] = make_pair(l,h);
+        }
+        cin>>q;
+        if(cont>0) cout<<"\n";
+        while(q--){
+            cin>>precio;
+            cant = 0;
+            marca = "UNDETERMINED";
+            for(auto it = base_datos.begin(); it!=base_datos.end(); it++){
+                if( (it->second).first <= precio && (it->second).second >= precio ){
+                    cant++;
+                    marca = it->first;
+                }
+                if(cant>1){
+                    marca = "UNDETERMINED";
+                    break;
+                }
+            }
+            cout<<marca<<endl;
+        }
+        cont++;
+    }
+
+    return 0;
+}
+

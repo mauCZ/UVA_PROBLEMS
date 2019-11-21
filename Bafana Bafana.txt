@@ -1,0 +1,28 @@
+#include <iostream>
+#include <sstream>
+#include <iomanip>
+#include <fstream>
+#include<bits/stdc++.h>
+using namespace std;
+
+int main(){
+    ofstream out("output.txt");
+    ifstream in("input.txt");
+
+    int n ,jugadores, empieza, pases;
+    cin>>n;
+    int vueltas, sobra,termina,cont = 1;
+    while(n--){
+        cin>>jugadores>>empieza>>pases;
+        vueltas = pases / jugadores;
+        sobra = pases % jugadores;
+        termina = empieza + sobra;
+        if(termina>jugadores){
+            termina = termina-jugadores;
+        }
+        cout<<"Case "<<cont<<": "<<termina<<endl;
+        cont++;
+    }
+    return 0;
+}
+

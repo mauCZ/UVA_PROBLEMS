@@ -1,0 +1,82 @@
+#include <iostream>
+#include <vector>
+#include <fstream>
+#include <sstream>
+ 
+#define pb push_back
+#define f first
+#define s second
+#define endl '\n'
+#define EPS 1e-9
+#define PI acos(-1)
+ 
+using namespace std;
+using ll = long long;
+using ii = pair<int,int>;
+using vi = vector<int>;
+using vll = vector<ll>;
+using ui = unsigned int;    
+ 
+int a[101];
+int dp[101][(500*100)+1];
+
+
+int subset_sum(int cap,int ind,int n){
+    //cout<<"cap "<<cap<<" ind "<<ind<<endl;
+    int res = 0;
+    if(cap<=0){
+
+    }
+    else if(ind == n){
+
+    }
+    else{
+
+        if(dp[ind][cap] == -1){
+            if(cap >= a[ind]){
+                res = max(subset_sum(cap - a[ind],ind+1,n) + a[ind],subset_sum(cap,ind+1,n));    
+            }
+            else{
+                res = subset_sum(cap,ind+1,n);
+            }
+            
+            dp[ind][cap] = res;
+        }
+        else{
+            res = dp[ind][cap];
+        }
+    }
+
+    return res;
+}
+void iniciar(int n,int mitad){
+    for(int i =0;i<=n;i++){
+        for(int j = 0;j<=mitad;j++){
+            dp[i][j] = -1;
+        }
+    }
+}
+ 
+int main() {
+    ofstream out("output.txt");
+    ios_base::sync_with_stdio(false);
+    
+    int q;
+    cin>>q;
+    while(q--){
+        int n;
+        cin>>n;
+        ll total = 0,mitad;
+        for(int i =0;i<n;i++){
+            cin>>a[i];
+            total += a[i];
+        }
+        mitad = (total+1) / 2;
+        iniciar(n,mitad);
+        ll cap = subset_sum(mitad,0,n);
+        cout<<abs((total-cap)-cap)<<endl;
+        out<<abs((total-cap)-cap)<<endl;
+    }
+
+    return 0;
+}

@@ -1,0 +1,94 @@
+#include <cstdio>
+//#include<bits/stdc++.h> 
+#include <iostream>
+#include <vector>
+#include <fstream>
+#include <string>
+#include <map>
+#include <math.h>
+#include <algorithm>
+#define pb          push_back 
+#define endl        "\n"
+#define mostrar(x,y) cout<<x<<" "<<y<<endl;
+#define f           first
+#define s           second
+#define mod         1000000007
+using namespace std;
+typedef pair<int,int> ii;
+typedef pair<pair<int,int>,int> iii;
+typedef vector<int> vi;
+typedef vector<pair<int,int>> vii;
+
+map<char,vector<char>> grafo;
+vector<char> topoSort;
+map<char,bool> visitado;
+
+void dfs(char nodo){
+    visitado[nodo] = true;
+
+    for(int i = 0; i<grafo[nodo].size(); i++){
+        char act = grafo[nodo][i];
+        if(!visitado[act]){
+            dfs(act);
+        }
+    }
+    topoSort.pb(nodo);
+}
+
+int main()
+{   
+    ofstream out("output.txt");
+    //ifstream in("input2.txt");
+
+    string pal;
+    string pal2;
+    vector<string> palabras;
+    while(cin>>pal){
+        palabras.pb(pal);
+        while(cin>>pal2&&pal2!="#"){
+            palabras.pb(pal2);
+        }
+        
+        if(palabras.size()==1){
+            cout<<palabras[0][0]<<endl;
+        }
+        else{
+            string cad1,cad2;
+            int m ;
+            for(int i = 0; i<palabras.size()-1; i++){
+                cad1 = palabras[i];
+                cad2 = palabras[i+1];
+                m = min(cad1.size(),cad2.size());
+                for(int j = 0; j<m; j++){
+                    if(cad1[j]!=cad2[j]){
+                        visitado[cad1[j]] = false;
+                        visitado[cad2[j]] = false;
+                        grafo[cad1[j]].pb(cad2[j]);
+                        break;
+                    }
+                }
+            }
+            for(auto it = grafo.begin(); it!=grafo.end(); it++){
+                if(!visitado[it->f]){
+                    dfs(it->f);
+                }
+            }
+            reverse(topoSort.begin(),topoSort.end());
+            for(int i = 0; i<topoSort.size(); i++){
+                cout<<topoSort[i];
+            }
+            cout<<endl;
+
+        }
+        topoSort.clear();
+        palabras.clear();
+        grafo.clear();
+    }
+    
+    
+    return 0;
+}
+
+
+
+

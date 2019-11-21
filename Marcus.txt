@@ -1,0 +1,82 @@
+#include<bits/stdc++.h>
+#define llenar(a,val)   memset(a,val,sizeof(a))
+#define pb          push_back 
+#define endl        "\n"
+#define mostrar(x,y) cout<<x<<" "<<y<<endl;
+#define f           first
+#define s           second
+#define mod         1000000007
+#define EPS         1e-9
+using namespace std;
+typedef pair<int,int> ii;
+typedef pair<pair<int,int>,int> iii;
+typedef vector<int> vi;
+typedef vector<pair<int,int>> vii;
+typedef long long ll;
+typedef vector< pair<pair<int,int>,int> > viii;
+
+char camino[10][10];
+string s = "IEHOVA#";
+
+bool adentro(int i, int j,int filas,int columnas){
+    return i>=0&&i<filas&&j>=0&&j<columnas;
+}
+
+void caminar(int i,int j,int filas,int columnas,int actual){
+    //cout<<i<<" "<<j<<endl;
+    if(camino[i][j] == '#')
+        return ;
+    if(adentro(i,j-1,filas,columnas)){
+        if(camino[i][j-1]==s[actual]){
+            if(actual == 0) cout<<"left";
+            else            cout<<" left";
+            caminar(i,j-1,filas,columnas,actual+1);
+        }
+    }
+    if(adentro(i-1,j,filas,columnas)){
+        if(camino[i-1][j] == s[actual]){
+            if(actual == 0) cout<<"forth";
+            else            cout<<" forth";
+            caminar(i-1,j,filas,columnas,actual+1);
+        }
+    }
+    if(adentro(i,j+1,filas,columnas)){
+        if(camino[i][j+1]==s[actual]){
+            if(actual == 0) cout<<"right";
+            else            cout<<" right";
+            caminar(i,j+1,filas,columnas,actual+1);
+        }
+    }
+}
+
+int main(){
+    ofstream out("output.txt");
+        
+    int t;
+    cin>>t;
+    while(t--){
+        int fil,col,x,y;
+        cin>>fil>>col;
+        for(int i =0;i<fil;i++){
+            for(int j=0;j<col;j++){
+                cin>>camino[i][j];
+                if(camino[i][j] == '@'){
+                    x = i, y  =j;
+                }
+            }
+        }
+        //cout<<x<<" "<<y<<endl;
+        caminar(x,y,fil,col,0);
+        cout<<endl;
+    }
+
+    return 0;
+}
+
+ 
+ 
+
+
+
+
+

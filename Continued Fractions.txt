@@ -1,0 +1,32 @@
+#include <cstdio>
+#include<bits/stdc++.h>
+using namespace std;
+
+int main(){
+    ofstream out("output.txt");
+
+    int a,b,div,aux;
+    string continued_fraction;
+    while(cin>>a>>b){
+        continued_fraction = "[";
+        div = a/b;
+        continued_fraction += to_string(div);
+        continued_fraction += ';';
+        a = a-div*b;
+        while(a!=1){
+            aux = a;
+            a = b;
+            b = aux;
+            div  = a / b;
+            continued_fraction += to_string(div);
+            continued_fraction += ',';
+            a = a-div*b;
+        }
+        continued_fraction += to_string(b);
+        continued_fraction += ']';
+        cout<<continued_fraction<<endl;
+    }
+    return 0;
+}
+
+

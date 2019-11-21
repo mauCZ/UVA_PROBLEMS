@@ -1,0 +1,58 @@
+#include <iostream>
+#include <sstream>
+#include <iomanip>
+#include <fstream>
+#include<bits/stdc++.h>
+using namespace std;
+
+long long actual;
+int longitudSecuencia;
+int ackermann(int actual){
+    longitudSecuencia = 0;
+    if(actual == 1){
+        return 3;
+    }
+    while(actual != 1){
+        if(actual % 2 == 0){
+            actual = actual / 2;
+        }
+        else{
+            actual = 3*actual + 1;
+        }
+        longitudSecuencia++;
+    }
+    return longitudSecuencia;
+}
+
+int main(){
+    ofstream out("output.txt");
+    ifstream in("input.txt");
+
+    int n,m,i;
+    int maximo, longActual,valorBuscado;
+    while(cin>>n>>m && !(n == 0 && m == 0)){
+        maximo = 0;
+        if(n>m){
+            for(i = m; i<= n; i++){
+                longActual = ackermann(i);
+                if(longActual > maximo){
+                    maximo = longActual;
+                    valorBuscado = i;
+                }
+            }
+            cout<<"Between "<<m<<" and "<<n<<", "<<valorBuscado<<" generates the longest sequence of "<<maximo<<" values.\n";
+        }
+        else{
+            for(i = n; i<= m; i++){
+                longActual = ackermann(i);
+                if(longActual > maximo){
+                    maximo = longActual;
+                    valorBuscado = i;
+                }
+            }
+        cout<<"Between "<<n<<" and "<<m<<", "<<valorBuscado<<" generates the longest sequence of "<<maximo<<" values.\n";
+        }
+    }
+    return 0;
+}
+

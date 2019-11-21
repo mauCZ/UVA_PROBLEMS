@@ -1,0 +1,82 @@
+#include<bits/stdc++.h>
+#define llenar(a,val)   memset(a,val,sizeof(a))
+#define pb          push_back 
+#define endl        "\n"
+#define mostrar(x,y) cout<<x<<" "<<y<<endl;
+#define f           first
+#define s           second
+#define mod         1000000007
+#define EPS         1e-9
+using namespace std;
+typedef pair<int,int> ii;
+typedef pair<pair<int,int>,int> iii;
+typedef vector<int> vi;
+typedef vector<pair<int,int>> vii;
+typedef long long ll;
+typedef vector< pair<pair<int,int>,int> > viii;
+
+int res[21];
+int votos[21];
+vi datos;
+
+int calc(int ind, int necesario){
+    int res = 0;
+    vi aux;
+    for(int i =0;i<datos.size();i++){
+        if(i!=ind) aux.pb(datos[i]);
+    }
+    int acumulado;
+    for(int mask = 0;mask<(1<<aux.size());mask++){
+        acumulado = 0;
+        for(int j =0;j<aux.size();j++){
+            if((1<<j)&mask){
+                acumulado += aux[j];
+            }
+        }
+        if(acumulado<necesario){
+            if(acumulado+votos[ind]>=necesario) res++;
+        }
+    }
+    return res;
+}
+
+int main(){
+    ofstream out("output.txt");
+    
+    
+    int t,n,val,total,necesario;
+    cin>>t;
+    while(t--){
+        cin>>n;
+        llenar(res,0);
+        total = 0;
+        for(int i =0;i<n;i++){
+            cin>>val;
+            datos.pb(val);
+            votos[i] = val;
+            total += val;
+        }
+        necesario = (total/2)+1;
+        int importancia;
+        //cout<<"necesario "<<necesario<<endl;
+        for(int i =0;i<n;i++){
+            importancia = calc(i,necesario);
+            //res[i] = importancia;
+            cout<<"party "<<i+1<<" has power index "<<importancia<<endl;
+            out<<"party "<<i+1<<" has power index "<<importancia<<endl;
+        }
+        cout<<endl;
+
+        datos.clear();
+    }
+    
+    return 0;
+}
+
+ 
+ 
+
+
+
+
+

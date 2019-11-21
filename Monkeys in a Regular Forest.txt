@@ -1,0 +1,203 @@
+#include<bits/stdc++.h>
+#define llenar(a,val)   memset(a,val,sizeof(a))
+#define pb          push_back 
+#define endl        "\n"
+#define mostrar(x,y) cout<<x<<" "<<y<<endl;
+#define f           first
+#define s           second
+#define mod         1000000007
+#define EPS         1e-9
+using namespace std;
+typedef pair<int,int> ii;
+typedef pair<pair<int,int>,int> iii;
+typedef vector<int> vi;
+typedef long long ll;
+typedef vector<pair<ll,ll>> vii;
+typedef vector< pair<pair<int,int>,int> > viii;
+
+char bosque[1000][1000];
+int visitado[1000][1000];
+int solucion[1000][1000];
+
+int control[1000];
+
+void pintar(int x,int y,int filas,int columnas,int pintura,char val){
+	if(!(x<filas&&x>=0&&y<columnas&&y>=0)) return;
+	if(visitado[x][y] != -1) return;
+	if(bosque[x][y] != val) return;
+	visitado[x][y] = 1;
+	solucion[x][y] = pintura;
+	pintar(x-1,y-1,filas,columnas,pintura,val);
+	pintar(x-1,y,filas,columnas,pintura,val);
+	pintar(x-1,y+1,filas,columnas,pintura,val);
+	pintar(x,y-1,filas,columnas,pintura,val);
+	pintar(x,y+1,filas,columnas,pintura,val);
+	pintar(x+1,y-1,filas,columnas,pintura,val);
+	pintar(x+1,y,filas,columnas,pintura,val);
+	pintar(x+1,y+1,filas,columnas,pintura,val);
+}
+
+int main(){
+    ofstream out("output.txt");
+		
+
+    string fila;
+    int fil = 0,col;
+    while(getline(cin,fila) ){
+    	if(fila == "%"){
+    		int pintura = 1;
+    		for(int i =0;i<fil;i++){
+    			for(int j = 0;j<col;j++){
+    				if(visitado[i][j] == -1){
+    					pintar(i,j,fil,col,pintura,bosque[i][j]);
+    					pintura++;
+    				}
+    			}
+    		}
+    		for(int j =0;j<col;j++){
+    			int maximo = 0;
+    			for(int i =0;i<fil;i++){
+    				maximo = max(maximo,solucion[i][j]);
+    			}
+    			control[j] = maximo;
+    		}
+    		for(int i =0;i<fil;i++){
+    			for(int j =0;j<col;j++){
+    				if(j == 0){
+    					if(control[j]>=1000){
+    						if(solucion[i][j]>=1000)   	cout<<solucion[i][j];
+    						else if(solucion[i][j]>=100)cout<<" "<<solucion[i][j];
+    						else if(solucion[i][j]>=10) cout<<"  "<<solucion[i][j];
+    						else  						cout<<"   "<<solucion[i][j];
+    					}
+    					else if(control[j]>=100){
+    						if(solucion[i][j]>=100) 	cout<<solucion[i][j];
+    						else if(solucion[i][j]>=10) cout<<" "<<solucion[i][j];
+    						else                        cout<<"  "<<solucion[i][j];
+    					}
+    					else if(control[j]>=10){
+    						if(solucion[i][j]>=10) cout<<solucion[i][j];
+    						else                   cout<<" "<<solucion[i][j];
+    					}
+    					else{
+    						cout<<solucion[i][j];
+    					}
+    				}
+    				else{
+    					if(control[j]>=1000){
+    						if(solucion[i][j]>=1000) 	cout<<" "<<solucion[i][j];
+    						else if(solucion[i][j]>=100)cout<<"  "<<solucion[i][j];
+    						else if(solucion[i][j]>=10) cout<<"   "<<solucion[i][j];
+    						else						cout<<"    "<<solucion[i][j];
+    					}
+    					else if(control[j]>=100){
+    						if(solucion[i][j]>=100)     cout<<" "<<solucion[i][j];
+    						else if(solucion[i][j]>=10) cout<<"  "<<solucion[i][j];
+    						else                        cout<<"   "<<solucion[i][j];	
+    					}
+    					else if(control[j]>=10){
+    						if(solucion[i][j]>=10)      cout<<" "<<solucion[i][j];
+    						else                        cout<<"  "<<solucion[i][j];
+    					}
+    					else{
+    						cout<<" "<<solucion[i][j];
+    					}
+    				}
+    			}
+    			cout<<endl;
+    		}
+    		cout<<"%\n";
+    		fil = 0;
+    		col = 0;
+    	}
+    	else{
+
+    		int aux = 0;
+    		for(int i =0;i<fila.size();i++){
+    			control[i] = 0;
+    		}
+    		for(int j =0;j<fila.size();j++){
+    			if(fila[j] != ' '){
+    				bosque[fil][aux] = fila[j];
+    				visitado[fil][aux] = -1;
+    				aux++;
+    			}
+    		}
+    		col = aux;
+    		fil++;
+    	}
+    }
+    int pintura = 1;
+   	for(int i =0;i<fil;i++){
+    	for(int j = 0;j<col;j++){
+    		if(visitado[i][j] == -1){
+  				pintar(i,j,fil,col,pintura,bosque[i][j]);
+  				pintura++;
+   			}
+    	}
+   	}
+   	for(int j =0;j<col;j++){
+    	int maximo = 0;
+    	for(int i =0;i<fil;i++){
+    		maximo = max(maximo,solucion[i][j]);
+    	}
+    	control[j] = maximo;
+    }
+    for(int i =0;i<fil;i++){
+   		for(int j =0;j<col;j++){
+   			if(j == 0){
+   				if(control[j]>=1000){
+    						if(solucion[i][j]>=1000)   	cout<<solucion[i][j];
+    						else if(solucion[i][j]>=100)cout<<" "<<solucion[i][j];
+    						else if(solucion[i][j]>=10) cout<<"  "<<solucion[i][j];
+    						else  						cout<<"   "<<solucion[i][j];
+    					}
+   				else if(control[j]>=100){
+   					if(solucion[i][j]>=100) cout<<solucion[i][j];
+   					else if(solucion[i][j]>=10) cout<<" "<<solucion[i][j];
+   					else                        cout<<"  "<<solucion[i][j];
+    			}
+    			else if(control[j]>=10){
+    				if(solucion[i][j]>=10) cout<<solucion[i][j];
+    				else                   cout<<" "<<solucion[i][j];
+    			}
+    			else{
+    				cout<<solucion[i][j];
+    			}
+    		}
+    		else{
+    			if(control[j]>=1000){
+    						if(solucion[i][j]>=1000) 	cout<<" "<<solucion[i][j];
+    						else if(solucion[i][j]>=100)cout<<"  "<<solucion[i][j];
+    						else if(solucion[i][j]>=10) cout<<"   "<<solucion[i][j];
+    						else						cout<<"    "<<solucion[i][j];
+    					}
+    			else if(control[j]>=100){
+    				if(solucion[i][j]>=100) cout<<" "<<solucion[i][j];
+    				else if(solucion[i][j]>=10) cout<<"  "<<solucion[i][j];
+    				else                        cout<<"   "<<solucion[i][j];	
+    			}
+    			else if(control[j]>=10){
+    				if(solucion[i][j]>=10) cout<<" "<<solucion[i][j];
+    				else                   cout<<"  "<<solucion[i][j];
+    			}
+    			else{
+    				cout<<" "<<solucion[i][j];
+    			}
+    		}
+    	}
+    	cout<<endl;
+    }
+    cout<<"%\n";
+
+    
+    return 0;
+}
+
+ 
+ 
+
+
+
+
+

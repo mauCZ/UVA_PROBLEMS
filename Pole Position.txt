@@ -1,0 +1,55 @@
+#include <cstdio>
+#include<bits/stdc++.h> 
+#define pb          push_back 
+#define endl        "\n"
+#define mostrar(x,y) cout<<x<<" "<<y<<endl;
+using namespace std;
+typedef pair<int,int> ii;
+typedef vector<int> vi;
+typedef vector<pair<int,int>> vii;
+
+
+
+int main()
+{   
+    ofstream out("output.txt");
+    //ifstream in("input2.txt");
+
+    int autos,autito,pos;
+    int posiciones[1005];
+    bool noHaySolucion;
+    while(cin>>autos&&autos!=0){
+        noHaySolucion = false;
+        for(int i = 0; i<autos; i++){
+            posiciones[i] = -1;
+        }
+        for(int i = 1; i<=autos; i++){
+            cin>>autito>>pos;
+            if(!noHaySolucion){
+                if((i+pos)>0&&(i+pos)<=autos){
+                    if(posiciones[i+pos-1]==-1){
+                        posiciones[i+pos-1] = autito;
+                    }
+                    else{
+                        noHaySolucion = true;
+                    }
+                }
+                else{
+                    noHaySolucion = true;
+                }
+            }
+        }
+        if(!noHaySolucion){
+            for(int i = 0; i<autos; i++){
+                if(i == 0){ cout<<posiciones[i];}
+                else      { cout<<" "<<posiciones[i];}
+            }
+            cout<<endl;
+        }
+        else{
+            cout<<-1<<endl;
+        }
+    }
+
+    return 0;
+}

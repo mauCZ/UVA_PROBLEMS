@@ -1,0 +1,48 @@
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Arrays;
+import java.util.Collections;
+import java.io.InputStreamReader;
+import java.io.PrintWriter;
+import java.io.BufferedReader;
+import java.util.LinkedList;
+import java.util.Locale;
+import java.util.Iterator;
+import java.util.Stack;
+import java.util.Set;
+import java.util.HashSet;
+import java.util.TreeSet;
+import java.util.Map;
+import java.util.HashMap;
+import java.util.TreeMap;
+import java.util.BitSet;
+import java.lang.StringBuilder;
+import java.util.Queue;
+import java.util.Objects;
+
+public class UvaProblems {
+
+	public static void main(String[] args) throws Exception {
+		BufferedReader in = new BufferedReader(new InputStreamReader(System.in));
+		PrintWriter out = new PrintWriter(System.out);
+		Locale.setDefault(new Locale("en", "US"));
+			
+		int n = Integer.parseInt(in.readLine());
+		int a,b,i,j,total, cont = 1;
+		while(n>0) {
+			total = 0;
+			a = Integer.parseInt(in.readLine());
+			b = Integer.parseInt(in.readLine());
+			for(i = a; i<= b; i++) {
+				if(i % 2 == 1) {
+					total+= i;
+				}
+			}
+			out.println("Case "+cont+": " +total);
+			cont++;
+			n--;
+		}
+		
+		out.flush();
+	}
+}				

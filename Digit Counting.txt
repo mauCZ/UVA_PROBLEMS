@@ -1,0 +1,61 @@
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Arrays;
+import java.util.Collections;
+import java.io.InputStreamReader;
+import java.io.PrintWriter;
+import java.io.BufferedReader;
+import java.util.LinkedList;
+import java.util.Locale;
+import java.util.Iterator;
+import java.util.Stack;
+import java.util.Set;
+import java.util.HashSet;
+import java.util.TreeSet;
+import java.util.Map;
+import java.util.HashMap;
+import java.util.TreeMap;
+import java.util.BitSet;
+import java.lang.StringBuilder;
+import java.util.Queue;
+import java.util.Objects;
+
+public class UvaProblems {
+
+	public static void main(String[] args) throws Exception {
+		BufferedReader in = new BufferedReader(new InputStreamReader(System.in));
+		PrintWriter out = new PrintWriter(System.out);
+		Locale.setDefault(new Locale("en", "US"));
+		
+		HashMap<Integer,Integer> mapa = new HashMap<>(); ;
+		StringBuilder cadena;
+		int x,i,j;
+		int n = Integer.parseInt(in.readLine()), b;
+		while(n>0) {
+			mapa = new HashMap<>();
+			cadena = new StringBuilder();
+			b = Integer.parseInt(in.readLine());
+			for( i = 0; i<10; i++) {
+				mapa.put(i, 0);
+			}
+			for( j = 1; j<= b; j++) {
+				cadena.append(Integer.toString(j));
+			}
+			for( i = 0; i<cadena.length(); i++) {
+				x = Integer.parseInt(cadena.charAt(i)+"");
+				mapa.put(x,mapa.get(x)+1 );
+			}
+			for(i = 0; i<10; i++) {
+				if(i==9) {
+					out.println(mapa.get(i));
+				}
+				else {
+					out.print(mapa.get(i)+" ");
+				}
+			}
+			n--;
+		}
+		
+		out.flush();
+	}
+}

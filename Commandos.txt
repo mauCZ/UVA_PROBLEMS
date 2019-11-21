@@ -1,0 +1,60 @@
+#include <cstdio>
+#include<bits/stdc++.h> 
+#define pb          push_back 
+#define endl        "\n"
+#define mostrar(x,y) cout<<x<<" "<<y<<endl;
+#define f           first
+#define s           second
+using namespace std;
+typedef pair<int,int> ii;
+typedef vector<int> vi;
+typedef vector<pair<int,int>> vii;
+typedef pair<pair<int,int>,int> iii;
+
+int dp[105][105];
+
+void iniciarDP(){
+    for(int i =0; i<105; i++){
+        for(int j= 0; j<105; j++){
+            if(i == j) dp[i][j] = 0;
+            else       dp[i][j] = 100000;
+        }
+    }
+}
+
+int main(){
+    ofstream out("output.txt");
+    
+
+    int n,vertices,aristas,a,b,inicio,final;
+    cin>>n;
+
+    for(int cont = 1; cont<=n; cont++){
+        iniciarDP();
+        cin>>vertices>>aristas;
+        for(int x = 0; x<aristas; x++){
+            cin>>a>>b;
+            dp[a][b] = 1;
+            dp[b][a] = 1;
+        }
+        cin>>inicio>>final;
+        for(int k = 0; k<vertices; k++){
+            for(int i = 0; i<vertices; i++){
+                for(int j = 0; j<vertices; j++){
+                    dp[i][j] = min(dp[i][j],dp[i][k]+dp[k][j]);
+                }
+            }
+        }
+        int max = 0;
+        for(int i = 0; i<vertices; i++){
+            if((dp[inicio][i]+dp[final][i])>max){
+                max = dp[inicio][i]+dp[final][i] ;
+            }
+        }
+        cout<<"Case "<<cont<<": "<<max<<endl;
+        out<<"Case "<<cont<<": "<<max<<endl;
+
+    }
+
+    return 0;
+}

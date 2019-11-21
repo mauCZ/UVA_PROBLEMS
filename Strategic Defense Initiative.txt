@@ -1,0 +1,77 @@
+#include <bits/stdc++.h>
+
+using namespace std;
+
+
+
+int main(){
+
+	int n;
+	cin>>n;
+
+	cin.ignore();
+	string dato;
+	getline(cin,dato);
+
+	for(int k =0;k<n;k++){
+		if(k > 0){
+			cout<<endl;
+		}
+		vector<int> sec;
+		string info = "";
+		while(getline(cin,dato) && dato.size()!=0){
+			info += dato+" ";
+		}
+		istringstream in(info);
+		int val;
+		while(in >> val){
+			sec.push_back(val);
+		}
+		/*for(int i =0;i<sec.size();i++){
+			cout<<sec[i]<<endl;
+		}*/
+		vector<int> lis,padre;
+		int l = sec.size();
+		for(int i =0;i<l;i++){
+			lis.push_back(1);
+		}
+		for(int i =1;i<l;i++){
+			int actual = 0;
+			for(int j =0;j<i;j++){
+				if(sec[j] < sec[i]){
+					actual = max(actual,lis[j]);
+				}
+			}
+			lis[i] += actual;
+		}
+		int LIS = 0,buscado;
+		for(int i = 0;i<l;i++){
+			if(LIS < lis[i]){
+				LIS = lis[i];
+				buscado = i;
+			}
+			//cout<<sec[i]<<" "<<lis[i]<<endl;
+		}
+		cout<<"Max hits: "<<LIS<<endl;
+		vector<int> solucion;
+		solucion.push_back(sec[buscado]);
+		int ind = buscado-1;
+		while(ind>=0){
+			if(lis[ind]+1 == LIS){
+				solucion.push_back(sec[ind]);
+				LIS--;
+				ind--;
+			}
+			else{
+				ind--;
+			}
+		}
+		reverse(solucion.begin(),solucion.end());
+		for(int i =0;i<solucion.size();i++){
+			cout<<solucion[i]<<endl;
+		}
+	}
+
+
+	return 0;
+}

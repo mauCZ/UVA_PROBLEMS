@@ -1,0 +1,116 @@
+#include<bits/stdc++.h>
+#define llenar(a,val)   memset(a,val,sizeof(a))
+#define pb          push_back 
+#define endl        "\n"
+#define mostrar(x,y) cout<<x<<" "<<y<<endl;
+#define f           first
+#define s           second
+#define mod         1000000007
+#define EPS         1e-9
+using namespace std;
+typedef pair<int,int> ii;
+typedef pair<pair<int,int>,int> iii;
+typedef vector<int> vi;
+typedef vector<pair<int,int>> vii;
+typedef long long ll;
+typedef vector< pair<pair<int,int>,int> > viii;
+
+bool tablero[8][8];
+vector<vi> soluciones;
+vi actual;
+
+bool sePuede(int fil,int col){
+    //printf("%d %d\n",fil,col);
+    bool res = false;
+    for(int i =0;i<8;i++)
+        res |= tablero[i][col];
+    for(int j =0;j<8;j++)
+        res |= tablero[fil][j];
+    int x = fil, y = col;
+    while(x>=0&&y>=0){
+        res |= tablero[x][y];
+        x--, y--;
+    }
+    x=fil, y = col;
+    while(x<8&&y<8){
+        res |= tablero[x][y];
+        x++, y++;
+    }
+    x = fil, y = col;
+    while(x>=0&&y<8){
+        res |= tablero[x][y];
+        x--, y++;
+    }
+    x = fil, y = col;
+    while(x<8&&y>=0){
+        res |= tablero[x][y];
+        x++, y--;
+    }
+    return !res;
+}
+void backtrack(int restante, int col){
+    //printf("%d %d\n",restante,col);
+    if(restante == 0){
+        //printf("aca\n");
+        actual.clear();
+        for(int j =0;j<8;j++){
+            for(int i =0;i<8;i++){
+                if(tablero[i][j]) actual.pb(i);
+            }
+        }
+        soluciones.pb(actual);
+    }
+    else{
+        for(int i =0;i<8;i++){
+            if(sePuede(i,col)){
+                tablero[i][col] = true;
+                backtrack(restante-1,col+1);
+                tablero[i][col] = false;
+            }
+        }
+    }
+}
+
+
+int main(){
+    ofstream out("output.txt");
+        
+    int a,b,c,d,e,f,g,h,cont = 1;
+    for(int i =0;i<8;i++){
+        llenar(tablero[i],0);
+    }
+    backtrack(8,0);
+    vi sol;
+    //cout<<soluciones.size()<<endl;
+    while(cin>>a>>b>>c>>d>>e>>f>>g>>h){
+        a--,b--,c--,d--,e--,f--,g--,h--;
+        cout<<"Case "<<cont<<": ";
+        out<<"Case "<<cont<<": ";
+        int minimo = 100000,moves;
+        for(int i =0;i<soluciones.size();i++){
+            moves =0;
+            soluciones[i][0]!=a?moves++:moves+0;
+            soluciones[i][1]!=b?moves++:moves+0;
+            soluciones[i][2]!=c?moves++:moves+0;
+            soluciones[i][3]!=d?moves++:moves+0;
+            soluciones[i][4]!=e?moves++:moves+0;
+            soluciones[i][5]!=f?moves++:moves+0;
+            soluciones[i][6]!=g?moves++:moves+0;
+            soluciones[i][7]!=h?moves++:moves+0;
+            minimo = min(moves,minimo);
+        }
+        cout<<minimo<<endl;
+        out<<minimo<<endl;
+        cont++;
+    }
+
+    return 0;
+}
+
+ 
+ 
+
+
+
+
+

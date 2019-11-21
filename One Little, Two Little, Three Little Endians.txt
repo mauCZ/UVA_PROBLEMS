@@ -1,0 +1,58 @@
+#include<bits/stdc++.h>
+#include <cstdio>   
+#define pb          push_back 
+#define endl        "\n"
+#define mostrar(x,y) cout<<x<<" "<<y<<endl;
+#define f           first
+#define s           second
+#define mod         1000000007
+#define EPS         1e-9
+using namespace std;
+typedef pair<int,int> ii;
+typedef pair<pair<int,int>,int> iii;
+typedef vector<int> vi;
+typedef vector<pair<int,int>> vii;
+typedef long long ll;
+    
+
+
+int main(){
+    ofstream out("output.txt");
+
+    int n,res,x;
+    while(cin>>n){
+        res = 0;
+        int aux = 31;
+        for(int i =7; i>=0; i--){
+            x = (1<<i)&n;
+            if(x) 
+                res |= ((1)<<(aux--));
+            else
+                res |= ((0)<<(aux--));
+        }
+        for(int i =15; i>=8; i--){
+            x = (1<<i)&n;
+            if(x) 
+                res |= ((1)<<(aux--));
+            else
+                res |= ((0)<<(aux--));
+        }
+        for(int i =23; i>=16; i--){
+            x = (1<<i)&n;
+            if(x) 
+                res |= ((1)<<(aux--));
+            else
+                res |= ((0)<<(aux--));
+        }
+        for(int i =31; i>=24; i--){
+            x = (1<<i)&n;
+            if(x) 
+                res |= ((1)<<(aux--));
+            else
+                res |= ((0)<<(aux--));
+        }
+        cout<<n<<" converts to "<<res<<endl;
+    }
+
+    return 0;
+}

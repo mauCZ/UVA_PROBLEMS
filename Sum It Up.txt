@@ -1,0 +1,91 @@
+#include <iostream>
+#include <vector>
+#include <fstream>
+#include <algorithm>
+#include <map>
+#include <set>
+#include <unordered_map>
+#include <unordered_set>
+#include <iomanip>
+#include <math.h>
+using namespace std;
+ 
+#define pb push_back
+#define f first
+#define s second
+#define endl '\n'
+#define EPS 1e-9
+#define PI acos(-1)
+ 
+using ll = long long;
+using pll = pair<ll,ll>;
+using ii = pair<int,int>;
+using vi = vector<int>;
+using vii = vector<ii>;
+using vll = vector<ll>;
+using ui = unsigned int;
+
+int t,n;
+int a[20];
+bool usado[20];
+set<vi> respuestas;
+vi actual;
+void backtrack(int ind,int total,vi &actual){
+    //
+    cout<<ind<<" "<<total<<endl;
+    if(total == 0){
+        vi copia(actual);
+        sort(copia.begin(),copia.end(),greater<int>());
+        respuestas.insert(copia);
+        return;
+    }
+    if(ind == n) return;
+
+    for(int i=ind;i<n;i++){
+        if(!usado[i] && a[i]<=total){
+            usado[i] = true;
+            actual.pb(a[i]);
+            backtrack(ind+1,total-a[i],actual);
+            usado[i] = false;
+            actual.erase(actual.end()-1);
+        }
+    }
+}
+
+
+int main() {
+    ofstream out("output.txt");
+    ios_base::sync_with_stdio(false);
+    
+    while(cin>>t>>n && (t!=0||n!=0)){
+        respuestas.clear();
+        for(int i =0;i<n;i++){
+            cin>>a[i];
+            usado[i] = false;
+        }
+
+        backtrack(0,t,actual);
+
+        cout<<"Sums of "<<t<<":\n";
+        if(respuestas.size()>0){
+            for(auto it = respuestas.rbegin();it!=respuestas.rend();it++){
+                for(int j= 0 ;j<(*it).size();j++){
+                    if(j == 0){
+                        cout<<(*it)[j];
+                    }
+                    else{
+                        cout<<"+"<<(*it)[j];
+                    }
+                }
+                cout<<endl;
+            }    
+        }
+        else{
+            cout<<"NONE"<<endl;
+        }
+        
+    }
+
+    return 0;
+}   
+

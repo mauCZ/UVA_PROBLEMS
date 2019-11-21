@@ -1,0 +1,90 @@
+#include <cstdio>
+#include<bits/stdc++.h> 
+#define pb          push_back 
+#define endl        "\n"
+#define mostrar(x,y) cout<<x<<" "<<y<<endl;
+using namespace std;
+typedef pair<int,int> ii;
+typedef vector<int> vi;
+typedef vector<pair<int,int>> vii;
+
+bool comparador(ii a,ii b){
+    if(a.first<b.first) return true;
+    else if(b.first<a.first) return false;
+    else return a.second>b.second;
+}
+
+int main()
+{   
+    ofstream out("output.txt");
+    //ifstream in("input2.txt");
+    int t,m,a,b,limite,cont = -1,i;
+    cin>>t;
+    cin.ignore();
+    vii segmentos;
+    vii segUtiles;
+    ii ultimo;
+    bool haySolucion;
+    while(t--){
+        getchar();
+        segUtiles.clear();
+        segmentos.clear();
+        cont++;
+        cin>>m;
+        while(cin>>a>>b && (a!=0||b!=0)){
+            if((a<=0&&b<=0)||(a>=m&&b>=m)){}
+            else segmentos.pb({a,b});
+        }
+        if(segmentos.size() == 0) haySolucion = false;
+        else                      haySolucion = true;   //parece que si :v
+        sort(segmentos.begin(),segmentos.end(),comparador);
+
+        if(haySolucion) ultimo = segmentos[0];
+        if(ultimo.first>0) haySolucion = false;
+        limite = 0;
+        for(i = 0; i<segmentos.size()&&haySolucion; i++){
+            if(segmentos[i].second > ultimo.second && limite>=segmentos[i].first){
+                ultimo = segmentos[i];
+            }
+            else if(segmentos[i].second > ultimo.second && limite<segmentos[i].first && segmentos[i].first>ultimo.second){
+                haySolucion = false;
+            } 
+            else if(segmentos[i].second > ultimo.second && segmentos[i].first>limite){
+                segUtiles.pb(ultimo);
+                limite = ultimo.second;
+                ultimo = segmentos[i];
+            }
+        }
+        if(cont>0){
+            cout<<"\n";
+            out<<"\n";
+        }
+        if(haySolucion){
+            if(limite<m){
+                if(ultimo.second>=m){
+                    segUtiles.pb(ultimo);
+                }
+                else{
+                    cout<<0<<endl;
+                    out<<0<<endl;
+                    continue;
+                }
+            }
+            else{   
+                //NO NECSITAMOS NADA 
+            }
+        }
+        else{
+            cout<<0<<endl;
+            out<<0<<endl;
+            continue;
+        }  
+        cout<<segUtiles.size()<<endl;
+        out<<segUtiles.size()<<endl;
+        for(i = 0; i<segUtiles.size();i++){
+            cout<<segUtiles[i].first<<" "<<segUtiles[i].second<<endl;
+            out<<segUtiles[i].first<<" "<<segUtiles[i].second<<endl;
+        }
+    }
+    return 0;
+}

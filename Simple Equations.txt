@@ -1,0 +1,51 @@
+#include<bits/stdc++.h>
+#define llenar(a,val)   memset(a,val,sizeof(a))
+#define pb          push_back 
+#define endl        "\n"
+#define mostrar(x,y) cout<<x<<" "<<y<<endl;
+#define f           first
+#define s           second
+#define mod         1000000007
+#define EPS         1e-9
+using namespace std;
+typedef pair<int,int> ii;
+typedef pair<pair<int,int>,int> iii;
+typedef vector<int> vi;
+typedef vector<pair<int,int>> vii;
+typedef long long ll;
+
+    
+
+int main(){
+    ofstream out("output.txt");
+
+    int n,a,b,c;
+    cin>>n;
+    for(int i =0;i<n;i++){
+        cin>>a>>b>>c;
+        bool haySol = false;
+        for(int x = -100; x<=100&&!haySol;x++){
+            for(int y = -100;y<=100&&!haySol;y++){
+                for(int z = -100; z<=100&&!haySol;z++){
+                    if(x!=y&&y!=z&&x!=z){
+                        if(x+y+z==a&&x*y*z==b&&x*x+y*y+z*z==c){
+                            cout<<x<<" "<<y<<" "<<z<<endl;
+                            haySol = true;
+                        }
+                    }
+                }
+            }
+        }
+        if(!haySol) cout<<"No solution.\n";
+    }
+    
+    return 0;
+}
+
+ 
+ 
+
+
+
+
+

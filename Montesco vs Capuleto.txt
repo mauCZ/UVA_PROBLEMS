@@ -1,0 +1,83 @@
+#include<bits/stdc++.h>
+using namespace std;
+
+unordered_map<int,vector<int>> grafo;
+unordered_map<int,int> visitado;
+void mostrarGrafo(){
+    for(auto it = grafo.begin(); it!=grafo.end(); it++){
+        cout<<it->first<<" :";
+        for(auto it2 = (it->second).begin(); it2!=(it->second).end(); it2++){
+            cout<<*it2<<" ";
+        }
+        cout<<"\n";
+    }
+}
+pair<int,int> bicolorable(int origen){
+    queue<int> colita;
+    colita.push(origen);
+    visitado[origen] = 0;
+    bool bipartido = true;
+    int azul = 0, rojo = 1;
+    while(!colita.empty() ){
+        int actual = colita.front(); colita.pop();
+        //cout<<actual<<endl;
+        for(int i = 0; i<grafo[actual].size(); i++){
+            int vecino = grafo[actual][i];
+            if(visitado[vecino] == -1){
+                visitado[vecino] = 1 - visitado[actual];
+                colita.push(vecino);
+                if(visitado[vecino] == 1){ azul++;}
+                else{                      rojo++;}
+            }
+            else{
+                if(visitado[vecino] == visitado[actual]){ 
+                    bipartido = false;
+                }
+            }
+        }
+    }
+    if(bipartido) return make_pair(azul,rojo);
+    else          return make_pair(0,0);
+}
+
+int main()
+{
+    ofstream out("output.txt");
+    ifstream in("input.txt");
+
+    int n,m,a,b,c,total;
+    cin>>m;
+    string blank;
+    pair<int,int> res;
+    while(m--){
+        getline(cin,blank);
+        cin>>n;
+        for(int i = 1; i<= n; i++){
+            visitado[i] = -1;
+            cin>>c;
+            while(c--){
+                cin>>a;
+                if(a<=n){
+                    if(find(grafo[i].begin(),grafo[i].end(),a) == grafo[i].end()) 
+                        grafo[i].push_back(a);
+                    if(find(grafo[a].begin(),grafo[a].end(),i) == grafo[a].end())
+                        grafo[a].push_back(i);
+                }
+            }
+        }
+        total = 0;
+        for(int i = 1; i<=n; i++){
+            if(visitado[i] == -1){
+                res = bicolorable(i);
+                total += max(res.first,res.second);
+            }
+        }
+        cout<<total<<endl;
+        visitado.clear();
+        grafo.clear();
+    }
+
+    return 0;
+}
+
+

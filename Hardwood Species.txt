@@ -1,0 +1,47 @@
+#include <cstdio>
+#include<bits/stdc++.h>
+using namespace std;
+
+int main(){
+    ofstream out("output.txt");
+    map<string,int> mapa;
+    string blanco, arbol;
+    int n,cont = 0;
+    cin>>n;
+    double total;
+    double porcentaje;
+    cin.ignore();
+    getline(cin,blanco);
+    char ar[30];
+    while(n--){
+        if(cont>0){
+            cout<<""<<endl;
+            out<<""<<endl;
+        }
+        total = 0;
+
+        while(getline(cin,arbol) && !arbol.empty()){
+            if(mapa.find(arbol) == mapa.end()){
+                mapa[arbol] = 1;
+            }
+            else{
+                mapa[arbol] = mapa[arbol]+1;
+            }
+            total++;
+        }
+        for(auto it = mapa.begin(); it != mapa.end(); it++){
+            porcentaje = (it->second/total)*100.0;
+            //cout<<it->first<<" "<<setprecision(4)<<fixed<<it->second/total*100<<endl;
+            //out<<it->first<<" "<<setprecision(4)<<fixed<<it->second/total*100<<endl;
+            printf("%s %.4f\n",it->first,it->second/total*100);
+
+            out<<setprecision(4)<<fixed<<it->second/total*100<<endl;
+        }
+        mapa.clear();
+        cont++;
+    }
+
+    return 0;
+}
+
+

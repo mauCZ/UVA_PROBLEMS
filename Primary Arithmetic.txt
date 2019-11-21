@@ -1,0 +1,141 @@
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Arrays;
+import java.util.Collections;
+import java.io.InputStreamReader;
+import java.io.PrintWriter;
+import java.io.BufferedReader;
+import java.util.LinkedList;
+import java.util.Locale;
+import java.util.Iterator;
+import java.util.Stack;
+import java.util.Set;
+import java.util.HashSet;
+import java.util.TreeSet;
+import java.util.Map;
+import java.util.HashMap;
+import java.util.TreeMap;
+import java.util.BitSet;
+import java.lang.StringBuilder;
+import java.util.Queue;
+import java.util.Objects;
+import java.util.PriorityQueue;
+public class UvaProblems {
+
+    public static void main(String[] args) throws Exception {
+        BufferedReader in = new BufferedReader(new InputStreamReader(System.in));
+        PrintWriter out = new PrintWriter(System.out);
+        Locale.setDefault(new Locale("en", "US"));
+        
+        String a;
+        String[] b;
+        int  num1, num2,cont = 1;
+        ArrayList<Integer> numero1;
+        ArrayList<Integer> numero2;
+        int residuo, carreos,carreo,i;
+        while(!(a = in.readLine()).equals("0 0")) {
+        	b = a.split(" ");
+        	carreos = 0;
+        	carreo = 0;
+        	num1 = Integer.parseInt(b[0]);
+        	num2 = Integer.parseInt(b[1]);
+        	numero1 = new ArrayList<>();
+        	numero2 = new ArrayList<>();
+        	
+        	if(num1 > num2) {
+        		while(num1>0) {
+        			numero1.add(num1 % 10);
+        			num1 = num1 /10;
+        			if(num2 == 0)  numero2.add(0);
+        			else {
+        				numero2.add(num2 % 10);
+        				num2 = num2 / 10;
+        			}
+        		}
+        	}
+        	else {
+        		while(num2 > 0) {
+        			numero2.add(num2 % 10);
+        			num2 = num2/10;
+        			if(num1 == 0)  numero1.add(0);
+        			else {
+        				numero1.add(num1 % 10);
+        				num1 = num1 / 10;
+        			}
+        		}
+        	}
+        	//out.println(numero1);
+        	//out.println(numero2);
+        	for( i = 0; i<numero2.size(); i++) {
+        		if(numero2.get(i)+numero1.get(i)+carreo >=10 ) {
+        			carreo = 1;
+        			carreos++;
+        		}
+        		else {
+        			carreo = 0;
+        		}
+        	}
+        	if(carreos ==0) {
+        		out.println(/*cont+" "+numero1+numero2+*/"No carry operation.");
+        	}
+        	else if(carreos ==1) {
+        		out.println(/*cont+" "+numero1+numero2+*/carreos+" carry operation.");
+        	}
+        	else {
+        		out.println(/*cont+" "+numero1+numero2+*/carreos+" carry operations.");
+        	}
+        	cont++;
+        }
+        
+        out.flush();
+    }
+}
+---------------------------------------------------------------------------------c++
+#include <cstdio>
+#include<bits/stdc++.h> 
+#define pb          push_back 
+#define endl        "\n"
+#define mostrar(x,y) cout<<x<<" "<<y<<endl;
+using namespace std;
+typedef pair<int,int> ii;
+typedef vector<int> vi;
+typedef vector<pair<int,int>> vii;
+
+
+
+int main()
+{   
+    ofstream out("output.txt");
+    //ifstream in("input2.txt");
+
+    long long a,b;
+    int carrys,c;
+    while(cin>>a>>b&&(a!=0||b!=0)){
+        carrys = 0;
+        c = 0;
+        while(a>0||b>0){
+            if((a%10 + b%10 + c)>9){
+                c = 1;
+                carrys++;
+            }else c = 0;
+
+            a = a/10;
+            b = b/10;
+        }
+        if(carrys == 0){
+            cout<<"No carry operation."<<endl;
+            out<<"No carry operation."<<endl;
+        }
+        else if(carrys == 1){
+            cout<<carrys<<" carry operation."<<endl;
+            out<<carrys<<" carry operation."<<endl;
+        }
+        else{
+            cout<<carrys<<" carry operations."<<endl;
+            out<<carrys<<" carry operations."<<endl;
+        }
+    }
+
+
+    return 0;
+}

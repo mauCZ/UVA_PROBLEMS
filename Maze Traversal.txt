@@ -1,0 +1,70 @@
+#include <cstdio>
+#include<bits/stdc++.h> 
+#define pb          push_back 
+#define endl        "\n"
+using namespace std;
+typedef pair<int,int> ii;
+typedef vector<int> vi;
+
+char laberinto[65][65];
+
+int main()
+{   
+    ofstream out("output.txt");
+    //ifstream in("input2.txt");
+
+    int n,filas,columnas,iniX,iniY,xActual,yActual,cont = 0;
+    char instruccion, dirActual;
+    string fila;
+    cin>>n;
+    cin.ignore();
+    while(n--){
+        getchar();
+        if(cont>0){cout<<endl; } 
+        cin>>filas>>columnas;
+        cin.ignore();
+        for(int i = 0; i<filas; i++){
+            getline(cin,fila);
+            for(int j = 0; j<columnas; j++){
+                laberinto[i][j] = fila[j];
+            }
+        }
+        cin>>iniX>>iniY;
+        xActual = iniX-1;
+        yActual = iniY-1;
+        dirActual = 'N';
+        while(cin>>instruccion && instruccion!='Q'){
+            if(instruccion == 'R'){
+                if(dirActual == 'N')        dirActual = 'E';
+                else if(dirActual == 'S')   dirActual = 'W';
+                else if(dirActual == 'W')   dirActual = 'N';
+                else if(dirActual == 'E')   dirActual = 'S';
+            }
+            else if(instruccion == 'L'){
+                if(dirActual == 'N')        dirActual = 'W';
+                else if(dirActual == 'S')   dirActual = 'E';
+                else if(dirActual == 'W')   dirActual = 'S';
+                else if(dirActual == 'E')   dirActual = 'N';
+            }
+            else if(instruccion == 'F'){
+                if(dirActual == 'N' && laberinto[xActual-1][yActual] == ' '){
+                    xActual--;
+                }
+                else if(dirActual == 'S' && laberinto[xActual+1][yActual] == ' '){
+                    xActual++;
+                }
+                else if(dirActual == 'W' && laberinto[xActual][yActual-1] == ' '){
+                    yActual--;
+                }
+                else if(dirActual == 'E' && laberinto[xActual][yActual+1] == ' '){
+                    yActual++;
+                }
+            }
+        }
+        cout<<xActual+1<<" "<<yActual+1<<" "<<dirActual<<endl;
+        cont++;
+    }
+
+    return 0;
+}
+

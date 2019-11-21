@@ -1,0 +1,70 @@
+#include<bits/stdc++.h>
+#define llenar(a,val)   memset(a,val,sizeof(a))
+#define pb          push_back 
+#define endl        "\n"
+#define mostrar(x,y) cout<<x<<" "<<y<<endl;
+#define f           first
+#define s           second
+#define mod         1000000007
+#define EPS         1e-9
+using namespace std;
+typedef pair<int,int> ii;
+typedef pair<pair<int,int>,int> iii;
+typedef vector<int> vi;
+typedef vector<pair<int,int>> vii;
+typedef long long ll;
+typedef vector< pair<pair<int,int>,int> > viii;
+
+vi grafo[30];
+bool visitado[30][30];
+
+int dfs(int i){
+    int l = 0;
+    for(int vec : grafo[i]){
+        if(!visitado[i][vec]){
+            visitado[i][vec] = true;
+            visitado[vec][i] = true;
+            l = max(l,dfs(vec)+1);
+            visitado[i][vec] = false;
+            visitado[vec][i] = false;
+        }
+    }
+    //cout<<i<<" "<<l<<endl;
+    return l;
+}
+
+
+int main(){
+    ofstream out("output.txt");
+    
+    int n,m,a,b;
+
+    while(cin>>n>>m&&(n!=0||m!=0)){
+        llenar(grafo,0);
+        for(int i =0;i<m;i++){
+            cin>>a>>b;
+            grafo[a].pb(b);
+            grafo[b].pb(a);
+        }
+        int maximo =0,camino;
+        for(int i =0;i<n;i++){
+            llenar(visitado[i],false);
+            camino = dfs(i);
+            //cout<<i<<" "<<camino<<endl;
+            maximo = max(maximo,camino);
+        }
+        cout<<maximo<<endl;
+        out<<maximo<<endl;
+    } 
+
+    
+    return 0;
+}
+
+ 
+ 
+
+
+
+
+

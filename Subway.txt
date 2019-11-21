@@ -1,0 +1,210 @@
+#include <cstdio>
+#include<bits/stdc++.h> 
+#include <iostream>
+#include <vector>
+#include <fstream>
+#include <string>
+#include <map>
+#include <math.h>
+    #include <algorithm>
+    #define pb          push_back 
+    #define endl        "\n"
+    #define mostrar(x,y) cout<<x<<" "<<y<<endl;
+    #define f           first
+    #define s           second
+    #define mod         1000000007
+    using namespace std;
+    typedef pair<int,int> ii;
+    typedef pair<pair<int,int>,int> iii;
+    typedef vector<int> vi;
+    typedef vector<pair<int,int>> vii;
+
+
+    double const velCaminar = 500.0/3.0;
+    double const velSubway  = 2000.0/3.0;   
+    double grafo[205][205];
+    vii vertices;
+    map<int,double> distancias;
+
+    void dijkstra(int origen){
+        for(int i = 0; i<vertices.size(); i++){
+            distancias[i+1] = 100000000;  
+        }
+        //COLA DE PRIORIDAD GUARDARA VERTICE ACTUAL Y LA DISTANCIA ACUMULADA
+        priority_queue<pair<int,double>,vector<pair<int,double>>,greater<pair<int,double>>> colita;
+        colita.push(make_pair(origen,0.0));
+        distancias[origen] = 0.0;
+        int control = 0;
+        while(!colita.empty()){
+            pair<int,double> actual = colita.top(); colita.pop();
+            double costoAcumulado = actual.second;
+            int vActual = actual.first;
+
+            if(costoAcumulado > distancias[vActual]) continue;
+        
+            for(int i = 1; i<=vertices.size(); i++){
+                if(i!=vActual){
+                    if(distancias[vActual] + grafo[vActual][i] < distancias[i]){
+                        distancias[i] = distancias[vActual]  + grafo[vActual][i];
+                        colita.push({i,distancias[i]});
+                    }      
+                }   
+            }
+            control++;
+        }
+    }
+    void inicializarMatriz(){
+        for(int i = 0; i<205; i++){
+            for(int j = 0; j<205; j++){
+                grafo[i][j] = -1;
+            }
+        }
+    }
+
+    double calcDist (int x1, int y1, int x2, int y2){
+        double dist;
+        double a = (x1-x2)*(x1-x2);
+        double b = (y1-y2)*(y1-y2);
+        dist = sqrt(a + b);
+        return dist;
+    }
+    double calcTiempoMinSub(int x1, int y1, int x2, int y2){
+        double res;
+        res = calcDist(x1,y1,x2,y2) / velSubway;
+        return res;
+    }
+    double calcTiempoMinCam(int x1,int y1, int x2, int y2){
+        double res;
+        res = calcDist(x1,y1,x2,y2) / velCaminar;
+        return res;
+    }
+
+
+
+
+    int main()
+    {   
+        ofstream out("output.txt");
+        //ifstream in("input2.txt");
+        int t,x1,y1,x2,y2,a,b,cont = 0,vertice,aux;
+        string datos;
+        istringstream stream;
+        int xAnterior,yAnterior;
+        ii aux1,aux2;
+        cin>>t;
+
+        for(int i = 0; i<t-1; i++){
+            inicializarMatriz();
+            vertice = 3;
+            cin>>x1>>y1>>x2>>y2;
+            cin.ignore();
+            vertices.pb({x1,y1});
+            vertices.pb({x2,y2});
+
+            while(getline(cin,datos)&&datos.size()>0){
+                stream.str(datos);
+                aux = 0;
+                while(stream>>a>>b && (a!=-1||b!=-1)){
+
+                    vertices.pb({a,b});
+                    if(aux == 0){
+                        xAnterior = a;
+                        yAnterior = b;
+                    }
+                    else{
+                        //vertices.pb({a,b});
+                        grafo[vertice][vertice-1] = calcTiempoMinSub(a,b,xAnterior,yAnterior);
+                        grafo[vertice-1][vertice] = calcTiempoMinSub(a,b,xAnterior,yAnterior);
+                        xAnterior = a;
+                        yAnterior = b;
+                    }
+                    vertice++;
+                    aux++;
+                }   
+                stream.clear();
+            }
+
+            //YA FORMAMOS PARCIALMENTE EL GRAFO, OSEA YA FORMAMOS EL CAMINO DE LOS METROS CON SUS RESPECTIVAS DISTANCIAS EN MIN,
+            //AHORA TENEMOS QUE FORMAR LAS ARISTAS DE TODOS CONTRA TODOS :V  :,(
+            for(int j = 0; j<vertices.size(); j++){
+                aux1 = vertices[j];
+                for(int k = 0; k<vertices.size(); k++){
+                    if(grafo[j+1][k+1] == -1 ){ //SI NO ESTAMOS SACANDO DISTANCIA 
+                        aux2 = vertices[k];
+                        grafo[j+1][k+1] = calcTiempoMinCam(aux1.f,aux1.s,aux2.f,aux2.s);
+                    }
+                }
+            }
+            if(cont>0){
+                cout<<endl;
+                out<<endl;
+            }
+            dijkstra(1); // INDICE 0 PERO EN REALIDAD ES NODO 1
+            cout<<round(distancias[2])<<endl;
+            out<<round(distancias[2])<<endl;
+
+            distancias.clear();
+            vertices.clear();
+            cont++;
+        }   
+            cout<<endl;
+            inicializarMatriz();
+            vertice = 3;
+            cin>>x1>>y1>>x2>>y2;
+            cin.ignore();
+            vertices.pb({x1,y1});
+            vertices.pb({x2,y2});
+
+            while(getline(cin,datos)){
+                stream.str(datos);
+                aux = 0;
+                while(stream>>a>>b && (a!=-1||b!=-1)){
+
+                    vertices.pb({a,b});
+                    if(aux == 0){
+                        xAnterior = a;
+                        yAnterior = b;
+                    }
+                    else{
+                        grafo[vertice][vertice-1] = calcTiempoMinSub(a,b,xAnterior,yAnterior);
+                        grafo[vertice-1][vertice] = calcTiempoMinSub(a,b,xAnterior,yAnterior);
+                        xAnterior = a;
+                        yAnterior = b;
+                    }
+                    vertice++;
+                    aux++;
+                }   
+                stream.clear();
+            }
+
+            //YA FORMAMOS PARCIALMENTE EL GRAFO, OSEA YA FORMAMOS EL CAMINO DE LOS METROS CON SUS RESPECTIVAS DISTANCIAS EN MIN,
+            //AHORA TENEMOS QUE FORMAR LAS ARISTAS DE TODOS CONTRA TODOS :V  :,(
+            for(int j = 0; j<vertices.size(); j++){
+                aux1 = vertices[j];
+                for(int k = 0; k<vertices.size(); k++){
+                    if(grafo[j+1][k+1] == -1 ){ //SI NO ESTAMOS SACANDO DISTANCIA 
+                        aux2 = vertices[k];
+                        grafo[j+1][k+1] = calcTiempoMinCam(aux1.f,aux1.s,aux2.f,aux2.s);
+                        //printf("j: %d k: %d disMin: %f\n",j+1,k+1,grafo[j+1][k+1]);
+                        //printf("x1: %d y1: %d x2: %d y2: %d\n",aux1.f,aux1.s,aux2.f,aux2.s);
+                    }
+                }
+            }
+            /*for(int j = 1; j<vertice; j++){
+                for(int k = 1; k<vertice; k++){
+                    cout<<grafo[j][k]<<"   ";
+                }
+                cout<<endl;
+            }*/
+            dijkstra(1); // INDICE 0 PERO EN REALIDAD ES NODO 1
+            cout<<round(distancias[2])<<endl;
+            out<<round(distancias[2])<<endl;
+
+            distancias.clear();
+            vertices.clear();
+        return 0;
+    }
+
+
+
+

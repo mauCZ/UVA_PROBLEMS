@@ -1,0 +1,107 @@
+#include<bits/stdc++.h>
+#include <cstdio>   
+#define pb          push_back 
+#define endl        "\n"
+#define mostrar(x,y) cout<<x<<" "<<y<<endl;
+#define f           first
+#define s           second
+#define mod         1000000007
+#define EPS         1e-9
+using namespace std;
+typedef pair<int,int> ii;
+typedef pair<pair<int,int>,int> iii;
+typedef vector<int> vi;
+typedef vector<pair<int,int>> vii;
+typedef long long ll;
+
+int cambios[101][101];
+vector<vector<pair<char,char>>> datos;
+vector<pair<char,char>> datosCiudad;
+
+void iniciarMatriz(){
+    for(int i =0 ; i<100; i++){
+        for(int j =0; j<100; j++){
+            cambios[i][j] = 0;
+        }
+    }
+}
+
+bool noEsta(pair<char,char> dato, int ciudad){
+    for(int i = 0; i<5; i++){
+        if(datos[ciudad][i] == dato) return false;
+    }
+    return true;
+}
+
+int main(){
+    ofstream out("output.txt");
+
+    string cad;
+    int l, mejorInd, suma, minimo;
+    pair<char,char> actual;
+
+    while(cin>>cad && cad!="#"){
+        iniciarMatriz();
+        for(int i=0; i<cad.size();i++){
+            if(cad[i] == '/'){
+                datosCiudad.pb({cad[i-1],cad[i+1]});
+            }
+        }
+
+        datos.pb(datosCiudad); datosCiudad.clear();
+
+        while(cin>>cad&&cad[0]!='e'){
+            for(int i = 0; i<cad.size();i++){
+                if(cad[i]=='/'){
+                    datosCiudad.pb({cad[i-1],cad[i+1]});
+                }
+            }
+            datos.pb(datosCiudad); datosCiudad.clear();
+
+        }
+        
+        l = datos.size();
+
+        /*cout<<"--------\n";
+        for(int i =0; i<l; i++){
+            for(auto p : datos[i]){
+                cout<<'{'<<p.f<<" "<<p.s<<'}';
+            }
+            cout<<endl;
+        }
+        cout<<"--------\n";*/
+
+        for(int i = 0; i<l; i++){
+            for(int j = i+1; j<l;j ++){
+                if(i!=j){
+                    for(int k =0; k<5; k++){
+                        actual = datos[j][k];
+                        if(noEsta(actual,i)){
+                            cambios[i][j]++;
+                            cambios[j][i]++;
+                        }
+                    }
+                }
+            }
+        }
+        minimo = 1000000;
+        for(int i = 0; i<l; i++){
+            suma=0;
+            for(int j =0; j<l;j++){
+                suma += cambios[i][j];
+            }
+            if(suma<minimo){
+                minimo = suma;
+                mejorInd = i+1;
+            }
+        }
+        cout<<mejorInd<<endl;
+        out<<mejorInd<<endl;
+        datos.clear();      
+        datosCiudad.clear();
+    }
+
+
+    return 0;
+}
+

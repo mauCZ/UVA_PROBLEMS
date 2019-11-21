@@ -1,0 +1,64 @@
+#include<bits/stdc++.h>
+#include <cstdio>   
+#define pb          push_back 
+#define endl        "\n"
+#define mostrar(x,y) cout<<x<<" "<<y<<endl;
+#define f           first
+#define s           second
+#define mod         1000000007
+#define EPS         1e-9
+using namespace std;
+typedef pair<int,int> ii;
+typedef pair<pair<int,int>,int> iii;
+typedef vector<int> vi;
+typedef vector<pair<int,int>> vii;
+typedef long long ll;
+
+vi rear,front;
+vector<double> drive_ratios;
+
+ll max(ll a, ll b){
+    if(a<b) return b;
+    return a;
+}
+
+int main(){
+    ofstream out("output.txt");
+
+
+    int n,m,val;
+    double drive_ratio,maximo;
+    while(cin>>n&&n!=0){
+        cin>>m;
+        for(int i = 0; i<n; i++){
+            cin>>val;
+            front.pb(val);
+        }
+        for(int i = 0; i<m;i++){
+            cin>>val;
+            rear.pb(val);
+        }
+        maximo = 0;
+        for(int i = 0; i<n; i++){
+            for(int j = 0; j<m; j++){
+                drive_ratio = (rear[j]+0.0)/front[i];
+                drive_ratios.pb(drive_ratio);
+            }
+        }
+        sort(drive_ratios.begin(),drive_ratios.end());
+
+        for(int i=0; i<(n*m)-1; i++){
+            maximo = max(maximo, drive_ratios[i+1]/drive_ratios[i]);
+        }
+        cout<<setprecision(2)<<fixed<<maximo<<endl;
+        out<<setprecision(2)<<fixed<<maximo<<endl;
+        rear.clear();
+        front.clear();
+        drive_ratios.clear();
+    }
+
+
+
+    return 0;
+}
+

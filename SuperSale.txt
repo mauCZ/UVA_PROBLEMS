@@ -1,0 +1,83 @@
+#include <iostream>
+#include <vector>
+#include <fstream>
+#include <algorithm>
+#include <map>
+using namespace std;
+ 
+#define pb push_back
+#define f first
+#define s second
+#define endl '\n'
+#define EPS 1e-9
+#define PI acos(-1)
+ 
+using ll = long long;
+using ii = pair<int,int>;
+using vi = vector<int>;
+using vii = vector<ii>;
+using vll = vector<ll>;
+using ui = unsigned int;
+
+#define maxObj 1005
+#define maxPre 110
+#define maxPeso 50
+#define maxPers 110
+#define maxCarga 31
+
+ll n,w;
+ll peso[maxObj],valor[maxObj];
+ll dp[maxObj][maxPeso];
+
+ll knapsack(int cap,int ind){
+    if(cap == 0) return 0;
+    if(ind == 0) return 0;
+    if(dp[ind][cap] == -1){
+        
+        if(peso[ind] > cap){
+            return dp[ind][cap] = knapsack(cap,ind-1);
+        }
+        else return dp[ind][cap] = max(knapsack(cap,ind-1), knapsack(cap-peso[ind],ind-1) + valor[ind]);
+    }
+    else return dp[ind][cap];
+}
+
+void limpiar(){
+    for(int i =0;i<maxObj;i++){
+        for(int j =0;j<maxPeso;j++){
+            dp[i][j] = -1;
+        }
+    }
+}
+ 
+int main() {
+    ofstream out("output.txt");
+    ios_base::sync_with_stdio(false);
+    
+    int t;
+    cin>>t;
+
+    while(t--){
+        int a,b;
+
+        cin>>n;
+        peso[0] = -1;
+        valor[0] = -1;
+        for(int i =1;i<=n;i++){
+            cin>>valor[i];
+            cin>>peso[i];
+        }
+        cin>>w;
+        int cap;
+        ll total = 0;
+        for(int i =0;i<w;i++){
+            cin>>cap;
+            limpiar();
+            total += knapsack(cap,n);
+        }
+        cout<<total<<endl;
+        out<<total<<endl;
+    }   
+
+    return 0;
+}

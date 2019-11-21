@@ -1,0 +1,48 @@
+#include <cstdio>
+//#include<bits/stdc++.h> 
+#include <iostream>
+#include <vector>
+#include <fstream>
+#include <string>
+#include <map>
+#include <math.h>
+#define pb          push_back 
+#define endl        "\n"
+#define mostrar(x,y) cout<<x<<" "<<y<<endl;
+//#define f           first
+#define s           second
+#define mod         1000000007
+using namespace std;
+typedef pair<int,int> ii;
+typedef pair<pair<int,int>,int> iii;
+typedef vector<int> vi;
+typedef vector<pair<int,int>> vii;
+
+long long dp[1000010];
+
+void preCalcular(){
+    long long  s;
+    dp[0] = 1;
+    for(long long i = 1; i<=1000000; i++){
+        s = i;
+        dp[i] =( dp[(long long)floor(s-sqrt(s) )]%1000000 + dp[(long long) floor(log(s))]%1000000 + dp[(long long)floor(s* (sin(s)*sin(s)))]%1000000 ) %1000000;
+
+    }
+}
+int main()
+{   
+    ofstream out("output.txt");
+    //ifstream in("input2.txt");
+    
+    long long n;
+    
+    preCalcular();
+    while(cin>>n&&n!=-1){
+        cout<<dp[n]<<endl;
+        out<<(dp[n]+mod)%mod<<endl;   
+    }
+
+
+    return 0;
+}
+

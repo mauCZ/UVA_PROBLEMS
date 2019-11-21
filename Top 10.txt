@@ -1,0 +1,84 @@
+#include <cstdio>
+#include<bits/stdc++.h> 
+#define pb          push_back 
+#define endl        "\n"
+#define mostrar(x,y) cout<<x<<" "<<y<<endl;
+#define f           first
+#define s           second
+using namespace std;
+typedef pair<int,int> ii;
+typedef vector<int> vi;
+typedef vector<pair<int,int>> vii;
+typedef pair<pair<int,int>,char> iii;
+
+bool substring(string &cad, string &candidato){
+    int l = candidato.size(),l1 = cad.size();
+    for(int i = 0; i<=l-l1; i++){
+        if(candidato.substr(i,l1) == cad){
+            return true;
+        }
+    }
+    return false;
+}
+int x,y;
+bool criterio(pair<string,int> a,pair<string,int> b){
+    x = a.f.size();
+    y = b.f.size();
+    if(x<y) return true;
+    if(y<x) return false;
+    if(a.f<b.f) return true;
+    if(b.f<a.f) return false;
+    return a.s<b.s;
+}
+
+int main(){
+    ofstream out("output.txt");
+    
+    int t,q,ind,cont,l,l1;
+    cin>>t;
+    string cad,querie;
+    vector<pair<string,int>> diccionario;
+    vector<pair<string,int>> candidatos;
+    vi respuesta;
+    for(int i = 1; i<=t; i++){
+        cin>>cad;
+        diccionario.pb({cad,i});
+    }
+    sort(diccionario.begin(),diccionario.end(),criterio);
+    cin>>q;
+    int d;
+    for(int i = 0; i<q; i++){
+        cin>>querie;
+        d = 0;
+        for(int j = 0; j<t; j++){
+            if(substring(querie,diccionario[j].f)&&d<10){
+                candidatos.pb(diccionario[j]);
+                d++;
+            }
+        }
+        l = candidatos.size();
+        if(l==0){
+            cout<<-1;
+        }
+        else{
+            ind = 0;
+            cont = 0;
+            while(ind<l&&cont<10){
+                respuesta.pb(candidatos[ind].s);
+                ind++;
+                cont++;
+            }
+        }
+        l1 = respuesta.size();
+        for(int i = 0; i<l1; i++){
+            if(i == 0)      cout<<respuesta[i];
+            else            cout<<" "<<respuesta[i];
+        }
+        cout<<endl;
+        respuesta.clear();
+        candidatos.clear();
+    }
+
+
+    return 0;
+}

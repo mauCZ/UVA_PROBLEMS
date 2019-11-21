@@ -1,0 +1,38 @@
+#include <cstdio>
+#include<bits/stdc++.h> 
+using namespace std;
+
+vector<int> hartals;
+int partidos;
+bool esHartal(int dia){
+
+    for(int i = 0; i<hartals.size(); i++){
+        if(dia % hartals[i] == 0) return true;
+    }
+    return false;
+}
+
+int main()
+{   
+    ofstream out("output.txt");
+    int t,dias,recesos,cont,h;
+    cin>>t;
+    while(t--){
+        cin>>dias;
+        cin>>partidos;
+        recesos = 0;
+        hartals.clear();
+        for(int i = 0; i<partidos; i++){
+            cin>>h;
+            hartals.push_back(h);
+        }
+        for(int i = 1; i<=dias; i++){
+            if(i % 7 == 0 || (i+1) % 7 == 0){ }
+            else if(esHartal(i)){                    recesos++;}
+
+        }
+        cout<<recesos<<endl;
+    }
+    return 0;
+}
+

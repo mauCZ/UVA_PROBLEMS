@@ -1,0 +1,163 @@
+#include <cstdio>
+#include<bits/stdc++.h> 
+#define pb          push_back 
+#define endl        "\n"
+#define mostrar(x,y) cout<<x<<" "<<y<<endl;
+#define f           first
+#define s           second
+using namespace std;
+typedef pair<int,int> ii;
+typedef vector<int> vi;
+typedef vector<pair<int,int>> vii;
+typedef pair<pair<int,int>,int> iii;
+
+int flujoCapacidades[1031][1031];
+
+map<int,vi> flujo;
+map<int,bool> visitado;
+map<int,int> padre;
+map<int,vi> respuesta;
+
+int actual,vecino;
+
+void bfs(int origen,int categorias,int problemas){
+    visitado[0] = false;
+    padre[0] = -1;
+
+    visitado[1030] = false;
+    padre[1030] = -1;
+
+    for(int i = 1; i<=categorias; i++){
+        visitado[i] = false;
+        padre[i] = -1;
+    }
+    for(int i = 1; i<=problemas; i++){
+        visitado[i+categorias] = false;
+        padre[i+categorias] = -1;
+    }
+    queue<int> colita;
+    colita.push(0);
+
+    while(!colita.empty()){
+        actual = colita.front(); colita.pop();
+        if(visitado[actual]) continue;
+
+        visitado[actual] = true;
+
+        for(int i = 0; i<flujo[actual].size(); i++){
+            vecino = flujo[actual][i];
+            if(!visitado[vecino] && flujoCapacidades[actual][vecino]>0){
+                colita.push(vecino);
+                padre[vecino] = actual;
+            }
+        }
+    }
+}
+
+int max_flow(int categorias, int problemas){
+
+    int bottleneck,maximoflujo = 0;
+    while(true){
+
+        bfs(0,categorias,problemas);
+        if(visitado[1030] == false) break;
+
+        int nodoAux = 1030;
+        bottleneck = 1000000000;
+        //CONSEGUIMOS EL BOTTLE DEL AUGMENTING PATH
+        while(nodoAux != 0){
+            bottleneck = min(bottleneck, flujoCapacidades[ padre[nodoAux] ][nodoAux] );
+            nodoAux = padre[nodoAux];
+        }
+        nodoAux = 1030;
+
+        while(nodoAux != 0){
+            flujoCapacidades[ padre[nodoAux] ][nodoAux] -= bottleneck;
+            flujoCapacidades[nodoAux][ padre[nodoAux] ] += bottleneck;
+            nodoAux = padre[nodoAux];
+        }
+        maximoflujo += bottleneck;
+
+    }
+
+    return maximoflujo;
+}
+
+
+int main(){
+    ofstream out("output.txt");
+
+    int nk,np,n,minimo,nroCate,categoria,maximoflujo,minimoprolemas;
+
+
+    while(cin>>nk>>np && (nk!=0||np!=0)){
+        for(int i = 0; i<1031; i++){
+            for(int j = 0; j<1031; j++){
+                flujoCapacidades[i][j] = 0;
+            }
+        }
+        minimoprolemas = 0;
+
+        for(int i = 1; i<=nk; i++){
+            cin>>minimo;
+            minimoprolemas += minimo;
+            //armamos las aristas pero sin peso en la lista 
+            flujo[0].pb(i);
+            flujo[i].pb(0);
+            //armamos las aristas ya con peso en la matriz
+            flujoCapacidades[0][i] = minimo;
+            flujoCapacidades[i][0] = 0;
+        }
+        for(int i = 1; i<=np; i++){
+            cin>>nroCate;
+            for(int j = 1; j<=nroCate; j++){
+                cin>>categoria;
+                //armamos las aristas peron sin peso en la lista
+                flujo[categoria].pb(i+nk);
+                flujo[i+nk].pb(categoria);
+                //armamos las aristas ya con peso en la matriz
+                flujoCapacidades[categoria][i+nk] = 1;
+                flujoCapacidades[i+nk][categoria] = 0;
+            }
+        }
+        //FALTA UNIR LOS PROBLEMAS CON EL SUMIDERO, SUMIDERO SERA 1030
+        for(int i = 1; i<=np; i++){
+            flujo[i+nk].pb(1030);
+            flujo[1030].pb(i+nk);
+
+            flujoCapacidades[i+nk][1030] = 1;
+            flujoCapacidades[1030][i+nk] = 0;
+        }
+        maximoflujo = max_flow(nk,np);
+        if(maximoflujo >= minimoprolemas){
+            cout<<1<<endl;
+
+            for(int i = 1; i<=nk; i++){
+                for(int j = 0; j<flujo[i].size(); j++){
+                    if(flujoCapacidades[i][ flujo[i][j] ] == 0){
+                        respuesta[i].pb(flujo[i][j]-nk);
+                    }
+                }
+            }
+            int cont;
+            for(auto it = respuesta.begin(); it!=respuesta.end(); it++){
+                cont = 0;
+                for(int k = 0; k<(it->s).size(); k++){
+                    if(k == 0)      cout<<respuesta[it->f][k];
+                    else            cout<<" "<<respuesta[it->f][k];
+                }
+                cout<<endl;
+            }
+
+        }
+        else{
+            cout<<0<<endl;
+        }
+        flujo.clear();
+        visitado.clear();
+        padre.clear();
+        respuesta.clear();
+    }
+
+    return 0;
+}

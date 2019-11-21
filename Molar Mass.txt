@@ -1,0 +1,78 @@
+#include<cstdio>
+#include<iostream>
+#include<cstring>
+#include<unordered_map>
+#include<set>
+#include<map>
+#include<queue>
+#include<stack>
+#include<string>
+#include<fstream>
+#include<bitset>
+#include<iomanip>
+using namespace std;
+
+bool esLetra(char a,set<char> &numeros){
+    if(numeros.find(a) == numeros.end()){
+        return true;
+    }
+    return false;
+}
+bool esNumero(char a,set<char> &numeros){
+    return !esLetra(a,numeros);
+}
+int main() {
+    ofstream out("output.txt");
+
+    int n;
+    string a;
+    map<char,double> mapa;
+    mapa['C'] = 12.01;
+    mapa['H'] = 1.008 ;
+    mapa['O'] = 16.00 ;
+    mapa['N'] = 14.01 ;
+    set<char> numeros;
+    numeros.insert('1');
+    numeros.insert('2');
+    numeros.insert('3');
+    numeros.insert('4');
+    numeros.insert('5');
+    numeros.insert('6');
+    numeros.insert('7');
+    numeros.insert('8');
+    numeros.insert('9');
+    double suma,total,multiplicador;
+
+    cin>>n;
+    while(n--){
+        total = 0;
+        multiplicador = 0;
+        suma = 0;
+        cin>>a;
+        for(int i = 0; i<a.size(); i++){
+            if(esLetra(a[i],numeros))
+                if(i < (a.size()-1))
+                    if(esNumero(a[i+1],numeros))
+                        suma = mapa[a[i]];
+                    else
+                        total += mapa[a[i]];
+                else
+                    total += mapa[a[i]];
+            else{
+                multiplicador = multiplicador * 10;
+                multiplicador += (a[i]-48);
+                if(i != (a.size()-1)){
+                    if(esLetra(a[i+1],numeros)){
+                        total += suma*multiplicador;
+                        multiplicador = 0;
+                    }
+                }
+                else{
+                    total += suma*multiplicador;
+                }
+            }
+        }
+        cout<<setprecision(3)<<fixed<<total<<endl;
+    }
+    return 0;
+}

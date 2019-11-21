@@ -1,0 +1,36 @@
+#include <cstdio>
+#include<bits/stdc++.h> 
+#define pb          push_back 
+#define endl        "\n"
+#define mostrar(x,y) cout<<x<<" "<<y<<endl;
+using namespace std;
+typedef pair<int,int> ii;
+typedef vector<int> vi;
+typedef vector<pair<int,int>> vii;
+
+
+int main()
+{   
+    ofstream out("output.txt");
+    //ifstream in("input2.txt");
+
+    int precios[20005];
+    int t,n,descuento;
+    cin>>t;
+    while(t--){
+        cin>>n;
+        for(int i = 0 ;i<n; i++){
+            cin>>precios[i];
+        }
+        sort(precios,precios+n,greater<int>());
+        descuento = 0;
+        for(int i= 2; i<n; i+=3){
+            descuento += precios[i];
+        }
+        cout<<descuento<<endl;
+    }
+
+
+    return 0;
+}
+

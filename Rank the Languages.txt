@@ -1,0 +1,70 @@
+#include<bits/stdc++.h>
+using namespace std;
+
+char mapa[100][100];
+int visitado[100][100];
+map<char,int> lenguajes;
+vector<pair<char,int>> orden;
+
+void floodfill(int i,int j,int maxX,int maxY,char lengua){
+    if(!(i>=0 && i<maxX && j>=0 && j<maxY)) return;
+    if(visitado[i][j] == 1) return;
+    if(mapa[i][j] != lengua) return;
+    visitado[i][j] = 1;
+
+    floodfill(i+1,j,maxX,maxY,lengua);
+    floodfill(i-1,j,maxX,maxY,lengua);
+    floodfill(i,j+1,maxX,maxY,lengua);
+    floodfill(i,j-1,maxX,maxY,lengua);
+}
+
+bool comparador(pair<char,int> a, pair<char,int> b){
+    if(a.second > b.second) return true;
+    if(a.second < b.second) return false;
+    return a.first<b.first;
+}
+
+int main()
+{
+    ofstream out("output.txt");
+    //ifstream in("input.txt");
+        
+    int n,filas,columnas,cont = 1;
+    cin>>n;
+    while(n--){
+        cin>>filas>>columnas;
+        for(int i = 0; i<filas;i++){
+            for(int j = 0; j<columnas; j++){
+                cin>>mapa[i][j];
+                visitado[i][j] = -1;
+            }
+        }
+        for(int i = 0; i<filas; i++){
+            for(int j = 0; j<columnas; j++){
+                if(visitado[i][j] == -1){
+                    if(lenguajes.find(mapa[i][j]) == lenguajes.end()){
+                        lenguajes[mapa[i][j]] = 1;
+                    }
+                    else{
+                        lenguajes[mapa[i][j]]++;
+                    }
+                    floodfill(i,j,filas,columnas,mapa[i][j]);
+                }
+            }
+        }
+        for(auto it = lenguajes.begin(); it!=lenguajes.end();it++){
+            orden.push_back(*it);
+        }
+        sort(orden.begin(),orden.end(),comparador);
+        cout<<"World #"<<cont<<endl;
+        for(int i  =0; i<orden.size(); i++){
+            cout<<orden[i].first<<": "<<orden[i].second<<endl;
+        }
+        
+        orden.clear();
+        lenguajes.clear();
+        cont++;
+    }
+    
+    return 0;
+}

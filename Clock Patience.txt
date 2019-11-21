@@ -1,0 +1,99 @@
+import java.util.ArrayList;
+import java.util.LinkedHashMap;
+import java.util.List;
+import java.util.Arrays;
+import java.util.Collections;
+import java.io.InputStreamReader;
+import java.io.PrintWriter;
+import java.io.BufferedReader;
+import java.util.LinkedList;
+import java.util.Locale;
+import java.util.Iterator;
+import java.util.Stack;
+import java.util.Set;
+import java.util.HashSet;
+import java.util.TreeSet;
+import java.util.Map;
+import java.util.HashMap;
+import java.util.TreeMap;
+import java.util.BitSet;
+import java.lang.StringBuilder;
+import java.util.Queue;
+import java.util.Objects;
+import java.util.PriorityQueue;
+public class UvaProblems {
+
+    public static void main(String[] args) throws Exception {
+        BufferedReader in = new BufferedReader(new InputStreamReader(System.in));
+        PrintWriter out = new 	PrintWriter(System.out);
+        Locale.setDefault(new Locale("en", "US"));
+        
+        String a, cartaActual,ultimaCarta;
+        String[] b;
+        int total, i,k, cartaActual1;
+        boolean terminado;
+        Map<Integer,Queue<String>> posiciones = new HashMap<>();
+        Map<String, Integer> mapa = new HashMap<>();
+        mapa.put("A", 1);
+        mapa.put("2", 2);
+        mapa.put("3", 3);
+        mapa.put("4", 4);
+        mapa.put("5", 5);
+        mapa.put("6", 6);
+        mapa.put("7", 7);
+        mapa.put("8", 8);
+        mapa.put("9", 9);
+        mapa.put("T", 10);
+        mapa.put("J", 11);
+        mapa.put("Q", 12);
+        mapa.put("K", 13);
+        
+    	for(i = 1; i <= 13; i++) {
+    		posiciones.put(i, new LinkedList<>());
+    	}
+        while(!(a = in.readLine()).equals("#")) {
+        	total = 0;
+        	b = a.split(" ");
+        	terminado = false;
+        	k = 13;
+        	for(String str : b) {
+        		posiciones.get(k).offer(str);
+        		k--;
+        	}
+        	for(i = 0 ;i<3; i++) {
+        		b = in.readLine().split(" ");
+        		k = 13;
+            	for(String str : b) {
+            		posiciones.get(k).offer(str);
+            		k--;
+            	}
+        	}
+        	cartaActual = "";
+        	ultimaCarta = "";
+        	total = 0;
+        	cartaActual1 = 13;
+        	while(!terminado) {
+        		if(posiciones.get(cartaActual1).isEmpty()) {
+        			terminado = true;
+        			ultimaCarta = cartaActual;
+        		}
+        		else {
+        			cartaActual = posiciones.get(cartaActual1).poll();
+        			cartaActual1 = mapa.get(cartaActual.charAt(0)+"");
+        			total++;
+        			
+        		}
+        	}
+        	if(total<10)
+        		out.println("0"+total+","+ultimaCarta);
+        	else
+        		out.println(total+","+ultimaCarta);
+        	
+        	for(int n : posiciones.keySet()) {
+        		posiciones.get(n).clear();
+        	}
+        }
+        out.flush();
+	}
+}
+-------------------------------------------------------------------------------------

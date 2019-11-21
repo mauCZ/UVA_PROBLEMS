@@ -1,0 +1,91 @@
+#include <cstdio>
+#include<bits/stdc++.h> 
+#define pb          push_back 
+#define endl        "\n"
+#define mostrar(x,y) cout<<x<<" "<<y<<endl;
+using namespace std;
+typedef pair<int,int> ii;
+typedef vector<int> vi;
+typedef vector<pair<int,int>> vii;
+typedef pair<pair<int,int>,char> iii;
+
+ii equipos[100];
+ii mesas[100];
+int mesasAux[100];
+bool criterio(ii a, ii b){
+    if(a.first>b.first) return true;
+    if(a.first<b.first) return false;
+    return a.second<b.second;
+}
+bool sePuede(ii equipos[100],int mesasAux[100],int nroE,int nroMe){
+    int k;
+    for(int i = 0; i<nroE; i++){
+        k = nroMe-1;
+        for(int j = 0; j<equipos[i].first; j++){
+            if(mesasAux[k]>0) mesasAux[k]--;
+            else{
+                return false;
+            }
+            k--;
+        }
+    }
+    return true;
+}
+struct cmp{
+    bool operator()(const ii a, const ii b) const{
+        return a.second<b.second;      
+    }
+};
+int main(){
+    ofstream out("output.txt");
+    
+    map<ii,set<int>,cmp> mapita;
+    int nroE,nroMe,mesa,nroInteg;
+    while(cin>>nroE>>nroMe && (nroE!=0||nroMe!=0)){
+        for(int i = 0; i<nroE; i++){
+            cin>>nroInteg;//FALTA PAR
+            equipos[i] = {nroInteg,i+1};
+        }
+        for(int i = 0; i<nroMe; i++){
+            cin>>mesa;
+            mesas[i] = {mesa,i+1};  //FALTA PAR
+            mesasAux[i] = mesa;
+        }
+        sort(mesasAux,mesasAux+nroMe);
+        sort(equipos,equipos+nroE,criterio);
+        sort(mesas,mesas+nroMe);
+        
+        if(sePuede(equipos,mesasAux,nroE,nroMe)){
+            cout<<1<<endl;
+            out<<1<<endl;
+            int k;
+            for(int i = 0; i<nroMe; i++){
+                mesasAux[i] = mesas[i].first;
+            }
+            for(int i = 0; i<nroE; i++){
+                k = 0;
+                while(mesas[k].first==0){
+                    k++;
+                }
+                for(int j = 0; j<equipos[i].first; j++){
+                    mapita[{equipos[i].first,equipos[i].second}].insert(mesas[k].second);
+                    mesas[k].first--;
+                    k++;
+                }
+            }
+            for(auto it = mapita.begin(); it!=mapita.end(); it++){
+                for(auto it1 = (it->second).begin(); it1!=(it->second).end(); it1++){
+                    if(it1 == (it->second).begin()){cout<<*it1;}  
+                    else{cout<<" "<<*it1; };                            
+                }
+                cout<<endl;
+            }
+        }
+        else{
+            cout<<0<<endl;
+        }
+        mapita.clear();
+    }
+    
+    return 0;
+}

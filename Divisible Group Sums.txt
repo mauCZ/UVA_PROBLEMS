@@ -1,0 +1,74 @@
+#include <iostream>
+#include <vector>
+#include <fstream>
+#include <algorithm>
+#include <map>
+using namespace std;
+ 
+#define pb push_back
+#define f first
+#define s second
+#define endl '\n'
+#define EPS 1e-9
+#define PI acos(-1)
+ 
+using ll = long long;
+using ii = pair<int,int>;
+using vi = vector<int>;
+using vii = vector<ii>;
+using vll = vector<ll>;
+using ui = unsigned int;
+
+
+#define x  205
+#define y 100
+#define z 12
+int n,q,m,d;
+ll a[205];
+ll dp[x][y][z];
+
+
+ll knapsack(int ind, int mod,int k){
+    if(mod == 0 && k == 0) return 1;
+    if(mod != 0 && k == 0) return 0;
+    if(ind == 0) return 0;
+    if(dp[ind][mod][k] == -1){
+        return dp[ind][mod][k] = knapsack(ind-1,mod,k) + knapsack(ind-1,(mod+a[ind]) % d, k-1);
+    }
+    else return dp[ind][mod][k];
+}
+void iniciar(){
+    for(int i =0;i<x;i++){
+        for(int j =0;j<y;j++){
+            for(int k = 0;k<z;k++){
+                dp[i][j][k] = -1;
+            }
+        }
+    }
+}
+ 
+int main() {
+    ofstream out("output.txt");
+    ios_base::sync_with_stdio(false);
+    int cont = 1;
+    while(cin>>n>>q && (n!=0 || q != 0)){
+        a[0] = -1;
+        for(int i =1;i<=n;i++){
+            cin>>a[i];
+        }
+        cout<<"SET "<<cont++<<":"<<endl;
+        
+        int res;
+        for(int i = 1 ;i<=q;i++){
+            iniciar();
+            cin>>d>>m;
+
+            res = knapsack(n,0,m);
+            cout<<"QUERY "<<i<<": "<<res<<endl;
+        } 
+    }   
+    
+
+
+    return 0;
+}

@@ -1,0 +1,31 @@
+#include <cstdio>
+#include<bits/stdc++.h>
+using namespace std;
+
+int main(){
+    int n;
+    cin>>n;
+    double distancia,L,D,H,V;
+    while(n--){
+        cin>>L>>D>>H>>V;
+        distancia = V*sqrt(2*H/9810.0);
+        if(distancia <= (D-500)){
+            cout<<"FLOOR\n";
+        }
+        else if(distancia>(D-500) && distancia <= (D+500)){
+            cout<<"EDGE\n";
+        }
+        else if(distancia > (D+500) && distancia <= (D+L-500)){
+            cout<<"POOL\n";
+        }
+        else if(distancia > (D+L-500) && distancia <= (D+L+500)){
+            cout<<"EDGE\n";
+        }
+        else{
+            cout<<"FLOOR\n";
+        }
+    }
+    return 0;
+}
+
+

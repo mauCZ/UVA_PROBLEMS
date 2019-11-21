@@ -1,0 +1,75 @@
+#include<bits/stdc++.h>
+#define llenar(a,val)   memset(a,val,sizeof(a))
+#define pb          push_back 
+#define endl        "\n"
+#define mostrar(x,y) cout<<x<<" "<<y<<endl;
+#define f           first
+#define s           second
+#define mod         1000000007
+#define EPS         1e-9
+#define PI          acos(-1)
+using namespace std;
+typedef pair<int,int> ii;
+typedef pair<pair<int,int>,int> iii;
+typedef vector<int> vi;
+typedef long long ll;
+typedef vector<pair<int,int>> vii;
+typedef vector< pair<pair<int,int>,int> > viii;
+ 
+bool criterio(ii a,ii b){
+    if(a.f > b.f) return true;
+    if(a.f < b.f) return false;
+    return a.s < b.s  ;
+}
+
+int binary_search(int val,int tam,vi &sec){
+    int l = 0, h = tam,mid,res;
+
+    while(l<=h){
+        mid = (l+h)/2;
+        if(sec[mid] <= val){
+            l = mid+1;
+        }
+        else{
+            res = mid;
+            h = mid-1;
+        }
+    }
+
+    return res;
+}
+int main(){
+    ofstream out("output.txt");
+ 
+    int n,d,x,y;
+    cin>>n;
+    while(n--){
+        cin>>d;
+        vii dolls;
+        vi lis,aux;
+        aux.pb(-10000);
+        for(int i =0;i<d;i++){
+            cin>>x>>y;
+            dolls.pb({x,y});
+            aux.pb(100000);
+            lis.pb(1);
+        }
+        sort(dolls.begin(),dolls.end(),criterio);
+        int res = 0,ind;
+        for(int i =0;i<d;i++){
+            ind = binary_search(dolls[i].s,d,aux);
+            aux[ind] = dolls[i].s;
+            lis[i] = ind;
+        }
+        int i = 1;
+         while(aux[i] != 100000 && i<=d){
+            res++;
+            i++;
+        }
+
+        cout<<res<<endl;
+        out<<res<<endl;
+    }
+        
+    return 0;
+}

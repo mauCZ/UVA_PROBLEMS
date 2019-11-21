@@ -1,0 +1,43 @@
+#include <iostream>
+#include <sstream>
+#include <iomanip>
+#include <fstream>
+#include<bits/stdc++.h>
+using namespace std;
+
+int main(){
+    ofstream out("output.txt");
+    ifstream in("input.txt");
+
+    int n,r,cont = 1;
+    while(cin>>r>>n && n != 0 || r != 0){
+        if(r > (n*26 + n)){
+            cout<<"Case "<<cont<<": impossible\n";
+            out<<"Case "<<cont<<": impossible\n";
+        }
+        else if(n>=r){
+            cout<<"Case "<<cont<<": 0\n";
+            out<<"Case "<<cont<<": 0\n";
+        }
+        else{
+            int necesario = r - n;
+            int minimo;
+            if(necesario % n == 0 ){
+                minimo =  necesario / n;
+            }
+            else{
+                minimo = necesario / n;
+                minimo++;
+            }
+
+            cout<<"Case "<<cont<<": "<<minimo<<endl;
+            out<<"Case "<<cont<<": "<<minimo<<endl;
+        }
+        cont++;
+    }
+
+
+
+    return 0;
+}
+

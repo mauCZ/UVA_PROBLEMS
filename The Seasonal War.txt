@@ -1,0 +1,50 @@
+#include<bits/stdc++.h>
+using namespace std;
+
+char tablero[30][30];
+int visitado[30][30];
+
+void dfs(int i,int j,int maxX, int maxY){
+    //cout<<i<<" "<<j<<endl;
+    visitado[i][j] = 1;
+
+    for(int a = i-1; a<=i+1; a++){
+        for(int b = j-1; b<=j+1; b++){
+            if(a>=0 && a<maxX && b>=0 && b<=maxY && (a!=i||b!=j)){
+                if(tablero[a][b] == '1' && visitado[a][b] == -1){
+                    dfs(a,b,maxX,maxY);
+                }
+            }
+        }
+    }
+}
+
+int main()
+{
+    ofstream out("output.txt");
+    //ifstream in("input.txt");
+    
+    int n,componentes,cont = 1;
+    char a;
+    while(cin>>n){
+        for(int i = 0; i<n; i++){
+            for(int j= 0; j<n;j++){
+                cin>>tablero[i][j];
+                visitado[i][j] = -1;
+            }
+        }
+        componentes = 0;
+        for(int i = 0; i<n; i++){
+            for(int j = 0; j<n; j++){
+                if(tablero[i][j] == '1' && visitado[i][j] == -1){
+                    dfs(i,j,n,n);
+                    componentes++;
+                }
+            }
+        }
+        cout<<"Image number "<<cont<<" contains "<<componentes<<" war eagles.\n";
+        cont++;
+    }
+
+    return 0;
+}

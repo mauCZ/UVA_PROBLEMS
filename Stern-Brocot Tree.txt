@@ -1,0 +1,42 @@
+    #include <cstdio>
+    #include<bits/stdc++.h> 
+    #define pb          push_back 
+    #define endl        "\n"
+    #define mostrar(x,y) cout<<x<<" "<<y<<endl;
+    using namespace std;
+    typedef pair<int,int> ii;
+    typedef vector<int> vi;
+    typedef vector<pair<int,int>> vii;
+
+    int main(){
+        ofstream out("output.txt");
+
+        long long n,numIzq= 0,denIzq = 1,numDer = 1,denDer=  0,numMed = 1,denMed = 1,numAux,denAux;
+        string sec;
+        cin>>n;
+        while(n--){
+            cin>>sec;   
+            numIzq=0;denIzq=1;numDer=1;denDer=0;numMed=1;denMed=1;
+            for(int i = 0; i<sec.size(); i++){
+                if(sec[i] == 'R'){
+                    numAux = numMed;
+                    denAux = denMed;
+                    numMed = numDer+numMed;
+                    denMed = denDer+denMed;
+                    numIzq = numAux;
+                    denIzq = denAux;
+                }
+                else{
+                    numAux = numMed;
+                    denAux = denMed;
+                    numMed = numMed+numIzq;
+                    denMed = denMed+denIzq;
+                    numDer = numAux;
+                    denDer = denAux;
+                }
+            }
+            printf("%llu/%llu\n",numMed,denMed);
+        }
+
+        return 0;
+    }

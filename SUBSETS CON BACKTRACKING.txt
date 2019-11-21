@@ -1,0 +1,49 @@
+#include<bits/stdc++.h>
+using namespace std;
+
+vector<vector<int>> subsets;
+vector<int> actual;
+
+void mostrarActual(){
+    for(int i = 0; i<actual.size(); i++){
+        if(i == actual.size()-1)    cout<<actual[i]<<" \n";
+        else                        cout<<actual[i]<<" ";
+    }
+}
+
+void backtrack(int max, int indAct, int a[]){
+    if(indAct == max){
+        subsets.push_back(actual);
+        mostrarActual();
+    }
+    else{
+        //ELEGIMOS UNA OPCION DE LAS 2 DISPONIBLES: COLOCAR O NO EL ELEMENTO A ACTUAL
+        //ELEGIMOS PRIMERO PONER EL I-ESIMO ELEMENTO A ACTUAL
+        actual.push_back(a[indAct]);    //LO "PUSHEAMOS" EN ACTUAL
+        indAct++;           
+        backtrack(max, indAct, a);
+        indAct--;                       //DESPUES DE LA LLAMADA PUES REDUCIMOS EL INDACT PARA CONTINUAR CON LA SGTE
+        actual.erase(find(actual.begin(),actual.end(),a[indAct]));//BORRAMOS EL ELEMENTO QUE DECIDIMOS COLOCAR PRIMERO
+        //AHORA ELEGIMOS NO PONER EL I-ESIMO ELEMENTO A ACTUAL
+                                        // ACA NO "PUSHEAMOS NADA" PORQUE DECIDIMOS NO COLOCAR EL ELEMENTO
+        indAct++;                       // PERO EL INDACT SI AUMENTA
+        backtrack(max, indAct,a);       //EXPLORAMOS
+        indAct--;                       //LUEGO DE LA LLAMADA REDUCIMOS EL INDACT PERO NO BORRAMOS NADA DE ACTUAL
+                                        //PORQUE NO PUSIMOS NADA EN LA LINEA 28
+    }
+}
+
+int main()
+{
+    ofstream out("output.txt");
+    //ifstream in("input.txt");
+
+    int n;
+    cin>>n;
+    int a[n];
+    for(int i = 0; i<n; i++){
+        cin>>a[i];
+    }
+    backtrack(n, 0,a);
+    return 0;
+}

@@ -1,0 +1,51 @@
+#include<bits/stdc++.h> 
+using namespace std;
+#define MAX 100005
+
+int marbles[MAX];
+
+int search(int N, int querie){
+    int l = 0, r = N-1, mid, res = -1;
+    while(l<=r){
+        mid = (l+r)/2;
+        if(marbles[mid] == querie){
+            res = mid;
+            break;
+        }
+        if(marbles[mid]>querie) r = mid-1;
+        else                    l = mid+1;
+    }
+    return res;
+}   
+int main()
+{
+    ofstream out("output.txt");
+
+    int N, Q,querie,cont = 1, indice;
+    bool encontrado;
+    while(cin>>N>>Q && (N != 0 || Q != 0)){
+        for(int i = 0; i<N; i++){
+            cin>>marbles[i];
+        }
+        sort(marbles,marbles + N);
+        cout<<"CASE# "<<cont<<":\n";
+        out<<"CASE# "<<cont<<":\n";
+        while(Q--){
+            cin>>querie;
+            encontrado = false;
+            indice = search(N, querie);
+            if(indice == -1){ cout<<querie<<" not found\n";out<<querie<<" not found\n";}
+            else{
+                int i;
+                for(i = indice ; i>=0; i--){
+                    if(marbles[i] != querie)break;
+                }
+                indice = i+1;
+                cout<<querie<<" found at "<<indice+1<<endl;
+                out<<querie<<" found at "<<indice+1<<endl;}
+        }
+        cont++;
+    }
+    return 0;
+}
+

@@ -1,0 +1,167 @@
+//JAVA
+import java.util.ArrayList;
+import java.util.Calendar;
+import java.util.LinkedHashMap;
+import java.util.List;
+import java.util.Arrays;
+import java.util.Collections;
+import java.util.GregorianCalendar;
+import java.io.InputStreamReader;
+import java.io.PrintWriter;
+import java.io.BufferedReader;
+import java.util.LinkedList;
+import java.util.Locale;
+import java.util.Iterator;
+import java.util.Stack;
+import java.util.Set;
+import java.util.HashSet;
+import java.util.TreeSet;
+import java.util.Map;
+import java.util.HashMap;
+import java.util.TreeMap;
+import java.util.BitSet;
+import java.util.Calendar;
+import java.lang.StringBuilder;
+import java.util.Queue;
+import java.util.Objects;
+import java.util.PriorityQueue;
+public class UvaProblems {
+
+    public static void main(String[] args) throws Exception {
+        BufferedReader in = new BufferedReader(new InputStreamReader(System.in));
+        PrintWriter out = new 	PrintWriter(System.out);
+        Locale.setDefault(new Locale("en", "US"));
+        
+        HashMap<Integer, HashSet<Integer>> grafo = new HashMap<>();
+        String[] a,b;
+        int amigo1, amigo2;
+        int n = Integer.parseInt(in.readLine());
+        for(int i = 0; i<n; i++) {
+        	a = in.readLine().split(" ");
+        	for(int k = 1; k<=Integer.parseInt(a[0]); k++) {
+        		grafo.put(k, new HashSet<>());
+        	}
+        	for(int j = 0; j<Integer.parseInt(a[1]); j++) {
+        		b = in.readLine().split(" ");
+        		amigo1 = Integer.parseInt(b[0]);
+        		amigo2 = Integer.parseInt(b[1]);
+        		
+        		grafo.get(amigo1).add(amigo2);
+        		grafo.get(amigo2).add(amigo1);
+        		
+        	}
+        	HashMap<Integer,Boolean> visitados = new HashMap<>();
+    		for(int v : grafo.keySet())
+    			visitados.put(v, false);
+    		int maximo = 0, actual;
+    		
+    		for(int vertice = 1; vertice<=Integer.parseInt(a[0]); vertice++) {
+    			if(!visitados.get(vertice)) {
+    				actual = dfs(grafo, vertice, visitados);
+    				if(actual>maximo) {
+    					maximo = actual;
+    				}
+    			}
+    		}
+    		out.println(maximo);
+        }
+        out.flush();
+	}
+    public static int dfs(HashMap<Integer,HashSet<Integer>> grafo, int vertice,HashMap<Integer,Boolean> visitados) {
+    	int total = 0;
+    	if(visitados.get(vertice)) {
+    		total = 0;
+    	}
+    	else {
+    		visitados.put(vertice, true);
+    		HashSet<Integer> vecinos = grafo.get(vertice);
+    		total = 1;
+    		for(int vecino : vecinos) {
+    			total += dfs(grafo, vecino, visitados);
+    		}
+    	}
+    	return total;
+    }
+    
+    public static boolean todosVisitados(HashMap<Integer,Boolean> visitados) {
+    	for(int v : visitados.keySet()) {
+    		if(visitados.get(v) == false) {
+    			return false;
+    		}
+    	}
+    	return true;
+    }
+}
+------------------------------------------------------------------------------------------------------------------------
+		USANDO-FIND DISJOINT SET C++
+#include <cstdio>
+#include<bits/stdc++.h> 
+#define pb          push_back 
+#define endl        "\n"
+#define mostrar(x,y) cout<<x<<" "<<y<<endl;
+using namespace std;
+typedef pair<int,int> ii;
+typedef vector<int> vi;
+typedef vector<pair<int,int>> vii;
+
+map<int,int> parent;
+map<int,int> lideres;
+map<int,int> ranking;
+int p1,p2;
+int Find(int x){
+    return parent[x] = (parent[x]==x?x:Find(parent[x]));
+}
+bool sameSet(int x,int y){
+    return Find(x)==Find(y);
+}
+void Union(int x,int y){
+    p1 = Find(x);
+    p2 = Find(y);
+    if(p1!=p2){
+        if(ranking[p1]>ranking[p2]){
+            parent[p2] = p1;
+            lideres[p1] += lideres[p2];
+        }
+        else{
+            parent[p1] = p2;
+            lideres[p2] += lideres[p1];
+            if(ranking[p1]==ranking[p2]) ranking[p2]++;
+        }
+    }
+}
+void make_set(int x){
+    parent[x] = x;
+    lideres[x] = 1;
+    ranking[x] = 0;
+}
+int main(){
+    ofstream out("output.txt");
+    
+    int t,n,m,a,b,maximo;
+    cin>>t;
+
+    while(t--){
+        cin>>n>>m;
+        for(int i = 1; i<=n; i++){
+            make_set(i);
+        }
+        while(m--){
+            cin>>a>>b;
+            Union(a,b);
+        }
+        maximo = 0;
+        for(auto it = lideres.begin(); it!=lideres.end();it++){
+            //cout<<it->first<<" "<<it->second<<endl; 
+            if(it->second>maximo) maximo = it->second;
+        }
+        cout<<maximo<<endl;
+        out<<maximo<<endl;
+
+        lideres.clear();
+        ranking.clear();
+        parent.clear(); 
+    }
+
+
+    return 0;
+}

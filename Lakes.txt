@@ -1,0 +1,78 @@
+#include<bits/stdc++.h>
+#define llenar(a,val)   memset(a,val,sizeof(a))
+#define pb          push_back 
+#define endl        "\n"
+#define mostrar(x,y) cout<<x<<" "<<y<<endl;
+#define f           first
+#define s           second
+#define mod         1000000007
+#define EPS         1e-9
+using namespace std;
+typedef pair<int,int> ii;
+typedef pair<pair<int,int>,int> iii;
+typedef vector<int> vi;
+typedef long long ll;
+typedef vector<pair<ll,ll>> vii;
+typedef vector< pair<pair<int,int>,int> > viii;
+
+char tablero[101][101];
+int visitado[101][101];
+
+int floodfill(int x,int y,int filas,int columnas){
+	if(!(x<filas&&x>=0&&y<columnas&&y>=0)) return 0;
+	if(tablero[x][y] == '1') return 0;
+	if(visitado[x][y] != -1) return 0;
+	visitado[x][y] = 1;
+	int l = 1;
+	l += floodfill(x+1,y,filas,columnas) + floodfill(x-1,y,filas,columnas) +
+			floodfill(x,y+1,filas,columnas) + floodfill(x,y-1,filas,columnas);
+	return l;
+}
+
+int main(){
+    ofstream out("output.txt");
+		
+
+    int m,a,b;
+    cin>>m;
+    string fila;
+    for(int i =0;i<m-1;i++){
+    	cin>>a>>b;
+    	cin.ignore();
+    	int fil = 0,col;
+    	while(getline(cin,fila) && fila.size()!=0){
+    		for(int j =0;j<fila.size();j++){
+    			tablero[fil][j] = fila[j];
+    			visitado[fil][j] = -1;
+    		}
+    		col = fila.size();
+    		fil++;
+    	}
+    	cout<<floodfill(a-1,b-1,fil,col)<<endl;
+    	cout<<endl;
+    }
+    cin>>a>>b;
+    cin.ignore();
+    int fil = 0,col;
+    while(getline(cin,fila) ){
+    	for(int j = 0 ;j<fila.size();j++){
+    		tablero[fil][j] = fila[j];
+    		visitado[fil][j] = -1;
+    	}
+    	if(fil == 0) col = fila.size();
+    	fil++;
+    }
+    cout<<floodfill(a-1,b-1,fil,col)<<endl;
+
+
+    
+    return 0;
+}
+
+ 
+ 
+
+
+
+
+

@@ -1,0 +1,77 @@
+#include<bits/stdc++.h>
+using namespace std;
+
+unordered_map<int,vector<int>> grafo;
+unordered_map<int,int> visitado;
+void mostrarGrafo(){
+    for(auto it = grafo.begin(); it!=grafo.end(); it++){
+        cout<<it->first<<" :";
+        for(auto it2 = (it->second).begin(); it2!=(it->second).end(); it2++){
+            cout<<*it2<<" ";
+        }
+        cout<<"\n";
+    }
+}
+
+pair<int,int> bicolorable(int origen){
+    queue<int> colita;
+    colita.push(origen);
+    visitado[origen] = 0;
+    int azul = 0, rojo = 1;
+    bool bipartido = true;
+    while(!colita.empty()){
+        int actual = colita.front(); colita.pop();
+
+        for(int i=0; i<grafo[actual].size(); i++){
+            int vecino = grafo[actual][i];
+            if(visitado[vecino] == -1){
+                visitado[vecino] = 1-visitado[actual];
+                colita.push(vecino);
+                if(visitado[vecino] == 1) azul++;
+                else                       rojo++;
+            }
+            else{
+                if(visitado[vecino] == visitado[actual]) bipartido = false;
+            }
+        }
+    }
+    if(bipartido == false) return make_pair(-1,-1);
+    if(azul == 0 || rojo == 0) return make_pair(1,1);
+    else                       return make_pair(azul,rojo);
+}
+
+int main()
+{
+    ofstream out("output.txt");
+    ifstream in("input.txt");
+
+    int t,v,e,a,b,total;
+    cin>>t;
+    bool sePuede;
+    while(t--){
+        cin>>v>>e;
+        while(e--){
+            cin>>a>>b;
+            grafo[a].push_back(b);
+            grafo[b].push_back(a);
+        }
+        for(int i = 0; i<v; i++){
+            visitado[i] = -1;
+        }
+        pair<int,int> res;
+        total = 0;
+        sePuede = true;
+        for(int i=0; i<v; i++){
+            if(visitado[i] == -1){
+                res = bicolorable(i);
+                if(res.first == -1) sePuede = false;
+                total += min(res.first,res.second);
+            }
+        }
+        if(!sePuede) total = -1;
+        cout<<total<<endl;
+        grafo.clear();
+        visitado.clear();
+    }       
+    return 0;
+}

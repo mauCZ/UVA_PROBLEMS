@@ -1,0 +1,55 @@
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Arrays;
+import java.util.Collections;
+import java.io.InputStreamReader;
+import java.io.PrintWriter;
+import java.io.BufferedReader;
+import java.util.LinkedList;
+import java.util.Locale;
+import java.util.Iterator;
+import java.util.Stack;
+import java.util.Set;
+import java.util.HashSet;
+import java.util.TreeSet;
+import java.util.Map;
+import java.util.HashMap;
+import java.util.TreeMap;
+import java.util.BitSet;
+import java.lang.StringBuilder;
+import java.util.Queue;
+import java.util.Objects;
+import java.util.PriorityQueue;
+public class UvaProblems {
+
+    public static void main(String[] args) throws Exception {
+        BufferedReader in = new BufferedReader(new InputStreamReader(System.in));
+        PrintWriter out = new PrintWriter(System.out);
+        Locale.setDefault(new Locale("en", "US"));
+        
+        int n = Integer.parseInt(in.readLine());
+        String[] b;
+        int total,personas;
+        double promedio, nro;
+        while(n>0) {
+        	b = in.readLine().split(" ");
+        	total = 0;
+        	personas = 0;
+        	nro = Integer.parseInt(b[0]);
+        	for(int i = 1; i<=nro; i++) {
+        		total += Integer.parseInt(b[i]);
+        	}
+        	promedio = total/nro;
+        	for(int j = 1; j<=nro; j++) {
+        		if(Integer.parseInt(b[j]) > promedio) {
+        			personas++;
+        		}
+        	}
+        	//out.println(total+" "+" "+nro+" "+personas+" "+promedio);
+        	out.println(String.format("%.3f", personas/nro*100)+"%");
+        	
+        	n--;
+        }
+        out.flush();
+    }
+}

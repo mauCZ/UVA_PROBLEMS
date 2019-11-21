@@ -1,0 +1,72 @@
+#include <iostream>
+#include <vector>
+#include <fstream>
+#include <algorithm>
+#include <map>
+#include <iomanip>
+#include <math.h>
+using namespace std;
+ 
+#define pb push_back
+#define f first
+#define s second
+#define endl '\n'
+#define EPS 1e-9
+#define PI acos(-1)
+ 
+using ll = long long;
+using ii = pair<int,int>;
+using pll = pair<ll,ll>;
+using vi = vector<int>;
+using vii = vector<ii>;
+using vll = vector<ll>;
+using ui = unsigned int;
+
+vector<string> perm(vector<string> vs,string x){
+    vector<string> v;
+    string aux;
+    int l = vs[0].size()+1;
+    for(string st : vs){
+        for(int i =0;i<l;i++){
+            aux = st;
+            aux.insert(i,x);
+            v.pb(aux);
+        }
+    }
+    return v;
+}
+
+vector<string> permutar(string s){
+    vector<string> permutaciones;
+
+    if(s.size() == 1){
+        permutaciones.pb(s);
+    }
+    else{
+        int l = s.size();
+        permutaciones = perm( permutar(s.substr(0,l-1)) ,string(1,s[l-1]));
+    }
+    return permutaciones;
+}
+
+int main() {
+    ofstream out("output.txt");
+    ios_base::sync_with_stdio(false);
+    cin.tie(0);
+
+    int cont = 0;
+    string s;
+    while(cin>>s){
+        if(cont > 0){
+            cout<<endl;
+        }
+        vector<string> permutaciones = permutar(s);
+        for(string s : permutaciones){
+            cout<<s<<endl;
+        }
+        cont++;
+    }
+
+    return 0;
+}
+

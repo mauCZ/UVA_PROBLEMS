@@ -1,0 +1,109 @@
+#include<bits/stdc++.h>
+#define llenar(a,val)   memset(a,val,sizeof(a))
+#define pb          push_back 
+#define endl        "\n"
+#define mostrar(x,y) cout<<x<<" "<<y<<endl;
+#define f           first
+#define s           second
+#define mod         1000000007
+#define EPS         1e-9
+using namespace std;
+typedef pair<int,int> ii;
+typedef pair<pair<int,int>,int> iii;
+typedef vector<int> vi;
+typedef long long ll;
+typedef vector<pair<ll,ll>> vii;
+typedef vector< pair<pair<int,int>,int> > viii;
+
+char grilla[1000][1000];
+vector<pair<char,ii>> informacion;
+int columnas[1000];
+
+void buscarPuntos(int filas,char contour){
+	for(int i =0;i<filas;i++){
+		for(int j =0;j<columnas[i];j++){
+			if(grilla[i][j] != ' ' && grilla[i][j] != contour){
+				informacion.pb({grilla[i][j],{i,j}});
+			}
+		}
+	}
+}
+void limpiarGrilla(){
+	for(int i =0;i<1000;i++){
+		for(int j =0;j<1000;j++){
+			grilla[i][j] = ' ';
+		}
+	}
+}
+char entorno(int filas){
+	for(int i =0;i<filas;i++){
+		for(int j =0;j<columnas[i];j++){
+			if(grilla[i][j] != ' ') return grilla[i][j];
+		}
+	}
+	return 'x';
+}
+
+void pintar(char color,int x,int y,char contour){
+	if(grilla[x][y] != ' ') return ;
+
+	grilla[x][y] = color;
+	pintar(color,x+1,y,contour);
+	pintar(color,x-1,y,contour);
+	pintar(color,x,y+1,contour);
+	pintar(color,x,y-1,contour);
+}
+
+int main(){
+    ofstream out("output.txt");
+		
+    string fila,primeraFila;
+    int fil = 0,col;
+
+    while(getline(cin,primeraFila) ){
+    	
+    	fil = 0;
+    	char contour;
+
+    	for(int j =0;j<primeraFila.size();j++){
+    		grilla[fil][j] = primeraFila[j];
+    	}
+    	columnas[fil] = primeraFila.size();
+    	fil++;
+    	while(getline(cin,fila) && fila[0]!='_'){
+    		for(int j = 0;j<fila.size();j++){
+    			grilla[fil][j] = fila[j];
+    		}
+    		columnas[fil] = fila.size();
+    		fil++;
+
+    	}
+
+    	contour = entorno(fil);
+    	informacion.clear();
+    	buscarPuntos(fil,contour);
+    	for(int i =0;i<informacion.size();i++){
+    		grilla[informacion[i].s.f][informacion[i].s.s] = ' ';
+    		pintar(informacion[i].f,informacion[i].s.f,informacion[i].s.s,contour);
+    	}
+    	for(int i =0;i<fil;i++){
+    		for(int j =0;j<columnas[i];j++){
+    			cout<<grilla[i][j];
+    		}
+    		cout<<endl;
+    	}
+    	cout<<fila<<endl;
+    	informacion.clear();
+    }
+    
+    
+    return 0;
+}
+
+ 
+ 
+
+
+
+
+

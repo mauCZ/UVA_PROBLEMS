@@ -1,0 +1,32 @@
+#include <iostream>
+#include <fstream>
+#include <cstdio>	
+using namespace std;
+
+int main(){
+	ofstream out("output.txt");
+	int n;
+	int maximoTomadas, tomadasActual, vacias, llenas, disponibles;
+	while(scanf("%d",&n) != EOF	){
+		maximoTomadas = 0;
+		for(int i = 0; i<3; i++){
+			tomadasActual = n;
+			vacias = i;
+			disponibles = tomadasActual+vacias;
+			while(disponibles >= 3){
+				vacias = disponibles % 3;
+				llenas = disponibles / 3;
+				tomadasActual += llenas;
+				disponibles = llenas + vacias;
+			}
+			if(disponibles >= i && tomadasActual>maximoTomadas){
+				maximoTomadas = tomadasActual;
+			}
+		}
+		printf("%d\n",maximoTomadas);
+		out<<maximoTomadas<<endl;
+	}
+	
+	
+	return 0;
+}

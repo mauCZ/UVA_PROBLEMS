@@ -1,0 +1,109 @@
+#include <cstdio>
+#include<bits/stdc++.h> 
+#define pb          push_back 
+#define endl        "\n"
+#define mostrar(x,y) cout<<x<<" "<<y<<endl;
+#define f           first
+#define s           second
+using namespace std;
+typedef pair<int,int> ii;
+typedef vector<int> vi;
+typedef vector<pair<int,int>> vii;
+typedef pair<pair<int,int>,int> iii;
+
+map<int,vii> grafo;
+vector<iii> aristas;
+
+map<int,int> parent;
+map<int,int> ranking;
+map<int,int> lideres;
+
+void create_set(int x){
+    parent[x] = x;
+    ranking[x] = 0;
+    lideres[x] = 1;
+}
+
+int find_set(int x){
+    return parent[x] = (parent[x] == x?x:find_set(parent[x]));
+}
+
+void union_set(int x,int y){
+    int raiz1,raiz2;
+    raiz1 = find_set(x);
+    raiz2 = find_set(y);
+    if(raiz1 != raiz2){
+        if(ranking[raiz1]>ranking[raiz2]){
+            parent[raiz2] = raiz1;
+            lideres[raiz1] += lideres[raiz2];
+        }
+        else{
+            parent[raiz1] = raiz2;
+            lideres[raiz2] += lideres[raiz1];
+            if(ranking[raiz1]==ranking[raiz2]) ranking[raiz2]++;
+    }
+    }
+}
+
+bool criterio(iii a, iii b){
+    return a.s<b.s;
+}
+
+int main(){
+    ofstream out("output.txt");
+    
+    int totalOriginal,todosNodos,totalNuevo,cont = 0;
+    int nodos,a,b,c,nodosExtras;
+    iii actual;
+    while(cin>>nodos&&nodos!=0){
+        totalOriginal = 0;
+        for(int i = 1; i<nodos; i++){
+            cin>>a>>b>>c;
+            totalOriginal += c;
+        }
+        cin>>nodosExtras;
+        for(int i= 0 ; i<nodosExtras; i++){
+            cin>>a>>b>>c;
+            aristas.pb({{a,b},c});
+            grafo[a].pb({b,c});
+            grafo[b].pb({a,c});
+        }
+        cin>>todosNodos;
+        for(int i = 0; i<todosNodos; i++){
+            cin>>a>>b>>c;
+            aristas.pb({{a,b},c});
+            grafo[a].pb({b,c});
+            grafo[b].pb({a,c});
+        }
+        sort(aristas.begin(),aristas.end(),criterio);
+        totalNuevo = 0;
+        for(int i = 1; i<=nodos; i++){
+            create_set(i);
+        }
+        int raiz1,raiz2;
+        for(int i = 0; i<aristas.size(); i++){
+            actual = aristas[i];
+            raiz1 = find_set(actual.f.f);
+            raiz2 = find_set(actual.f.s);
+            if(raiz1!=raiz2){
+                union_set(actual.f.f,actual.f.s);
+                totalNuevo += actual.s;
+            }
+        }   
+        if(cont>0){
+            cout<<endl;
+        }
+        cout<<totalOriginal<<endl;
+        cout<<totalNuevo<<endl;
+
+        grafo.clear();
+        aristas.clear();
+        parent.clear();
+        ranking.clear();
+        lideres.clear();
+        cont++;
+    }
+
+
+    return 0;
+}

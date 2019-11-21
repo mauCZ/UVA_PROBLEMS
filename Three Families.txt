@@ -1,0 +1,29 @@
+#include <iostream>
+#include <sstream>
+#include <iomanip>
+#include <fstream>
+#include<bits/stdc++.h>
+using namespace std;
+
+int main(){
+    ofstream out("output.txt");
+    ifstream in("input.txt");
+
+    int n;
+    int x,y,z;
+    double horasDemasA,horasDemasB, horasA, horasB,horasTotales;
+    double dineroMerecido;
+    cin>>n;
+    while(n--){
+        cin>>x>>y>>z;
+        horasTotales = x+y;
+        horasA = horasTotales/3;
+        horasB = horasTotales/3;
+        horasDemasA = x - horasA;
+        horasDemasB = y - horasB;
+        dineroMerecido = ( horasDemasA / (horasDemasA+horasDemasB+0.0) ) * z;
+        cout<<setprecision(0)<<fixed<<dineroMerecido<<endl;
+    }
+    return 0;
+}
+

@@ -1,0 +1,199 @@
+#include <cstdio>
+#include<bits/stdc++.h> 
+#define pb          push_back 
+#define endl        "\n"
+#define mostrar(x,y) cout<<x<<" "<<y<<endl;
+using namespace std;
+typedef pair<int,int> ii;
+typedef vector<int> vi;
+typedef vector<pair<int,int>> vii;
+
+map<string,vi> datosEquipos;
+vector<string> equipos;
+string aux1,aux2;
+
+int indice(string &a){
+    for(int i = 0; i<equipos.size(); i++){
+        if(equipos[i]==a) return i;
+    }
+    return 0;
+}
+
+bool criterio(string equipo1, string equipo2){//SI A TIENES QUE IR ANTES, DEVOLVER TRUE SINO FALSE
+    if(datosEquipos[equipo1][0]>datosEquipos[equipo2][0]) return true; //SI TIENE MAS PUNTOS
+    else if(datosEquipos[equipo2][0]>datosEquipos[equipo1][0]) return false;
+    else{
+        if(datosEquipos[equipo1][4]>datosEquipos[equipo2][4])//SI TIENE MAS GOL DIFERENCIA
+            return true;
+        else if(datosEquipos[equipo2][4]>datosEquipos[equipo1][4]) 
+            return false;
+        else{
+            if(datosEquipos[equipo1][2]>datosEquipos[equipo2][2]) return true;
+            else if(datosEquipos[equipo2][2]>datosEquipos[equipo1][2]) return false;
+        }
+    }
+    aux1 = equipo1;
+    aux2 = equipo2;
+    transform(equipo1.begin(),equipo1.end(),equipo1.begin(),::tolower);
+    transform(equipo2.begin(),equipo2.end(),equipo2.begin(),::tolower);
+    if(equipo1 == equipo2){ //SON LO MISMO, ORDENAMOS POR ORDEN DE LLEGADA
+        return indice(equipo1)<indice(equipo2);
+    }
+    else{   //no son lo mismo   
+        return equipo1<equipo2;
+    }
+}
+
+int main(){
+    ofstream out("output.txt");
+
+
+    int nroEquipos,partidos,goles1,goles2,puntosUltimo,golFavorUltimo,difUltimo,k,cont = 0;
+    double puntosPosibles,porcentaje;
+    string equipo,equipo1,equipo2,aux;
+    while(cin>>nroEquipos>>partidos&&(nroEquipos!=0||partidos!=0)){
+        if(cont>0){
+            cout<<endl;
+        }
+        for(int i = 0; i<nroEquipos; i++){
+            cin>>equipo;
+            equipos.push_back(equipo);
+            datosEquipos[equipo] = {0,0,0,0,0}; //{A,B,C,D,E} A:ptos B:jugados C:favor D:contra E:dif
+        }
+
+        for(int i = 0; i<partidos; i++){
+            cin>>equipo1>>goles1>>aux>>goles2>>equipo2;
+            datosEquipos[equipo1][1]++; //UN PARTIDO MAS
+            datosEquipos[equipo2][1]++; //UN PARTIDO MAS
+            datosEquipos[equipo1][2]+=goles1;   
+            datosEquipos[equipo2][2]+=goles2;
+            datosEquipos[equipo1][3]+=goles2;
+            datosEquipos[equipo2][3]+=goles1;
+            datosEquipos[equipo1][4]+=(goles1-goles2);
+            datosEquipos[equipo2][4]+=(goles2-goles1);
+            if(goles1>goles2){ //SI EQuIPO 1 GANO
+                datosEquipos[equipo1][0]+=3;
+            }
+            else if(goles2>goles1){ //SI EQUIPO 2 GANO
+                datosEquipos[equipo2][0]+=3;
+            }
+            else{   //SI EMPATARON
+                datosEquipos[equipo1][0]++;
+                datosEquipos[equipo2][0]++;
+            }
+        }
+        
+        sort(equipos.begin(),equipos.end(),criterio);
+        puntosUltimo = 0;
+        golFavorUltimo = 0;
+        difUltimo = 0;
+        for(int i = 0; i<nroEquipos; i++){
+            equipo = equipos[i];
+            puntosPosibles = datosEquipos[equipo][1]*3;
+            if(!(datosEquipos[equipo][0]==puntosUltimo && datosEquipos[equipo][2]==golFavorUltimo&&datosEquipos[equipo][4]==difUltimo)||i == 0){
+                if((i+1)<10){ 
+                    printf(" %d.",i+1);
+                }
+                else{         
+                    printf("%d.",i+1);
+                }
+                //printf(" %d.",i+1);
+                for(k = 0; k<16-equipo.size(); k++){
+                    printf(" ");
+                }
+                cout<<equipo;
+
+                if(datosEquipos[equipo][0]<10) printf("   %d",datosEquipos[equipo][0]);
+                else if(datosEquipos[equipo][0]<100) printf("  %d",datosEquipos[equipo][0]);
+                else if(datosEquipos[equipo][0]<1000) printf(" %d",datosEquipos[equipo][0]);
+                else if(datosEquipos[equipo][0]<10000) printf("%d",datosEquipos[equipo][0]);
+                if(datosEquipos[equipo][1]<10) printf("   %d",datosEquipos[equipo][1]);
+                else if(datosEquipos[equipo][1]<100) printf("  %d",datosEquipos[equipo][1]);
+                else if(datosEquipos[equipo][1]<1000) printf(" %d",datosEquipos[equipo][1]);
+                else if(datosEquipos[equipo][1]<10000) printf("%d",datosEquipos[equipo][1]);
+                if(datosEquipos[equipo][2]<10) printf("   %d",datosEquipos[equipo][2]);
+                else if(datosEquipos[equipo][2]<100) printf("  %d",datosEquipos[equipo][2]);
+                else if(datosEquipos[equipo][2]<1000) printf(" %d",datosEquipos[equipo][2]);
+                else if(datosEquipos[equipo][2]<10000) printf("%d",datosEquipos[equipo][2]);
+                if(datosEquipos[equipo][3]<10) printf("   %d",datosEquipos[equipo][3]);
+                else if(datosEquipos[equipo][3]<100) printf("  %d",datosEquipos[equipo][3]);
+                else if(datosEquipos[equipo][3]<1000) printf(" %d",datosEquipos[equipo][3]);
+                else if(datosEquipos[equipo][3]<10000) printf("%d",datosEquipos[equipo][3]);
+                if(datosEquipos[equipo][4]<0){//SI ES LA DIFERENCIA ES NEGATIVA
+                    if(datosEquipos[equipo][4]>-10) printf("  %d",datosEquipos[equipo][4]);
+                    else if(datosEquipos[equipo][4]>-100) printf(" %d",datosEquipos[equipo][4]);
+                    else if(datosEquipos[equipo][4]>-1000) printf("%d",datosEquipos[equipo][4]);
+                    else if(datosEquipos[equipo][4]>-10000) printf("%d",datosEquipos[equipo][4]);
+                }
+                else{//SI DIFERENCIA ES POSITIVO
+                    if(datosEquipos[equipo][4]<10) printf("   %d",datosEquipos[equipo][4]);
+                    else if(datosEquipos[equipo][4]<100) printf("  %d",datosEquipos[equipo][4]);
+                    else if(datosEquipos[equipo][4]<1000) printf(" %d",datosEquipos[equipo][4]);
+                    else if(datosEquipos[equipo][4]<10000) printf("%d",datosEquipos[equipo][4]);
+                }
+                if(datosEquipos[equipo][1]!=0){//SI EL EQUIPO JUGO AL MENOS UN PARTIDITO :P
+                    porcentaje = ((datosEquipos[equipo][0]+0.0)/puntosPosibles)*100;
+                    if(porcentaje<10) printf("   %.2lf",porcentaje);
+                    else if(porcentaje<100) printf("  %.2lf",porcentaje);
+                    else if(porcentaje<1000) printf(" %.2lf",porcentaje); 
+                }
+                else{   //SI EL EQUIPO NO JUGO NI UN PARTIDO
+                    printf("    N/A");
+                }
+                puntosUltimo = datosEquipos[equipo][0];
+                golFavorUltimo = datosEquipos[equipo][2];
+                difUltimo = datosEquipos[equipo][4];
+                printf("\n");
+            }
+            else{
+                for(k = 0; k<19-equipo.size(); k++)printf(" ");
+                cout<<equipo;
+                if(datosEquipos[equipo][0]<10) printf("   %d",datosEquipos[equipo][0]);
+                else if(datosEquipos[equipo][0]<100) printf("  %d",datosEquipos[equipo][0]);
+                else if(datosEquipos[equipo][0]<1000) printf(" %d",datosEquipos[equipo][0]);
+                else if(datosEquipos[equipo][0]<10000) printf("%d",datosEquipos[equipo][0]);
+                if(datosEquipos[equipo][1]<10) printf("   %d",datosEquipos[equipo][1]);
+                else if(datosEquipos[equipo][1]<100) printf("  %d",datosEquipos[equipo][1]);
+                else if(datosEquipos[equipo][1]<1000) printf(" %d",datosEquipos[equipo][1]);
+                else if(datosEquipos[equipo][1]<10000) printf("%d",datosEquipos[equipo][1]);
+                if(datosEquipos[equipo][2]<10) printf("   %d",datosEquipos[equipo][2]);
+                else if(datosEquipos[equipo][2]<100) printf("  %d",datosEquipos[equipo][2]);
+                else if(datosEquipos[equipo][2]<1000) printf(" %d",datosEquipos[equipo][2]);
+                else if(datosEquipos[equipo][2]<10000) printf("%d",datosEquipos[equipo][2]);
+                if(datosEquipos[equipo][3]<10) printf("   %d",datosEquipos[equipo][3]);
+                else if(datosEquipos[equipo][3]<100) printf("  %d",datosEquipos[equipo][3]);
+                else if(datosEquipos[equipo][3]<1000) printf(" %d",datosEquipos[equipo][3]);
+                else if(datosEquipos[equipo][3]<10000) printf("%d",datosEquipos[equipo][3]);
+                if(datosEquipos[equipo][4]<0){//SI ES LA DIFERENCIA ES NEGATIVA
+                    if(datosEquipos[equipo][4]>-10) printf("  %d",datosEquipos[equipo][4]);
+                    else if(datosEquipos[equipo][4]>-100) printf(" %d",datosEquipos[equipo][4]);
+                    else if(datosEquipos[equipo][4]>-1000) printf("%d",datosEquipos[equipo][4]);
+                    else if(datosEquipos[equipo][4]>-10000) printf("%d",datosEquipos[equipo][4]);
+
+                }
+                else{//SI DIFERENCIA ES POSITIVO
+                    if(datosEquipos[equipo][4]<10) printf("   %d",datosEquipos[equipo][4]);
+                    else if(datosEquipos[equipo][4]<100) printf("  %d",datosEquipos[equipo][4]);
+                    else if(datosEquipos[equipo][4]<1000) printf(" %d",datosEquipos[equipo][4]);
+                    else if(datosEquipos[equipo][4]<10000) printf("%d",datosEquipos[equipo][4]);
+                }
+                if(datosEquipos[equipo][1]!=0){//SI EL EQUIPO JUGO AL MENOS UN PARTIDITO :P
+                    porcentaje = ((datosEquipos[equipo][0]+0.0)/puntosPosibles)*100;
+                    if(porcentaje<10) printf("   %.2lf",porcentaje);
+                    else if(porcentaje<100) printf("  %.2lf",porcentaje);
+                    else if(porcentaje<1000) printf(" %.2lf",porcentaje); 
+                }
+                else{   //SI EL EQUIPO NO JUGO NI UN PARTIDO
+                    printf("    N/A");
+                }    
+                printf("\n");
+            }
+              
+        }  
+        cont++;
+        datosEquipos.clear();
+        equipos.clear();
+    }
+
+    return 0;
+}

@@ -1,0 +1,52 @@
+#include <cstdio>
+#include<bits/stdc++.h> 
+#define pb          push_back 
+#define endl        "\n"
+#define mostrar(x,y) cout<<x<<" "<<y<<endl;
+using namespace std;
+typedef pair<int,int> ii;
+typedef vector<int> vi;
+typedef vector<pair<int,int>> vii;
+
+
+int secuencia(int n){
+    int cont = 1;
+
+    while(n!=1){
+        if(n % 2 == 1){
+            n = 3*n+1;
+        }
+        else{
+            n = n / 2;
+        }
+        cont++;
+    }
+    return cont;
+}
+
+int main()
+{   
+    ofstream out("output.txt");
+    //ifstream in("input2.txt");
+
+    int i,j,x,y,actual,max;
+    string cad;
+    while(cin>>i>>j){
+        if(i<j){
+            x = i;
+            y = j;
+        }
+        else{
+            x = j;
+            y = i;
+        }
+        max = 0;
+        for(int i = x; i<=y; i++){
+            actual = secuencia(i);
+            if(actual>max) max = actual;
+        }
+        cout<<i<<" "<<j<<" "<<max<<endl;
+    }
+
+    return 0;
+}

@@ -1,0 +1,94 @@
+#include <cstdio>
+#include<bits/stdc++.h>
+using namespace std;
+
+int main(){
+    ofstream out("output.txt");
+    int n,cantidad,contador = 0;
+    map<char,char> mapa;
+    mapa['A'] = '2';
+    mapa['B'] = '2';
+    mapa['C'] = '2';
+    mapa['D'] = '3';
+    mapa['E'] = '3';
+    mapa['F'] = '3';
+    mapa['G'] = '4';
+    mapa['H'] = '4';
+    mapa['I'] = '4';
+    mapa['J'] = '5';
+    mapa['K'] = '5';
+    mapa['L'] = '5';
+    mapa['M'] = '6';
+    mapa['N'] = '6';
+    mapa['O'] = '6';
+    mapa['P'] = '7';
+    mapa['R'] = '7';
+    mapa['S'] = '7';
+    mapa['T'] = '8';
+    mapa['U'] = '8';
+    mapa['V'] = '8';
+    mapa['W'] = '9';
+    mapa['X'] = '9';
+    mapa['Y'] = '9';
+    mapa['1'] = '1';
+    mapa['2'] = '2';
+    mapa['3'] = '3';
+    mapa['4'] = '4';
+    mapa['5'] = '5';
+    mapa['6'] = '6';
+    mapa['7'] = '7';
+    mapa['8'] = '8';
+    mapa['9'] = '9';
+    mapa['0'] = '0';
+    string numero, numBuscado,lineaBlanca;
+    cin>>n;
+    string estandar;
+    int cont;
+    bool existeRepetidos;
+    while(n--){
+        getline(cin,lineaBlanca);
+        cin>> cantidad;
+        cin.ignore();
+        existeRepetidos = false;
+        map<string,int> repetidos;
+        while(cantidad--){
+            getline(cin,numero);
+            estandar = "";
+            cont = 0;
+            for(int i = 0; i<numero.size(); i++){
+                if(numero[i] != '-'){
+                    estandar += mapa[numero[i]];
+                    cont++;
+                    if(cont == 3){
+                        estandar += '-';
+                    }
+                }
+            }
+            if(repetidos.find(estandar) == repetidos.end()){
+                repetidos[estandar] = 1;
+            }
+            else{
+                repetidos[estandar]++;
+            }
+        }
+        if(contador>0){
+            cout<<endl;
+            out<<endl;
+        }
+        contador++;
+        for(auto it = repetidos.begin(); it!= repetidos.end(); it++){
+                if(it->second >1){
+                    existeRepetidos = true;
+                    cout<<it->first<<" "<<(it->second)<<endl;
+                    out<<it->first<<" "<<(it->second)<<endl;
+                }
+        }
+        if(!existeRepetidos){
+            cout<<"No duplicates.\n";
+            out<<"No duplicates.\n";
+        }
+    }
+    return 0;
+}
+
+

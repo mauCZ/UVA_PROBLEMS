@@ -1,0 +1,50 @@
+#include <cstdio>
+#include<bits/stdc++.h> 
+#define pb          push_back 
+#define endl        "\n"
+#define mostrar(x,y) cout<<x<<" "<<y<<endl;
+using namespace std;
+typedef pair<int,int> ii;
+typedef vector<int> vi;
+
+bool comparador(int i,int j){
+    return i>j;
+}
+int main()
+{   
+    ofstream out("output.txt");
+    //ifstream in("input2.txt");
+
+    int conductores, tiempoDisponible, paga, tiempo;
+    long long deudaFinal;
+    vi a;
+    vi b;
+    while(cin>>conductores>>tiempoDisponible>>paga &&(conductores!=0||tiempoDisponible!=0||paga!=0)){
+        for(int i = 0; i<conductores; i++){
+            cin>>tiempo;
+            a.push_back(tiempo);
+        }
+        for(int i = 0; i<conductores; i++){
+            cin>>tiempo;
+            b.push_back(tiempo);   
+        }
+        deudaFinal = 0;
+        sort(a.begin(),a.end());
+        sort(b.begin(),b.end(),comparador);
+        
+        for(int i = 0; i<conductores; i++){
+            if(a[i]+b[i]-tiempoDisponible > 0){
+                deudaFinal += (a[i]+b[i]-tiempoDisponible)*paga;
+            }
+            else{
+                deudaFinal += 0;    
+            }
+        }
+        cout<<deudaFinal<<endl;
+        b.clear();
+        a.clear();
+    }
+
+    return 0;
+}
+

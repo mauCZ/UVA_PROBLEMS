@@ -1,0 +1,46 @@
+#include <cstdio>
+#include <iostream>
+#include <cstring>
+#include <unordered_map>
+#include <set>
+#include <map>
+using namespace std;
+
+int main(){
+    int n, cont,curso;
+    map<set<int>,int> mapa;
+    set<int> cursos;
+    int mayor,total;
+    while(cin>>n && n!= 0){
+        mayor = 0;
+        total = 0;
+        while(n--){
+            cont = 5;
+            while(cont--){
+                cin>>curso;
+                cursos.insert(curso);
+            }
+            if(mapa.find(cursos) == mapa.end()){
+                mapa[cursos] = 1;
+            }
+            else{
+                mapa[cursos] ++;
+            }
+            cursos.clear();
+        }
+        for(auto it =mapa.begin(); it != mapa.end() ; it++){
+            if((it -> second )  > mayor)
+                mayor = it->second;
+        }
+        for(auto it = mapa.begin(); it != mapa.end(); it++){
+            if((it->second)==mayor)
+                total += (it->second);
+        }
+        cout<<total<<endl;
+        mapa.clear();
+    }
+
+
+    return 0;
+}
+

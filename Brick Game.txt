@@ -1,0 +1,24 @@
+#include <iostream>
+#include <fstream>
+#include <cstdio>	
+using namespace std;
+
+int main(){
+	ofstream out("output.txt");
+	int n, nroJug, edadJug, capitan, cont = 1;
+	cin>>n;
+	while(n>0){
+		scanf("%d",&nroJug);
+		for(int i = 0; i<nroJug; i++){
+			scanf("%d",&edadJug);
+			if(i == (nroJug/2)){
+				capitan = edadJug;
+			}
+		}
+		cout<<"Case "<<cont<<": "<<capitan<<endl;
+		n--;
+		cont++;
+	}
+	
+	return 0;
+}

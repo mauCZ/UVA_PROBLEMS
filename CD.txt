@@ -1,0 +1,26 @@
+#include <cstdio>
+#include<bits/stdc++.h>
+using namespace std;
+
+int main(){
+    int n,m, discoJack, discoJill,total;
+    set<int> jack;
+    while(cin>>n>>m &&(n!= 0 || m != 0)){
+        total = 0;
+        while(n--){
+            scanf("%d",&discoJack);
+            jack.insert(discoJack);
+        }
+        while(m--){
+            scanf("%d",&discoJill);
+            if(jack.find(discoJill) != jack.end()){
+                total++;
+            }
+        }
+        cout<<total<<endl;
+        jack.clear();
+    }
+    return 0;
+}
+
+

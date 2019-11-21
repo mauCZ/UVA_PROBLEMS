@@ -1,0 +1,40 @@
+#include <cstdio>
+#include<bits/stdc++.h> 
+#define pb          push_back 
+#define endl        "\n"
+#define mostrar(x,y) cout<<x<<" "<<y<<endl;
+using namespace std;
+typedef pair<int,int> ii;
+typedef vector<int> vi;
+typedef vector<pair<int,int>> vii;
+
+long long aux1,aux2;
+long long calcular(long long B, long long P, long long M){
+    if(P == 0){
+        return 1;
+    }
+    else if(P % 2 == 0){
+        aux1 = calcular(B,P/2,M);
+        return ((aux1%M)*(aux1%M))%M;
+    }
+    else{  
+        aux2 = calcular(B,P-1,M);
+        return  ((aux2%M)*(B%M)) % M;
+    }
+}
+
+int main()
+{   
+    ofstream out("output.txt");
+    //ifstream in("input2.txt");
+
+
+    long long B,P,M,residuo;
+
+    while(cin>>B>>P>>M){
+        residuo = calcular(B,P,M);
+        cout<<residuo<<endl;
+    }
+
+    return 0;
+}

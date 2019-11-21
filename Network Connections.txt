@@ -1,0 +1,71 @@
+#include<bits/stdc++.h>
+#include <cstdio>   
+#define PI              acos(-1)
+#define pb              push_back 
+#define endl            "\n"
+#define mostrar(x,y)    cout<<x<<" "<<y<<endl;
+#define f               first
+#define s               second
+#define mod             1000000007
+#define EPS             1e-9
+#define llenar(a,val)   memset(a,val,sizeof(a))
+using namespace std;
+typedef pair<int,int> ii;
+typedef pair<pair<int,int>,int> iii;
+typedef vector<int> vi;
+typedef vector<pair<int,int>> vii;
+typedef long long ll;
+    
+int parent[100000];
+int lideres[100000];
+
+void create_set(int a){
+    parent[a] = a;
+    lideres[a] = 1;
+}
+int find_set(int a){
+    return parent[a] = (parent[a] == a? a:find_set(parent[a]));
+}
+void union_set(int a,int b){
+    int r1 = find_set(a), r2 = find_set(b);
+    if(r1 != r2){
+        parent[r1] = r2;
+    }
+}
+
+int main(){
+    ofstream out("output.txt");
+    ios_base::sync_with_stdio(0), cin.tie(0), cout.tie(0);
+
+    int t,a,b,n;
+    cin>>t;
+    char opcion;
+    string datos;
+    istringstream s;
+    for(int i =0; i<t; i++){
+        if(i >0){
+            cout<<endl;
+            out<<endl;
+        } 
+        int sus=0,nosus=0;
+        cin>>n;
+        cin.ignore();
+        for(int j = 0; j<=n; j++) create_set(j);
+        while(getline(cin,datos)&&datos.size()!=0){
+            s.str(datos);
+            s>>opcion>>a>>b;
+            if(opcion == 'c'){
+                union_set(a,b);
+            }
+            else{
+                if(find_set(a) == find_set(b)) sus++;
+                else                   nosus++;
+            }
+            s.clear();
+        }
+        cout<<sus<<','<<nosus<<endl;
+        out<<sus<<','<<nosus<<endl;
+    }
+
+    return 0;
+}

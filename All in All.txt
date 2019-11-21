@@ -1,0 +1,64 @@
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Arrays;
+import java.util.Collections;
+import java.io.InputStreamReader;
+import java.io.PrintWriter;
+import java.io.BufferedReader;
+import java.util.LinkedList;
+import java.util.Locale;
+import java.util.Iterator;
+import java.util.Stack;
+import java.util.Set;
+import java.util.HashSet;
+import java.util.TreeSet;
+import java.util.Map;
+import java.util.HashMap;
+import java.util.TreeMap;
+import java.util.BitSet;
+import java.lang.StringBuilder;
+import java.util.Queue;
+import java.util.Objects;
+import java.util.PriorityQueue;
+public class UvaProblems {
+
+    public static void main(String[] args) throws Exception {
+        BufferedReader in = new BufferedReader(new InputStreamReader(System.in));
+        PrintWriter out = new PrintWriter(System.out);
+        Locale.setDefault(new Locale("en", "US"));
+        
+        String a;
+        String[] b;
+        int cont, j;
+        Queue<Character> colita;
+        while((a = in.readLine()) != null) {
+        	b = a.split(" ");
+        	colita = new LinkedList<>();
+        	for(int i = 0; i<b[1].length(); i++) {
+        		colita.offer(b[1].charAt(i));
+        	}
+        	j = 0;
+        	cont = 0;
+        	while(!colita.isEmpty()) {
+        		if(colita.peek() == b[0].charAt(j)) {
+        			cont++;
+        			j++;
+        		}
+        		if(j == b[0].length()) {
+        			break;
+        		}
+        		colita.poll();
+        	}
+        	if(cont == b[0].length()) {
+        		out.println("Yes");
+        	}
+        	else {
+        		out.println("No");
+        	}
+        	//System.out.println(cont);
+        }
+        
+        
+        out.flush();
+    }
+}

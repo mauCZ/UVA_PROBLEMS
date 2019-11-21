@@ -1,0 +1,57 @@
+#include<bits/stdc++.h>
+#include <cstdio>   
+#define pb          push_back 
+#define endl        "\n"
+#define mostrar(x,y) cout<<x<<" "<<y<<endl;
+#define f           first
+#define s           second
+#define mod         1000000007
+#define EPS         1e-9
+using namespace std;
+typedef pair<int,int> ii;
+typedef pair<pair<int,int>,int> iii;
+typedef vector<int> vi;
+typedef vector<pair<int,int>> vii;
+typedef long long ll;
+
+char grilla[1000][1000];
+
+int main(){
+    ofstream out("output.txt");
+
+
+    int n,minimo,dist;
+
+    while(cin>>n){
+        for(int i = 0; i<n; i++){
+            for(int j = 0; j<n; j++){
+                cin>>grilla[i][j];
+            }
+        }
+        int minimo = 0,distMin,dist;
+        for(int i =0; i<n; i++){
+            for(int j = 0; j<n; j++){
+                if(grilla[i][j] == '1'){
+                    distMin = 1000000,dist;
+                    for(int a = 0; a<n; a++){
+                        for(int b= 0; b<n; b++){
+                            if(grilla[a][b] == '3'){
+                                dist = abs(i-a)+abs(j-b);
+                                if(dist < distMin){
+                                    distMin = dist;
+                                }
+                            }
+                        }
+                    }
+                    minimo = max(minimo,distMin);
+                }
+            }
+        }
+        cout<<minimo<<endl;
+        out<<minimo<<endl;
+    }
+
+
+    return 0;
+}
+

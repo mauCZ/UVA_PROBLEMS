@@ -1,0 +1,88 @@
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Arrays;
+import java.util.Collections;
+import java.io.InputStreamReader;
+import java.io.PrintWriter;
+import java.io.BufferedReader;
+import java.util.LinkedList;
+import java.util.Locale;
+import java.util.Iterator;
+import java.util.Stack;
+import java.util.Set;
+import java.util.HashSet;
+import java.util.TreeSet;
+import java.util.Map;
+import java.util.HashMap;
+import java.util.TreeMap;
+import java.util.BitSet;
+import java.lang.StringBuilder;
+import java.util.Queue;
+import java.util.Objects;
+import java.util.PriorityQueue;
+public class UvaProblems {
+
+    public static void main(String[] args) throws Exception {
+        BufferedReader in = new BufferedReader(new InputStreamReader(System.in));
+        PrintWriter out = new PrintWriter(System.out);
+        Locale.setDefault(new Locale("en", "US"));
+
+        String a;
+        String[] b;
+        int total, min;
+        HashMap<Integer, String> mapita = new HashMap<>();
+        mapita.put(1,"BCG");
+        mapita.put(2,"BGC");
+        mapita.put(3,"CBG");
+        mapita.put(4,"CGB");
+        mapita.put(5,"GBC");
+        mapita.put(6,"GCB");
+        int totalPases;
+        String estado;
+        int[] botellas = new int[9];
+        PriorityQueue<String> respuesta = new PriorityQueue<>();
+        while((a = in.readLine()) != null){
+            b = a.split(" ");
+            for(int i = 0; i<9; i++){
+                botellas[i] = Integer.parseInt(b[i]);
+            }
+            estado = "";
+            totalPases = 0;
+            min = 1000000000;
+            respuesta.clear();
+            for(int i = 1; i<7; i++){
+                totalPases = obtenerMov(mapita.get(i),botellas);
+                if(totalPases < min){
+                    min = totalPases ;
+                    if(estado.compareTo(mapita.get(i))  <0 ) {
+                    	estado = mapita.get(i);
+                    }
+                }
+            }
+            System.out.println(estado +" " + min);
+        }
+        out.flush();
+    }
+    private static int obtenerMov(String str, int[] botellas){
+        int total = 0;
+        if(str.equals("BCG")){
+            total += botellas[3]+botellas[6]+botellas[2]+botellas[8]+botellas[4]+botellas[1];
+        }
+        else if(str.equals("BGC")){
+            total += botellas[3]+botellas[6]+botellas[7]+botellas[1]+botellas[5]+botellas[2];
+        }
+        else if(str.equals("CBG")){
+            total += botellas[5]+botellas[8]+botellas[0]+botellas[6]+botellas[4]+botellas[1];
+        }
+        else if(str.equals("CGB")){
+            total += botellas[5]+botellas[8]+botellas[7]+botellas[1]+botellas[0]+botellas[3];
+        }
+        else if(str.equals("GBC")){
+            total += botellas[4]+botellas[7]+botellas[0]+botellas[6]+botellas[5]+botellas[2];
+        }
+        else if(str.equals("GCB")){
+            total += botellas[4]+botellas[7]+botellas[2]+botellas[8]+botellas[0]+botellas[3];
+        }
+        return total;
+    }
+}

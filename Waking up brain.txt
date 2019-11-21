@@ -1,0 +1,127 @@
+#include<bits/stdc++.h>
+#define llenar(a,val)   memset(a,val,sizeof(a))
+#define pb          push_back 
+#define endl        "\n"
+#define mostrar(x,y) cout<<x<<" "<<y<<endl;
+#define f           first
+#define s           second
+#define mod         1000000007
+#define EPS         1e-9
+using namespace std;
+typedef pair<int,int> ii;
+typedef pair<pair<int,int>,int> iii;
+typedef vector<int> vi;
+typedef vector<pair<int,int>> vii;
+typedef long long ll;
+
+map<char,char> parent;
+
+
+map<char,vector<char>> grafo;
+set<char> letras;
+vector<char> aux;
+vector<char> copiaLetras;
+void create_set(char x){
+    parent[x] = x;
+}
+void crearSets(){
+    for(char i = 'A'; i<='Z'; i++){
+        create_set(i);
+    }
+}
+char find_set(char x){
+    return parent[x] = (parent[x] == x?x:find_set(parent[x]));
+}
+void union_set(char a,char b){
+    char r1 = find_set(a), r2 = find_set(b);
+    if(r1!=r2){
+        parent[r1] = r2;
+    }
+}
+bool despierta(char c,char lider){
+    int despiertos = 0;
+    for(int i = 0; i<grafo[c].size(); i++){
+        if(find_set(lider) == find_set(grafo[c][i])) despiertos++;
+    }
+    return despiertos>=3;
+}
+
+int main(){
+    ofstream out("output.txt");
+
+    char a,b;
+    int n,m;
+    string cad;
+
+    while(cin>>n){
+        cin>>m;
+        cin>>cad;
+        crearSets();
+        for(int i = 0; i<cad.size(); i++){
+            union_set(cad[0],cad[i]);
+        }
+        for(int i = 0; i<m;i ++){
+            cin>>a>>b;
+            if(find_set(a) != find_set(cad[0])){
+                letras.insert(a);
+            }
+            if(find_set(b)!=find_set(cad[0])){
+                letras.insert(b);
+            }   
+            grafo[a].pb(b);
+            grafo[b].pb(a);
+        }
+        for(auto c:letras) copiaLetras.pb(c);
+
+        //cout<<cad<<" "<<cad.size()<<" "<<n<<endl;
+        if(m == 0&&n>cad.size()){
+            cout<<"THIS BRAIN NEVER WAKES UP\n";
+            out<<"THIS BRAIN NEVER WAKES UP\n";
+            continue;
+        }
+        else if(m == 0 &&cad.size()==n){
+            cout<<"WAKE UP IN, 0, YEARS\n";
+            out<<"WAKE UP IN, 0, YEARS\n";
+            continue;
+        }
+        int dias= 0;
+        while(true){
+            vector<char> despiertos;
+            for(char c : letras){
+                if(despierta(c,cad[0])) despiertos.pb(c);
+            }
+            if(despiertos.size() == 0) break;
+            else{
+                for(char c : despiertos){
+                    union_set(cad[0],c);
+                    letras.erase(letras.find(c));
+                }
+            }
+            dias++;
+        }
+        if(letras.empty()){
+            cout<<"WAKE UP IN, "<<dias<<", YEARS\n";
+            out<<"WAKE UP IN, "<<dias<<", YEARS\n";
+        }
+        else{
+            cout<<"THIS BRAIN NEVER WAKES UP\n";
+            out<<"THIS BRAIN NEVER WAKES UP\n";
+        }
+
+        copiaLetras.clear();
+        letras.clear();
+        parent.clear();
+        grafo.clear();
+        aux.clear();
+    }
+
+    return 0;
+}
+
+ 
+ 
+
+
+
+
+

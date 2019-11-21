@@ -1,0 +1,121 @@
+#include<bits/stdc++.h>
+#define llenar(a,val)   memset(a,val,sizeof(a))
+#define pb          push_back 
+#define endl        "\n"
+#define mostrar(x,y) cout<<x<<" "<<y<<endl;
+#define f           first
+#define s           second
+#define mod         1000000007
+#define EPS         1e-9
+using namespace std;
+typedef pair<int,int> ii;
+typedef pair<pair<int,int>,int> iii;
+typedef vector<int> vi;
+typedef vector<pair<int,int>> vii;
+typedef long long ll;
+typedef vector< pair<pair<int,int>,int> > viii;
+
+ofstream out("output.txt");
+
+int matriz[15][15];
+bool visitado[30];
+vi grafo[30];
+
+void limpiarGrafo(){
+    for(int i =0;i<30;i++){
+        grafo[i].clear();
+    }
+}
+bool sePudo;
+void backtrack(int nodo,string perm,int k,int n){
+    if(k == n){
+        cout<<'(';
+        out<<'(';
+        for(int i =0;i<perm.size();i++){
+            if(i ==0){ cout<<perm[i];out<<perm[i];}
+            else     {cout<<','<<perm[i];out<<','<<perm[i];}
+        }
+        cout<<")\n";
+        out<<")\n";
+        sePudo = true;
+    }
+    else{
+        for(int vec : grafo[nodo]){
+            if(!visitado[vec]){
+                visitado[vec] = true;
+                backtrack(vec,perm+=(vec+'0'),k+1,n);
+                visitado[vec] = false;
+                perm.erase(perm.size()-1,1);
+            }
+        }
+    }
+}
+
+int main(){
+    //ofstream out("output.txt");
+    
+    int m,n;
+    cin>>m>>n;
+    for(int i =0;i<m;i++){
+        for(int j=0;j<m;j++){
+            cin>>matriz[i][j];
+            if(matriz[i][j]==1){
+                grafo[i+1].pb(j+1);
+            }
+        }
+    }
+    for(int i =1;i<=m;i++){
+        sort(grafo[i].begin(),grafo[i].end());
+    }
+    llenar(visitado,0);
+    visitado[1] = true;
+
+    /*for(int i =1;i<=m;i++){
+        cout<<i<<"-> ";
+        for(int j = 0;j<grafo[i].size();j++){
+            cout<<grafo[i][j]<<" ";
+        }
+        cout<<endl;
+    }*/
+    sePudo = false;
+    backtrack(1,"1",0,n);
+    if(!sePudo){
+         cout<<"no walk of length "<<n<<endl;
+    }
+    limpiarGrafo();
+    int basura; 
+    while(cin>>basura){
+        cin>>m>>n;
+        for(int i=0;i<m;i++){
+            for(int j=0;j<m;j++){
+                cin>>matriz[i][j];
+                if(matriz[i][j]==1){
+                    grafo[i+1].pb(j+1);
+                }
+            }
+        }
+        for(int i =1;i<=m;i++){
+            sort(grafo[i].begin(),grafo[i].end());
+        }
+        sePudo = false;
+        llenar(visitado,0);
+        visitado[1] = true;
+        cout<<endl;
+        out<<endl;
+        backtrack(1,"1",0,n);
+        if(!sePudo){
+            cout<<"no walk of length "<<n<<endl;
+        }
+        limpiarGrafo();
+    }
+    
+    return 0;
+}
+
+ 
+ 
+
+
+
+
+

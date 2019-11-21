@@ -1,0 +1,35 @@
+#include <iostream>
+#include <sstream>
+#include <iomanip>
+#include <fstream>
+#include<bits/stdc++.h>
+using namespace std;
+
+int main(){
+    ofstream out("output.txt");
+    ifstream in("input.txt");
+
+    double n,d,vr,v1_2;
+    cin>>n;
+    int cont = 1;
+    while(n--){
+        cin>>d>>vr>>v1_2;
+        if(v1_2<=vr || v1_2 == 0 || vr == 0){
+            cout<<"Case "<<cont<<": "<<"can't determine"<<endl;
+            cont++;
+            continue;
+        }
+        double vb1,vb2,t1,t2;
+        vb1 = sqrt(v1_2*v1_2 - vr*vr );
+        t1 = d/vb1;
+
+        vb2 = sqrt(vr*vr + v1_2*v1_2);
+        double angulo = atan(vr/v1_2);
+        double distancia = d/(cos(angulo));
+        t2 = distancia / vb2;
+        cout<<"Case "<<cont<<": "<<setprecision(3)<<fixed<<abs(t1-t2)<<endl;
+        cont++;
+    }
+    return 0;
+}
+

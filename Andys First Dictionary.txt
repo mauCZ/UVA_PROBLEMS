@@ -1,0 +1,23 @@
+TreeSet<String> diccionario = new TreeSet<>();
+        String a;
+        String cadenita;
+        String letras = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ";
+        while((a = in.readLine()) != null) {
+        	cadenita = "";
+        	for(int i = 0; i<a.length(); i++) {
+        		if(letras.contains(a.charAt(i)+"")) {
+        			cadenita+= a.charAt(i);
+        		}
+        		else {
+        			diccionario.add(cadenita.toLowerCase());
+        			cadenita = "";
+        		}
+        	}
+        	diccionario.add(cadenita.toLowerCase());
+        }
+        int cont = 0;
+        for(String str : diccionario) {
+        	if(cont != 0)out.println(str);
+        	cont ++;
+        }
+        out.flush();

@@ -1,0 +1,79 @@
+#include<bits/stdc++.h>
+#include <cstdio>   
+#define pb          push_back 
+#define endl        "\n"
+#define mostrar(x,y) cout<<x<<" "<<y<<endl;
+#define f           first
+#define s           second
+#define mod         1000000007
+#define EPS         1e-9
+using namespace std;
+typedef pair<int,int> ii;
+typedef pair<pair<int,int>,int> iii;
+typedef vector<int> vi;
+typedef vector<pair<int,int>> vii;
+typedef long long ll;
+    
+
+
+
+int main(){
+    ofstream out("output.txt");
+
+    int n,comando,val;
+    bool esCola,esPila,esPriCola;
+    while(cin>>n){
+        esPila = true;
+        esCola = true;
+        esPriCola = true;
+        queue<int> q;
+        stack<int> s;
+        priority_queue<int> pq;
+        for(int i = 0;i<n; i++){
+            cin>>comando>>val;
+            if(esCola || esPila || esPriCola){
+                if(comando == 1){
+                    if(esCola) q.push(val);
+                    if(esPila) s.push(val);
+                    if(esPriCola) pq.push(val);
+                }
+                else{
+                    if(q.empty()) esCola = false;
+                    else if(esCola){
+                        if(q.front() != val) esCola  = false;
+                        else               q.pop();
+                    }
+                    if(s.empty()) esPila = false;
+                    else if(esPila){
+                        if(s.top() != val) esPila = false;
+                        else               s.pop();
+                    }
+                    if(pq.empty()) esPriCola = false;
+                    else if(esPriCola){
+                        if(pq.top() != val) esPriCola = false;
+                        else                pq.pop();
+                    }
+
+                }
+            }
+        }
+
+        if(!(esCola||esPila||esPriCola)){
+            cout<<"impossible\n";
+        }
+        else if(esCola && !(esPila||esPriCola)){
+            cout<<"queue\n";
+        }
+        else if(esPila && !(esCola||esPriCola)){
+            cout<<"stack\n";
+        }
+        else if(esPriCola && !(esCola||esPila)){
+            cout<<"priority queue\n";
+        }
+        else{
+            cout<<"not sure\n";
+        }
+    }
+
+    return 0;
+}

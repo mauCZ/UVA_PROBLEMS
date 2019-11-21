@@ -1,0 +1,172 @@
+import java.util.ArrayList;
+import java.util.LinkedHashMap;
+import java.util.List;
+import java.util.Arrays;
+import java.util.Collections;
+import java.io.InputStreamReader;
+import java.io.PrintWriter;
+import java.io.BufferedReader;
+import java.util.LinkedList;
+import java.util.Locale;
+import java.util.Iterator;
+import java.util.Stack;
+import java.util.Set;
+import java.util.HashSet;
+import java.util.TreeSet;
+import java.util.Map;
+import java.util.HashMap;
+import java.util.TreeMap;
+import java.util.BitSet;
+import java.lang.StringBuilder;
+import java.util.Queue;
+import java.util.Objects;
+import java.util.PriorityQueue;
+public class UvaProblems {
+
+    public static void main(String[] args) throws Exception {
+        BufferedReader in = new BufferedReader(new InputStreamReader(System.in));
+        PrintWriter out = new PrintWriter(System.out);
+        Locale.setDefault(new Locale("en", "US"));
+        
+        String a, horaComienzoReposo;
+        String[] b;
+        int n, hora1, hora2, reposoMax, reposoActual, minutoBuscado,j;
+        BitSet minutos;
+        int cont = 1;
+        while((a = in.readLine()) != null) {
+        	n = Integer.parseInt(a);
+        	minutos = new BitSet(480);
+        	while(n>0) {
+        		b = in.readLine().split(" ");
+        		hora1 = convertirHora(b[0]);
+        		hora2 = convertirHora(b[1]);
+        		for(int i = hora1-600; i<hora2-600; i++) {
+        			minutos.set(i,true);
+        		}
+        		n--;
+        	}
+        	reposoMax = 0;
+        	reposoActual = 0;
+        	minutoBuscado =0;
+        	for(j = 0; j<480; j++) {
+        		if(minutos.get(j)) {
+        			if(reposoActual > reposoMax) { 
+        				reposoMax = reposoActual;
+        				minutoBuscado = j-reposoActual;
+        			}
+        			reposoActual = 0;
+        		}
+        		else 
+        			//System.out.println(j);
+        			reposoActual++;
+        	}
+        	//System.out.println(reposoActual);
+        	if(reposoActual>reposoMax) {
+        		reposoMax = reposoActual;
+        		minutoBuscado = j-reposoActual;
+        	}
+        	int hora = reposoMax/60;
+        	int minuto = reposoMax % 60;
+        	horaComienzoReposo = convertirMinutos(minutoBuscado+600);
+        	if(hora >0) {
+        		System.out.println("Day #"+cont+": the longest nap starts at "+horaComienzoReposo+" and will last for "+hora+" hours and "+minuto+" minutes.");	
+        	}
+        	else {
+        		System.out.println("Day #"+cont+": the longest nap starts at "+horaComienzoReposo+" and will last for "+minuto+" minutes.");                
+        	}
+        	cont++;
+        }
+        //System.out.println(convertirMinutos(933));
+        
+        
+        out.flush();
+    }
+    public static String convertirMinutos(int minutos) {
+    	String res;
+    	int hora, minuto;
+    	hora = minutos/60;
+    	minuto = minutos%60;
+    	if(minuto<10) {
+    		res = hora+":"+"0"+minuto;
+    	}
+    	else {
+    		res = hora+":"+minuto;	
+    	}
+    	return res;
+    }
+    public static int convertirHora(String hora) {
+    	String[] inf = hora.split(":");
+    	int horas = Integer.parseInt(inf[0]);
+    	int minutos = Integer.parseInt(inf[1]);
+    	return (horas*60)+minutos;
+    }
+}
+------------------------------------------------------------------------------------------------------C++
+#include <cstdio>
+#include<bits/stdc++.h> 
+#define pb          push_back 
+#define endl        "\n"
+#define mostrar(x,y) cout<<x<<" "<<y<<endl;
+using namespace std;
+typedef pair<int,int> ii;
+typedef vector<int> vi;
+typedef vector<pair<int,int>> vii;
+
+
+
+int main()
+{   
+    ofstream out("output.txt");
+    //ifstream in("input2.txt");
+
+    int n,hora1,minutos1,hora2,minutos2,maximo,ultimo,buscado;
+    int cont =1;
+    string horaRes,minRes,horasRep,minRep;
+    vii horarios;
+    string horario,aux;
+    while(cin>>n){
+        cin.ignore();
+        for(int i  =0; i<n; i++){
+            getline(cin,horario);
+            aux = horario.substr(0,2);
+            hora1 = stoi(aux);
+            aux = horario.substr(3,2);
+            minutos1 = stoi(aux);
+            aux = horario.substr(6,2);
+            hora2 = stoi(aux);
+            aux = horario.substr(9,2);
+            minutos2 = stoi(aux);
+            horarios.push_back({hora1*60+minutos1,hora2*60+minutos2});
+        }
+        sort(horarios.begin(),horarios.end());
+        ultimo = 600;
+        maximo = 0;
+        for(int i = 0; i<horarios.size(); i++){
+            if((horarios[i].first - ultimo)>maximo){
+                maximo = horarios[i].first-ultimo;
+                buscado = ultimo;
+            }
+            ultimo = horarios[i].second;
+        }
+        if((1080-ultimo)>maximo){
+            maximo = 1080 - ultimo;
+            buscado = ultimo;
+        }
+        horaRes =to_string(maximo/60);
+        minRes = to_string(maximo % 60);
+
+        minRes = to_string((buscado) % 60);
+        horaRes = to_string((buscado) / 60);
+        if(stoi(minRes)<10) minRes = "0"+minRes;
+        horaRes = horaRes+":"+minRes;
+        if(maximo>59){
+            cout<<"Day #"<<cont<<": the longest nap starts at "<<horaRes<<" and will last for "<<maximo/60<<" hours and "<<maximo%60<<" minutes.\n";
+        }
+        else{
+            cout<<"Day #"<<cont<<": the longest nap starts at "<<horaRes<<" and will last for "<<maximo<<" minutes.\n";
+        }
+        cont++;
+        horarios.clear();
+    }
+    return 0;
+}

@@ -1,0 +1,72 @@
+#include <cstdio>
+#include<bits/stdc++.h> 
+#define pb          push_back 
+#define endl        "\n"
+#define mostrar(x,y) cout<<x<<" "<<y<<endl;
+using namespace std;
+typedef pair<int,int> ii;
+typedef vector<int> vi;
+typedef vector<pair<int,int>> vii;
+
+
+map<int,int> trabajos;
+bool esMayorPriori(int actual){
+    for(auto it = trabajos.begin(); it!=trabajos.end(); it++){
+        if(it->first > actual && it->second>0){
+            return false;
+        }
+    }
+    return true;
+}
+void vaciar(queue<int> &cola){
+    while(!cola.empty()){
+        cola.pop();
+    }
+}
+int main()
+{   
+    ofstream out("output.txt");
+    //ifstream in("input2.txt");
+
+    int n,nroT,tuyo,turnos,actual,t;
+    bool encontrado;
+    queue<int> cola;
+    cin>>n;
+    while(n--){
+        cin>>nroT>>tuyo;
+        for(int i = 0; i<nroT; i++){
+            cin>>t;
+            if(trabajos.find(t)==trabajos.end()) trabajos[t] = 1;
+            else                                 trabajos[t]++;
+            cola.push(t);
+        }
+        encontrado = false;
+        turnos = 0;
+        tuyo++;
+        while(!encontrado&&!cola.empty()){    
+            actual = cola.front();
+            cola.pop();
+            if(esMayorPriori(actual)){
+                if(tuyo == 1){
+                    encontrado = true;
+                    turnos++;
+                }
+                else{
+                    tuyo--;
+                    turnos++;
+                }
+                trabajos[actual]--;
+            }
+            else{
+                if(tuyo == 1) tuyo = cola.size()+1;
+                else          tuyo--;
+                cola.push(actual);
+            }
+        }
+        cout<<turnos<<endl;
+        vaciar(cola);
+        trabajos.clear();
+    }
+
+    return 0;
+}

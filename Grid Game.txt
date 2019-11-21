@@ -1,0 +1,70 @@
+#include<bits/stdc++.h>
+#define llenar(a,val)   memset(a,val,sizeof(a))
+#define pb          push_back 
+#define endl        "\n"
+#define mostrar(x,y) cout<<x<<" "<<y<<endl;
+#define f           first
+#define s           second
+#define mod         1000000007
+#define EPS         1e-9
+using namespace std;
+typedef pair<int,int> ii;
+typedef pair<pair<int,int>,int> iii;
+typedef vector<int> vi;
+typedef vector<pair<int,int>> vii;
+typedef long long ll;
+typedef vector< pair<pair<int,int>,int> > viii;
+
+
+int grilla[10][10];
+bool puedeFila[10];
+
+ll min(ll a,ll b){
+    if(a<b) return a;
+    return b;
+}
+ll minimo = 100000000000000;
+void backtrack(int columnaAct,ll sumaAct,int n){
+    //cout<<columnaAct<<endl;
+    if(columnaAct == n){
+        minimo =  min(sumaAct,minimo);
+    }
+
+    for(int i =0;i<n;i++){
+        if(puedeFila[i]){
+            puedeFila[i] = false;
+            backtrack(columnaAct+1,sumaAct+grilla[i][columnaAct],n);
+            puedeFila[i] = true;
+        }
+    }
+}
+
+int main(){
+    ofstream out("output.txt");
+    
+    int t,n;
+    cin>>t;
+    while(t--){
+        cin>>n;
+        for(int i =0;i<n;i++){
+            for(int j=0;j<n;j++){
+                cin>>grilla[i][j];
+            }
+        }
+        minimo = 100000000000000;
+        llenar(puedeFila,-1);
+        backtrack(0,0,n);
+        cout<<minimo<<endl;
+        out<<minimo<<endl;
+    }
+    
+    return 0;
+}
+
+ 
+ 
+
+
+
+
+

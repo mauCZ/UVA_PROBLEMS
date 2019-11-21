@@ -1,0 +1,48 @@
+#include <bits/stdc++.h>
+
+using namespace std;
+
+bool criterio(pair<int,int> a,pair<int,int> b){
+	if(a.first < b.first && a.second < b.second) return true;
+	if(a.first < b.first) return true;
+	return a.first+a.second < b.first+b.second
+	;
+}
+
+int main(){
+	fstream out("output.txt");
+	int n,l,m;
+	while(cin>>n && n!=0){
+		vector<pair<int,int>> sec;
+		vector<int> lis;
+		for(int i =0;i<n;i++){
+			cin>>l>>m;
+			sec.push_back({l,m});
+		}
+		sort(sec.begin(),sec.end(),criterio);
+		for(int i=0;i<n;i++){
+			cout<<sec[i].first<<" "<<sec[i].second<<endl;
+			lis.push_back(1);
+		}
+		for(int i =1;i<n;i++){
+			int actual =0;
+			for(int j =0;j<i;j++){
+				if(sec[j].first <= sec[i].first && sec[j].second <=
+				 sec[i].second){
+					actual = max(actual,lis[j]);
+				}
+			}
+			lis[i] += actual;
+		}
+		int maximo = 0;
+		for(int i =0;i<n;i++){
+			maximo = max(maximo,lis[i]);	
+		}
+		cout<<maximo<<endl;
+		out<<maximo<<endl;
+	}	
+	cout<<"*"<<endl;
+	out<<"*"<<endl;
+
+	return 0;
+}

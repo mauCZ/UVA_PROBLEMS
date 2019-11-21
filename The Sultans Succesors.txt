@@ -1,0 +1,85 @@
+#include<bits/stdc++.h>
+using namespace std;
+
+vector<vector<int>> soluciones;
+vector<int> actual;
+vector<pair<int,int>> posiciones;
+
+string mostrarVector(vector<int> v){
+    string r = "";
+    for(int i = 0; i<v.size(); i++){
+        if(i == 0) r += to_string(v[i]);
+        else       r+= (" "+to_string(v[i]));
+    }
+    r+= "\n";
+    return r;
+}
+
+bool sePuede(int fila, int columna){
+    for(int i = 0; i<posiciones.size(); i++){
+        if(posiciones[i].first == fila)        return false;
+        else if(posiciones[i].second == columna)   return false;
+        else if((fila-columna) == (posiciones[i].first-posiciones[i].second))   return false;
+        else if((fila+columna) == (posiciones[i].first+posiciones[i].second))   return false;
+    }
+    return true;
+}
+
+void backtrack(int restantes, int columna){
+    if(restantes == 0){
+        soluciones.push_back(actual);
+    }
+    else{
+        for(int fila = 1; fila<=8; fila++){
+            if(sePuede(fila,columna)){
+                actual.push_back(fila);
+                posiciones.push_back(make_pair(fila,columna));
+                restantes--;
+                columna++;
+
+                backtrack(restantes, columna);
+
+                restantes++;
+                columna--;
+                actual.erase(find(actual.begin(),actual.end(),fila));
+                posiciones.erase(find(posiciones.begin(),posiciones.end(),make_pair(fila,columna)));
+            }
+        }
+    }
+}
+
+int main()
+{
+    ofstream out("output.txt");
+    //ifstream in("input.txt");
+
+    int k;
+    cin>>k;
+    int tableros[8][8][k];
+
+    backtrack(8,1);
+
+    for(int l = 0; l<k; l++){
+        for(int i = 0; i<8; i++){
+            for(int j = 0; j<8; j++){
+                cin>>tableros[i][j][l];
+            }
+        }    
+    }
+    int puntosAct = 0, max = 0;
+    for(int x = 0; x<k; x++){   //TABLEROS
+        for(int i = 0; i<soluciones.size(); i++){ //SOLUCIONES
+            for(int j = 0; j<soluciones[i].size(); j++){
+                puntosAct += tableros[soluciones[i][j]-1][j][x];
+            }
+            if(puntosAct > max) max = puntosAct;
+            puntosAct = 0;
+        }
+        if(max <10){          cout<<"    "<<max<<"\n";   }
+        else if(max < 100){   cout<<"   "<<max<<"\n";  }
+        else if(max < 1000){  cout<<"  "<<max<<"\n"; }
+        else if(max < 10000){ cout<<" "<<max<<"\n"; }
+        max = 0;
+    }
+    return 0;
+}
