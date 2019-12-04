@@ -1,0 +1,82 @@
+#include <iostream>
+#include <vector>
+#include <fstream>
+#include <algorithm>
+#include <map>
+#include <set>
+#include <unordered_map>
+#include <iomanip>
+#include <math.h>
+using namespace std;
+ 
+#define pb push_back
+#define f first
+#define s second
+#define endl '\n'
+#define EPS 1e-9
+#define PI acos(-1)
+ 
+using ll = unsigned long long;
+using pll = pair<ll,ll>;
+using ii = pair<int,int>;
+using iii = pair<pair<int,int>,int>;
+using viii = vector<iii>;
+using vi = vector<int>;
+using vii = vector<ii>;
+using vll = vector<ll>;
+using ui = unsigned int;
+ 
+
+
+bool nodoHoja(int nodo,vector<vi> &grafo){
+    return grafo[nodo].size() == 0;
+}
+ii mayor(ii a,ii b){
+    if(a.s > b.s ) return a;
+    return b;
+}
+
+ii dfs(int nodo,int costActual,vector<vi> &grafo,vi &valores){
+    ii res;
+    if(nodoHoja(nodo,grafo)){
+        res =  {nodo,costActual};
+    }
+    else{
+        ii bestOpt = {0,0};
+        for(int vecinos : grafo[nodo]){
+            bestOpt = mayor(bestOpt,{vecinos,valores[vecinos]});
+        }
+        res = dfs(bestOpt.f,bestOpt.s+costActual,grafo,valores);
+    }
+    return res;
+}
+
+int main() {
+    ofstream out("output.txt");
+    ios_base::sync_with_stdio(false);
+
+
+    int t;
+    cin>>t;
+    int cont = 1;
+    while(t--){
+        vector<vi> grafo(105);
+        vi valores(105);
+        int n,m;
+        cin>>n>>m;
+        for(int i =0;i<n;i++){
+            cin>>valores[i];
+        }
+        int a,b;
+        for(int i =0;i<m;i++){
+            cin>>a>>b;
+            grafo[a].pb(b);
+        }
+        ii res = dfs(0,0,grafo,valores);
+        cout<<"Case "<<cont<<": "<<res.s<<" "<<res.f<<endl;
+        cont++;
+    }   
+
+
+    return 0;
+}   
