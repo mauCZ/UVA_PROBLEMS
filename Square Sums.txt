@@ -1,0 +1,89 @@
+#include <iostream>
+#include <vector>
+#include <fstream>
+#include <algorithm>
+#include <map>
+#include <set>
+#include <unordered_map>
+#include <iomanip>
+#include <math.h>
+using namespace std;
+ 
+#define pb push_back
+#define f first
+#define s second
+#define endl '\n'
+#define EPS 1e-9
+#define PI acos(-1)
+ 
+using ll = unsigned long long;
+using pll = pair<ll,ll>;
+using ii = pair<int,int>;
+using iii = pair<pair<int,int>,int>;
+using viii = vector<iii>;
+using vi = vector<int>;
+using vii = vector<ii>;
+using vll = vector<ll>;
+using ui = unsigned int;
+ 
+
+int grilla[10][10];
+
+int f(int ind,int n){
+    int res = 0;
+
+    for(int i =ind;i<(n-ind);i++){
+        res += grilla[ind][i];
+    }    
+    for(int i =ind;i<(n-ind);i++){
+        res += grilla[n-ind-1][i];
+    }   
+    for(int i =ind;i<(n-ind);i++){
+        res += grilla[i][ind];
+    }    
+    for(int i =ind;i<(n-ind);i++){
+        res += grilla[i][n-ind-1];
+    }
+    if(ind != (n-ind-1)){
+        res -= grilla[ind][ind];
+        res -= grilla[ind][n-ind-1];
+        res -= grilla[n-ind-1][ind];
+        res -= grilla[n-ind-1][n-ind-1];
+    }
+    else{
+        return grilla[ind][n-ind-1];
+    }
+    return res;
+}
+
+int main() {
+    ofstream out("output.txt");
+    ios_base::sync_with_stdio(false);
+
+
+    int n,cont = 1;
+
+    while(cin>>n && n!=0){
+        for(int i =0;i<n;i++){
+            for(int j =0;j<n;j++){
+                cin>>grilla[i][j];
+            }
+        }
+
+        int x = (n-1)/2;
+        vi res;
+        for(int i = 0;i<=x;i++){
+            res.pb(f(i,n));
+        }
+        cout<<"Case "<<cont<<":";
+        for(int i =0;i<res.size();i++){
+            cout<<" "<<res[i];
+        }
+        cout<<endl;
+        cont++;
+    }
+
+
+
+    return 0;
+}   
