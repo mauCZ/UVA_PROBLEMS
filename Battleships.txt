@@ -1,0 +1,74 @@
+#include <iostream>
+#include <vector>
+#include <fstream>
+#include <algorithm>
+#include <map>
+#include <set>
+#include <unordered_map>
+#include <iomanip>
+#include <math.h>
+using namespace std;
+ 
+#define pb push_back
+#define f first
+#define s second
+#define endl '\n'
+#define EPS 1e-9
+#define PI acos(-1)
+ 
+using ll = unsigned long long;
+using pll = pair<ll,ll>;
+using ii = pair<int,int>;
+using iii = pair<pair<int,int>,int>;
+using viii = vector<iii>;
+using vi = vector<int>;
+using vii = vector<ii>;
+using vll = vector<ll>;
+using ui = unsigned int;
+ 
+
+char grilla[100][100];
+bool visitado[100][100];
+
+bool dfs(int i,int j,int n){
+    if(!(i>=0&&i<n&&j>=0&&j<n)) return false;
+    if(grilla[i][j] == '.') return false;
+    if(visitado[i][j] == true) return false;
+    visitado[i][j] = true;
+    
+    //grilla[i][j] == 'x' last term, bec of lazyness xd
+    return dfs(i+1,j,n) || dfs(i-1,j,n) || dfs(i,j+1,n) || dfs(i,j-1,n) || grilla[i][j] == 'x';
+
+}
+
+
+int main() {
+    ofstream out("output.txt");
+    ios_base::sync_with_stdio(false);
+
+
+    int t;
+    cin>>t;
+    for(int k = 1;k<=t;k++){
+
+        int n;
+        cin>>n;
+        for(int i =0;i<n;i++){
+            for(int j =0;j<n;j++){
+                cin>>grilla[i][j];
+                visitado[i][j] = false;
+            }
+        }
+        int res = 0;
+        for(int i =0;i<n;i++){
+            for(int j =0;j<n;j++){
+                if(!visitado[i][j] && (grilla[i][j] == 'x' || grilla[i][j] == '@')){
+                    res += dfs(i,j,n);
+                }
+            }
+        }
+        cout<<"Case "<<k<<": "<<res<<endl;
+    }
+
+    return 0;
+}   
