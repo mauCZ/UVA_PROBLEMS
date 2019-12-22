@@ -1,0 +1,108 @@
+/*
+ID: madavai1
+LANG: C++
+TASK: ride
+*/
+#include <iostream>
+#include <vector>
+#include <fstream>
+#include <algorithm>
+#include <map>
+#include <set>
+#include <unordered_map>
+#include <iomanip>
+#include <math.h>
+#include <stack>
+#include <queue>
+using namespace std;
+ 
+#define pb push_back
+#define f first
+#define s second
+#define endl '\n'
+#define EPS 1e-9
+#define PI acos(-1)
+ 
+using ll = unsigned long long;
+using pll = pair<ll,ll>;
+using ii = pair<int,int>;
+using iii = pair<pair<int,int>,int>;
+using viii = vector<iii>;
+using vi = vector<int>;
+using vii = vector<ii>;
+using vll = vector<ll>;
+using ui = unsigned int;
+
+ofstream out("output.txt");
+ifstream in("intput.txt");
+
+map<string,vector<string>> grafo;
+map<string,int> distancia;
+map<string,string> padre;
+
+void bfs(string nodo){
+    for(auto it = grafo.begin();it!=grafo.end();it++){
+        distancia[it->f] = -1;
+        padre[it->f] = "n";
+    }
+    distancia[nodo] = 0;
+    padre[nodo] = nodo;
+    queue<string> q;
+    q.push(nodo);
+    string actual;
+    while(!q.empty()){   
+        actual = q.front();
+        q.pop();
+        for(string vecino : grafo[actual]){
+            if(distancia[vecino] == -1){
+                distancia[vecino] = distancia[actual]+1;
+                padre[vecino] = actual;
+                q.push(vecino);
+            }
+        }
+    }
+}
+void mostrarCamino(string comienzo){
+    if(comienzo != padre[comienzo]){
+        mostrarCamino(padre[comienzo]);
+        cout<<padre[comienzo]<<" "<<comienzo<<endl;
+    }
+}
+int main() {
+
+    ios_base::sync_with_stdio(false);
+
+    int n,cont = 1;
+
+    while(cin>>n){
+        
+        string a,b,x,y;
+        grafo.clear();
+        distancia.clear();
+        padre.clear();
+        for(int i =0;i<n;i++){
+            cin>>a>>b;
+            grafo[a].pb(b);
+            grafo[b].pb(a);
+        }
+        cin>>x>>y;
+
+        bfs(x);
+        if(cont> 1){
+            cout<<endl;
+        }
+        cont++;
+        if(grafo.find(x) == grafo.end() || grafo.find(y) == grafo.end()){
+            cout<<"No route"<<endl;
+        }
+        else if(distancia[y] == -1){
+            cout<<"No route"<<endl;
+        }
+        else{
+            mostrarCamino(y);
+        }
+    }
+    
+    return 0;
+}   
+
