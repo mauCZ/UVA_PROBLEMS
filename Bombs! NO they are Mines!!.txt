@@ -1,0 +1,120 @@
+#include <iostream>
+#include <vector>
+#include <fstream>
+#include <algorithm>
+#include <map>
+#include <set>
+#include <unordered_map>
+#include <unordered_set>
+#include <iomanip>
+#include <math.h>
+#include <queue>
+#include <stack>
+using namespace std;
+     
+#define pb push_back
+#define f first
+#define s second
+#define endl '\n'
+#define EPS 1e-9
+#define PI acos(-1)
+     
+using ll = unsigned long long;
+using pll = pair<ll,ll>;
+using ii = pair<int,int>;
+using vi = vector<int>;
+using vii = vector<ii>;
+using vll = vector<ll>;
+using ui = unsigned int;
+
+int grilla[1002][1002];
+int distancias[1002][1002];
+
+bool adentro(int x,int y,int filas,int columnas){
+    return x>=0&&x<filas&&y>=0&&y<columnas;
+}
+
+void bfs(int iniX,int iniY,int filas,int columnas){
+    queue<ii> q;
+    for(int i =0;i<filas;i++){
+        for(int j =0;j<columnas;j++){
+            distancias[i][j] = -1;
+        }
+    }
+    distancias[iniX][iniY] = 0;
+    q.push({iniX,iniY});
+
+    ii actual;
+    int xAct, yAct;
+    while(!q.empty()){
+        actual = q.front(); q.pop();
+        xAct = actual.f;
+        yAct = actual.s;
+
+        if(adentro(xAct+1,yAct,filas,columnas)){
+            if(grilla[xAct+1][yAct] == 0){
+                if(distancias[xAct+1][yAct] == -1){
+                    q.push({xAct+1,yAct});
+                    distancias[xAct+1][yAct] = distancias[xAct][yAct]+1;
+                }
+            }
+        }
+        if(adentro(xAct-1,yAct,filas,columnas)){
+            if(grilla[xAct-1][yAct] == 0){
+                if(distancias[xAct-1][yAct] == -1){
+                    q.push({xAct-1,yAct});
+                    distancias[xAct-1][yAct] = distancias[xAct][yAct]+1;
+                }
+            }
+        }
+        if(adentro(xAct,yAct+1,filas,columnas)){
+            if(grilla[xAct][yAct+1] == 0){
+                if(distancias[xAct][yAct+1] == -1){
+                    q.push({xAct,yAct+1});
+                    distancias[xAct][yAct+1] = distancias[xAct][yAct]+1;
+                }
+            }
+        }
+        if(adentro(xAct,yAct-1,filas,columnas)){
+            if(grilla[xAct][yAct-1] == 0){
+                if(distancias[xAct][yAct-1] == -1){
+                    q.push({xAct,yAct-1});
+                    distancias[xAct][yAct-1] = distancias[xAct][yAct]+1;
+                }
+            }
+        }
+    }
+}
+
+int main() {
+    ofstream out("output.txt");
+    ios_base::sync_with_stdio(false);
+
+    int r,c,n,fil,col,bombas;
+    int iniX,iniY,finX,finY;
+
+    while(cin>>r>>c && (r!=0 || c!=0)){
+        for(int i =0;i<r;i++){
+            for(int j =0;j<c;j++){
+                grilla[i][j] = 0;
+                distancias[i][j] = -1;
+            }
+        }
+        cin>>n;
+        for(int i =0;i<n;i++){
+            cin>>fil>>bombas;
+            for(int k =0;k<bombas;k++){
+                cin>>col;
+                grilla[fil][col] = -1;
+            }
+        }
+        cin>>iniX>>iniY>>finX>>finY;
+
+        bfs(iniX,iniY,r,c);
+        cout<<distancias[finX][finY]<<endl;
+    }
+
+
+    return 0;
+}   
+
