@@ -1,0 +1,95 @@
+#include <iostream>
+#include <vector>
+#include <fstream>
+#include <algorithm>
+#include <map>
+#include <set>
+#include <unordered_map>
+#include <iomanip>
+#include <math.h>
+#include <queue>
+#include <stack>
+using namespace std;
+ 
+#define pb push_back
+#define f first
+#define s second
+#define endl '\n'
+#define EPS 1e-9
+#define PI acos(-1)
+ 
+using ll = unsigned long long;
+using pll = pair<ll,ll>;
+using ii = pair<int,int>;
+using iii = pair<pair<int,int>,int>;
+using viii = vector<iii>;
+using vi = vector<int>;
+using vii = vector<ii>;
+using vll = vector<ll>;
+using ui = unsigned int;
+
+map<string,vector<string>> grafo;
+map<string,string> padre;
+
+void bfs(string a){
+
+    for(auto it = grafo.begin();it!=grafo.end();it++){
+        padre[it->f] = "x";
+    }
+    padre[a] = a;
+    queue<string> q;
+    q.push(a);
+    string actual;
+    while(!q.empty()){
+        actual = q.front(); q.pop();
+
+        for(string vecino : grafo[actual]){
+            if(padre[vecino] == "x"){
+                q.push(vecino);
+                padre[vecino] = actual;
+            }
+        }
+    }
+}
+
+int main() {
+    ofstream out("output.txt");
+    ifstream in("input.txt");
+    ios_base::sync_with_stdio(false);
+
+
+    int n;
+    cin>>n;
+    string a,b,camino;
+    for(int k =0;k<n;k++){
+        int m,n;
+        cin>>m>>n;
+        grafo.clear();
+        padre.clear();
+        for(int i =0;i<m;i++){
+            cin>>a>>b;
+            grafo[a].pb(b);
+            grafo[b].pb(a);
+        }
+        if(k >0){
+            cout<<endl;
+            out<<endl;
+        }
+        for(int i =0;i<n;i++){
+            cin>>a>>b;
+            bfs(a);
+            camino = "";
+            while(padre[b]!=b){
+                camino += b[0];
+                b = padre[b];
+            }
+            camino += b[0];
+            reverse(camino.begin(),camino.end());
+            cout<<camino<<endl;
+            out<<camino<<endl;
+        }
+    }
+
+    return 0;
+}   
+
