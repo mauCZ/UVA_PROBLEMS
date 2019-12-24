@@ -1,0 +1,103 @@
+#include <iostream>
+#include <vector>
+#include <fstream>
+#include <algorithm>
+#include <map>
+#include <set>
+#include <unordered_map>
+#include <iomanip>
+#include <math.h>
+#include <queue>
+#include <stack>
+using namespace std;
+ 
+#define pb push_back
+#define f first
+#define s second
+#define endl '\n'
+#define EPS 1e-9
+#define PI acos(-1)
+ 
+using ll = unsigned long long;
+using pll = pair<ll,ll>;
+using ii = pair<int,int>;
+using iii = pair<pair<int,int>,int>;
+using viii = vector<iii>;
+using vi = vector<int>;
+using vii = vector<ii>;
+using vll = vector<ll>;
+using ui = unsigned int;
+
+vi grafo[2505];
+int nivel[2505];
+
+void bfs(int ini,int n){
+    for(int i =0;i<n;i++){
+        nivel[i] = -1;
+    }
+    nivel[ini] = 0;
+    queue<int> q;
+    q.push(ini);
+    int actual;
+    while(!q.empty()){
+        actual = q.front(); q.pop();
+        for(int vecino : grafo[actual]){
+            if(nivel[vecino] == -1){
+                q.push(vecino);
+                nivel[vecino] = nivel[actual]+1;
+            }
+        }
+    }
+}
+
+int main() {
+    ofstream out("output.txt");
+    ifstream in("input.txt");
+    ios_base::sync_with_stdio(false);
+
+    int n,a,b;
+    cin>>n;
+    for(int k =0;k<n;k++){
+        cin>>a;
+        for(int j =0;j<a;j++){
+            cin>>b;
+            grafo[k].pb(b);
+        }
+    }
+    int m;
+    cin>>m;
+    for(int i =0;i<m;i++){
+        cin>>b;
+        bfs(b,n);
+        int mejor = 0;
+        int aux[n];
+        for(int i =0;i<n;i++) aux[i] =0;
+
+        for(int i =0;i<n;i++){
+            if(i != b)
+                aux[nivel[i]]++;
+        }
+        for(int i =0;i<n;i++){
+            mejor = max(mejor,aux[i]);
+        }
+
+        if(mejor == 0){
+            cout<<0<<endl;
+        }
+        else{
+            int res;
+            for(int i =0;i<n;i++){
+                if(aux[i] == mejor){
+                    res = i;
+                    break;
+                }
+            }
+            cout<<mejor<<" "<<res<<endl;
+        }
+        
+    }
+
+
+    return 0;
+}   
+
