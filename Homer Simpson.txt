@@ -1,0 +1,94 @@
+#include <iostream>
+#include <vector>
+#include <fstream>
+#include <algorithm>
+#include <map>
+#include <set>
+#include <unordered_map>
+#include <iomanip>
+#include <math.h>
+#include <queue>
+#include <stack>
+using namespace std;
+ 
+#define pb push_back
+#define f first
+#define s second
+#define endl '\n'
+#define EPS 1e-9
+#define PI acos(-1)
+ 
+using ll = unsigned long long;
+using pll = pair<ll,ll>;
+using ii = pair<int,int>;
+using iii = pair<pair<int,int>,int>;
+using viii = vector<iii>;
+using vi = vector<int>;
+using vii = vector<ii>;
+using vll = vector<ll>;
+using ui = unsigned int;
+	
+ii dp[100005];
+int n,m,t;
+void iniciar(){
+	for(int i =0;i<100005;i++){
+		dp[i] = {-1,-1};
+	}
+}
+
+ii mejor(ii a,ii b){
+	if(a.s < b.s) return a;
+	if(a.s > b.s) return b;
+	if(a.f > b.f) return a;
+	return b;
+}
+
+ii f(int t){
+	ii res;
+	if(t == 0){
+		res = {0,0};
+	}
+	else if(dp[t].f == -1){
+		ii aux1,aux2;
+		if(t < n){
+			aux1 = {0,t};
+		}
+		else{
+			aux1 = f(t-n);
+			aux1.f ++;
+		}
+		if(t < m){
+			aux2 = {0,t};
+		}
+		else{
+			aux2 = f(t-m);
+			aux2.f++;
+		}
+		res = mejor(aux1,aux2);
+		dp[t] = res;
+	}
+	else{
+		res = dp[t];
+	}
+	return res;
+}
+
+int main() {
+    ofstream out("output.txt");
+    ios_base::sync_with_stdio(false);
+	
+	
+	while(cin>>n>>m>>t){
+		iniciar();
+		ii res = f(t);
+		if(res.s == 0){
+			cout<<res.f<<endl;
+		}
+		else{
+			cout<<res.f<<" "<<res.s<<endl;
+		}
+	}
+
+    return 0;
+}   
+
