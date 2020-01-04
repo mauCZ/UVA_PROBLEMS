@@ -1,0 +1,68 @@
+
+
+import java.util.*;
+import java.io.*;
+
+public class Main {
+
+	public static void main(String[] args) throws Exception{
+		BufferedReader in = new BufferedReader(new InputStreamReader(System.in));
+		PrintWriter out = new PrintWriter(System.out);
+		
+		int n;
+		String s,t,respuesta,t2;
+		HashSet<Character> se = new HashSet<>();
+		HashSet<Character> aux = new HashSet<>();
+		while(true) {
+			n = Integer.parseInt(in.readLine());
+			if(n == -1) {
+				break;
+			}
+			se.clear();
+			aux.clear();
+			s = in.readLine();
+			t = in.readLine();
+			for(int i =0;i<s.length();i++) {
+				se.add(s.charAt(i));
+			}
+			int letras = se.size();
+			
+			int l = t.length(),vidas = 7;
+			for(int i =0;i<l;i++) {
+				aux.add(t.charAt(i));
+			}
+			t2 = "";
+			for(int i =0;i<l;i++) {
+				if(!t2.contains(t.charAt(i)+"")) {
+					t2 += t.charAt(i);
+				}
+			}
+			
+			for(int i =0;i<t2.length();i++) {
+				if(se.contains(t2.charAt(i))) {
+					letras--;
+				}
+				else {
+					vidas--;
+					}
+				if(vidas == 0 || letras == 0) break;
+			}
+			if(vidas == 0) {
+				respuesta = "You lose.";
+			}
+			else if(letras == 0) {
+				respuesta = "You win.";
+			}
+			else {
+				respuesta = "You chickened out.";
+			}
+			
+			out.println("Round "+n);
+			out.println(respuesta);
+		}
+		
+		out.flush();
+	}
+
+}
+
