@@ -1,0 +1,91 @@
+#include <iostream>
+#include <fstream>
+using namespace std;
+
+int main() {
+	ofstream out("output.txt");
+    ios_base::sync_with_stdio(false);
+	
+	int t;
+	cin>>t;
+	while(t--){
+		int m,n,q;
+		cin>>m>>n>>q;
+		char a[m][n];
+		for(int i =0;i<m;i++){
+			for(int j =0;j<n;j++){
+				cin>>a[i][j];
+			}
+		}
+		int z = 0;
+		out<<m<<" "<<n<<" "<<q<<endl;
+		cout<<m<<" "<<n<<" "<<q<<endl;
+		
+		while(z<q){
+			int x,y;
+			cin>>x>>y;
+			int minDiag = 100000000;
+			int act = 0;
+			int i =x,j = y;
+			while(i>=0&&i<m&&j>=0&&j<n && a[i][j] == a[x][y]){
+				
+				act++;
+				i--;
+				j--;
+			}
+			minDiag = min(minDiag,act);
+			i = x; j = y;
+			act = 0;
+			while(i>=0&&i<m&&j>=0&&j<n && a[i][j] == a[x][y]){
+				act++;
+				i++;
+				j--;
+			}
+			minDiag = min(minDiag,act);
+			i = x; j = y;
+			act = 0;
+			while(i>=0&&i<m&&j>=0&&j<n && a[i][j] == a[x][y]){
+				act++;
+				i--;
+				j++;
+			}
+			minDiag = min(minDiag,act);
+			i = x; j = y;
+			act = 0;
+			while(i>=0&&i<m&&j>=0&&j<n && a[i][j] == a[x][y]){
+				act++;
+				i++;
+				j++;
+			}
+			minDiag = min(minDiag,act);
+			minDiag--;
+			int res = 1;
+			char centro = a[x][y];
+			for(int i =1;i<=minDiag;i++){
+				bool sePuede = true;
+				for(int k = y-i;k<=y+i;k++){
+					sePuede &= (a[x-i][k] == centro);
+				}
+				for(int k = x-i;k<=x+i;k++){
+					sePuede &= (a[k][y+i] == centro);
+				}
+				for(int k = y+i;k>=y-i;k--){
+					sePuede &= (a[x+i][k] == centro);
+				}
+				for(int k = x+i;k>=x-i;k--){
+					sePuede &= (a[k][y-i] == centro);
+				}
+				if(sePuede){
+					res = 2*i + 1;
+				}
+				else break;
+			}
+			out<<res<<endl;
+			cout<<res<<endl;
+			z++;
+		}
+	}
+	
+	return 0;
+}
+
