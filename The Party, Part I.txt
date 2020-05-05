@@ -1,0 +1,87 @@
+#include <iostream>
+#include <vector>
+#include <fstream>
+#include <algorithm>
+#include <map>
+#include <set>
+#include <unordered_map>
+#include <iomanip>
+#include <math.h>
+#include <queue>
+#include <stack>
+#include <bitset>
+using namespace std;
+ 
+#define pb push_back
+#define f first
+#define s second
+#define endl '\n'
+#define EPS 1e-9
+#define PI acos(-1)
+ 
+using ll = long long;
+using pll = pair<ll,ll>;
+using ii = pair<ll,ll>;
+using iii = pair<pair<int,int>,int>;
+using viii = vector<iii>;
+using vi = vector<int>;
+using vii = vector<ii>;
+using vll = vector<ll>;
+using ui = unsigned int;
+
+
+
+int main() {
+    ofstream out("output.txt");
+    ios_base::sync_with_stdio(false);
+    
+    queue<int> q;
+    int cont = 0;
+    int n;
+    cin>>n;
+    for(int i =0;i<n;i++){
+		int vertice,arista;
+		cin>>vertice>>arista;
+		int a,b;
+		vector<int> grafo[vertice];
+		int grado[vertice];
+		for(int i =0;i<vertice;i++){
+			grado[i] = 0;
+		}
+		grado[0] = 0;
+		for(int j=0;j<arista;j++){
+			cin>>a>>b;
+			grafo[a].push_back(b);
+			grafo[b].push_back(a);
+		}
+		bool visitado[vertice+1];
+		
+		for(int i =0;i<vertice;i++){
+			visitado[i] = false;
+		}
+		visitado[0] = true;
+		q.push(0);
+		while(!q.empty()){
+			int act = q.front();
+			q.pop();
+			
+			for(int k =0;k<grafo[act].size();k++){
+				int vecino = grafo[act][k];
+				if(!visitado[vecino]){
+					q.push(vecino);
+					grado[vecino] = grado[act]+1;
+					visitado[vecino] = true;
+				}
+			}
+		}
+		if(cont++>0){
+			cout<<endl;
+		}
+		for(int i =1;i<vertice;i++){
+			cout<<grado[i]<<endl;	
+		}
+	}
+    
+    return 0;
+}   
+
