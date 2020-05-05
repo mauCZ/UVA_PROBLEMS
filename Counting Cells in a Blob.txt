@@ -1,0 +1,82 @@
+#include <iostream>
+#include <vector>
+#include <fstream>
+#include <algorithm>
+#include <map>
+#include <set>
+#include <unordered_map>
+#include <iomanip>
+#include <math.h>
+#include <queue>
+#include <stack>
+#include <bitset>
+using namespace std;
+ 
+#define pb push_back
+#define f first
+#define s second
+#define endl '\n'
+#define EPS 1e-9
+#define PI acos(-1)
+ 
+using ll = long long;
+using pll = pair<ll,ll>;
+using ii = pair<ll,ll>;
+using iii = pair<pair<int,int>,int>;
+using viii = vector<iii>;
+using vi = vector<int>;
+using vii = vector<ii>;
+using vll = vector<ll>;
+using ui = unsigned int;
+
+bool visitado[100][100];
+
+int dfs(int i,int j,int fil,int col,vector<string> &filas){
+	if(!(i>=0&&i<fil&&j>=0&&j<col)) return 0;
+	if(visitado[i][j]) return 0;
+	if(filas[i][j] == '0') return 0;
+	visitado[i][j] = true;
+	return 1+dfs(i+1,j,fil,col,filas)+dfs(i-1,j,fil,col,filas)
+	 + dfs(i,j+1,fil,col,filas)+dfs(i,j-1,fil,col,filas)+
+	 dfs(i+1,j+1,fil,col,filas)+dfs(i+1,j-1,fil,col,filas)
+	 +dfs(i-1,j+1,fil,col,filas)+dfs(i-1,j-1,fil,col,filas);
+}
+
+int main() {
+    ofstream out("output.txt");
+    ios_base::sync_with_stdio(false);
+	
+	int n;
+	cin>>n;
+	cin.ignore();
+	cin.ignore();
+	string fila;
+	vector<string> filas;
+	for(int k =0;k<n;k++){
+		filas.clear();
+		while(getline(cin,fila) && fila.size() > 0){
+			filas.push_back(fila);
+		}
+		int fil = filas.size();
+		int col = filas[0].size();
+		int res = 0;
+		for(int i =0;i<fil;i++){
+			for(int j =0;j<col;j++){
+				visitado[i][j] = false;
+			}
+		}
+		for(int i =0;i<fil;i++){
+			for(int j =0;j<col;j++){
+				if(filas[i][j] == '1' && visitado[i][j] == false){				
+					res = max(res,dfs(i,j,fil,col,filas));
+				}
+			}
+		}
+		
+		if(k >0) cout<<endl;
+		cout<<res<<endl;
+	}
+	
+    return 0;
+}   
+
