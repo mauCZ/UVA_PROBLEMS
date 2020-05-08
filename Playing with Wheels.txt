@@ -1,0 +1,129 @@
+#include <iostream>
+#include <vector>
+#include <fstream>
+#include <algorithm>
+#include <map>
+#include <set>
+#include <unordered_map>
+#include <iomanip>
+#include <math.h>
+#include <queue>
+#include <stack>
+#include <bitset>
+using namespace std;
+ 
+#define pb push_back
+#define f first
+#define s second
+#define endl '\n'
+#define EPS 1e-9
+#define PI acos(-1)
+ 
+using ll = long long;
+using pll = pair<ll,ll>;
+using ii = pair<ll,ll>;
+using iii = pair<pair<int,int>,int>;
+using viii = vector<iii>;
+using vi = vector<int>;
+using vii = vector<ii>;
+using vll = vector<ll>;
+using ui = unsigned int;
+using iiii = pair<pair<int,int>,pair<int,int>>;
+
+int add(int a){
+	if(a == 9) return 0;
+	else return a+1;
+}
+int sus(int a){
+	if(a == 0) return 9;
+	else return a-1;
+}
+int distancia[10][10][10][10];
+
+bool valido(int a,int b,int c,int d){
+	return distancia[a][b][c][d] != -10 && distancia[a][b][c][d] == -1;
+}
+int main() {
+    ofstream out("output.txt");
+    ios_base::sync_with_stdio(false);
+    
+    int n;
+    cin>>n;
+    for(int x =0;x<n;x++){
+		vi inicio(4);
+		vi target(4);
+		cin>>inicio[0]>>inicio[1]>>inicio[2]>>inicio[3];
+		cin>>target[0]>>target[1]>>target[2]>>target[3];
+		int m;
+		cin>>m;
+		vector<vi> prohibidos(m);
+		vi prohibido;
+		int val;
+		for(int j=0;j<m;j++){
+			for(int k =0;k<4;k++){
+				cin>>val;
+				prohibido.push_back(val);
+			}
+			prohibidos[j] = prohibido;
+			prohibido.clear();
+		}
+		for(int i =0;i<10;i++){
+			for(int j =0;j<10;j++){
+				for(int k=0;k<10;k++){
+					for(int m=0;m<10;m++){
+						distancia[i][j][k][m] = -1;
+					}
+				}
+			}
+		}
+		for(int i =0;i<m;i++){
+			distancia[prohibidos[i][0]][prohibidos[i][1]][prohibidos[i][2]][prohibidos[i][3]] = -10;
+		}
+		queue<iiii> q;
+		distancia[inicio[0]][inicio[1]][inicio[2]][inicio[3]] = 0;
+		q.push({{inicio[0],inicio[1]},{inicio[2],inicio[3]}});
+		iiii act;
+		while(!q.empty()){
+			act = q.front(); q.pop();
+			
+			if(valido(add(act.f.f),act.f.s,act.s.f,act.s.s)){
+				q.push({{add(act.f.f),act.f.s},{act.s.f,act.s.s}});
+				distancia[add(act.f.f)][act.f.s][act.s.f][act.s.s] = 1+distancia[act.f.f][act.f.s][act.s.f][act.s.s];
+			}
+			if(valido(sus(act.f.f),act.f.s,act.s.f,act.s.s)){
+				q.push({{sus(act.f.f),act.f.s},{act.s.f,act.s.s}});
+				distancia[sus(act.f.f)][act.f.s][act.s.f][act.s.s] = 1+distancia[act.f.f][act.f.s][act.s.f][act.s.s];
+			}
+			if(valido(act.f.f,add(act.f.s),act.s.f,act.s.s)){
+				q.push({{act.f.f,add(act.f.s)},{act.s.f,act.s.s}});
+				distancia[act.f.f][add(act.f.s)][act.s.f][act.s.s] = 1+distancia[act.f.f][act.f.s][act.s.f][act.s.s];
+			}
+			if(valido(act.f.f,sus(act.f.s),act.s.f,act.s.s)){
+				q.push({{act.f.f,sus(act.f.s)},{act.s.f,act.s.s}});
+				distancia[act.f.f][sus(act.f.s)][act.s.f][act.s.s] = 1+distancia[act.f.f][act.f.s][act.s.f][act.s.s];
+			}
+			if(valido(act.f.f,act.f.s,add(act.s.f),act.s.s)){
+				q.push({{act.f.f,act.f.s},{add(act.s.f),act.s.s}});
+				distancia[act.f.f][act.f.s][add(act.s.f)][act.s.s] = 1+distancia[act.f.f][act.f.s][act.s.f][act.s.s];
+			}
+			if(valido(act.f.f,act.f.s,sus(act.s.f),act.s.s)){
+				q.push({{act.f.f,act.f.s},{sus(act.s.f),act.s.s}});
+				distancia[act.f.f][act.f.s][sus(act.s.f)][act.s.s] = 1+distancia[act.f.f][act.f.s][act.s.f][act.s.s];
+			}
+			if(valido(act.f.f,act.f.s,act.s.f,sus(act.s.s))){
+				q.push({{act.f.f,act.f.s},{act.s.f,sus(act.s.s)}});
+				distancia[act.f.f][act.f.s][act.s.f][sus(act.s.s)] = 1+distancia[act.f.f][act.f.s][act.s.f][act.s.s];
+			}
+			if(valido(act.f.f,act.f.s,act.s.f,add(act.s.s))){
+				q.push({{act.f.f,act.f.s},{act.s.f,add(act.s.s)}});
+				distancia[act.f.f][act.f.s][act.s.f][add(act.s.s)] = 1+distancia[act.f.f][act.f.s][act.s.f][act.s.s];
+			}	
+		}
+		distancia[target[0]][target[1]][target[2]][target[3]]==-10?cout<<-1<<endl:cout<<distancia[target[0]][target[1]][target[2]][target[3]]<<endl;
+		distancia[target[0]][target[1]][target[2]][target[3]]==-10?out<<-1<<endl:out<<distancia[target[0]][target[1]][target[2]][target[3]]<<endl;
+	}
+    
+    
+    return 0;
+}   
+
