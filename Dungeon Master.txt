@@ -1,0 +1,160 @@
+#include <iostream>
+#include <vector>
+#include <fstream>
+#include <algorithm>
+#include <map>
+#include <set>
+#include <unordered_map>
+#include <iomanip>
+#include <math.h>
+#include <queue>
+#include <stack>
+#include <stdlib.h>
+using namespace std;
+ 
+#define pb push_back
+#define f first
+#define s second
+#define endl '\n'
+#define EPS 1e-9
+#define PI acos(-1)
+ 
+using ll = long long;
+using pll = pair<ll,ll>;
+using ii = pair<int,int>;
+using iii = pair<pair<int,int>,int>;
+using viii = vector<iii>; 
+using vi = vector<int>;
+using vii = vector<ii>;
+using vll = vector<ll>;
+using ui = unsigned int;
+
+bool valido(iii actual,int niveles,int fil,int col){
+	int i = actual.f.f;
+	int j = actual.f.s;
+	int l = actual.s;
+	return l>=0&&l<niveles&&i>=0&&i<fil&&j>=0&&j<col;
+}
+
+int main() {
+	
+	int niveles,fil,col;
+	
+	while(cin>>niveles>>fil>>col && (niveles!=0||fil!=0||col!=0)){
+		vector<vector<vector<char>>> grafo;
+		vector<vector<char>> nivel;
+		vector<char> fila;
+		char c;
+		int xIni,yIni,lIni,xFin,yFin,lFin;
+		for(int k =0;k<niveles;k++){
+			for(int i =0;i<fil;i++){
+				for(int j =0;j<col;j++){	
+					cin>>c;
+					fila.push_back(c);
+					if(c == 'S'){
+						xIni = i;
+						yIni = j;
+						lIni = k;
+					}
+					else if(c == 'E'){
+						xFin = i;
+						yFin = j;
+						lFin = k	;
+					}
+				}
+				nivel.push_back(fila);
+				fila.clear();
+			}
+			grafo.push_back(nivel);
+			nivel.clear();
+		}
+		
+		vector< vector<vector<int>> > distancia(niveles);
+		vector<vector<int>> mat;
+		vector<int> filita;
+		for(int k=0;k<niveles;k++){
+			for(int i =0;i<fil;i++){
+				for(int j =0;j<col;j++){
+					filita.push_back(-1);
+				}
+				mat.push_back(filita);
+				filita.clear();
+			}
+			distancia[k] = mat;
+			mat.clear();
+		}
+		
+		queue<iii> q;
+		distancia[lIni][xIni][yIni] = 0;
+		q.push({{xIni,yIni},lIni});
+		iii act;
+		iii v1,v2,v3,v4,v5,v6;
+		while(!q.empty()){
+			act = q.front();
+			q.pop();
+			//conseguir los vecinos
+			v1 = {{act.f.f+1,act.f.s},act.s};
+			v2 = {{act.f.f-1,act.f.s},act.s};
+			v3 = {{act.f.f,act.f.s+1,},act.s};
+			v4 = {{act.f.f,act.f.s-1},act.s};
+			v5 = {{act.f.f,act.f.s},act.s+1};
+			v6 = {{act.f.f,act.f.s},act.s-1};
+			if(valido(v1,niveles,fil,col)){
+				if(grafo[v1.s][v1.f.f][v1.f.s] != '#' && distancia[v1.s][v1.f.f][v1.f.s] == -1){
+					q.push(v1);
+					distancia[v1.s][v1.f.f][v1.f.s] = 1+distancia[act.s][act.f.f][act.f.s];
+				}
+			}
+			if(valido(v2,niveles,fil,col)){
+				if(grafo[v2.s][v2.f.f][v2.f.s] != '#' && distancia[v2.s][v2.f.f][v2.f.s] == -1){
+					q.push(v2);
+					distancia[v2.s][v2.f.f][v2.f.s] = 1+distancia[act.s][act.f.f][act.f.s];
+				}
+			}
+			if(valido(v3,niveles,fil,col)){
+				if(grafo[v3.s][v3.f.f][v3.f.s] != '#' && distancia[v3.s][v3.f.f][v3.f.s] == -1){
+					q.push(v3);
+					distancia[v3.s][v3.f.f][v3.f.s] = 1+distancia[act.s][act.f.f][act.f.s];
+				}
+			}
+			if(valido(v4,niveles,fil,col)){
+				if(grafo[v4.s][v4.f.f][v4.f.s] != '#' && distancia[v4.s][v4.f.f][v4.f.s] == -1){
+					q.push(v4);
+					distancia[v4.s][v4.f.f][v4.f.s] = 1+distancia[act.s][act.f.f][act.f.s];
+				}
+			}
+			if(valido(v5,niveles,fil,col)){
+				if(grafo[v5.s][v5.f.f][v5.f.s] != '#' && distancia[v5.s][v5.f.f][v5.f.s] == -1){
+					q.push(v5);
+					distancia[v5.s][v5.f.f][v5.f.s] = 1+distancia[act.s][act.f.f][act.f.s];
+				}
+			}
+			if(valido(v6,niveles,fil,col)){
+				if(grafo[v6.s][v6.f.f][v6.f.s] != '#' && distancia[v6.s][v6.f.f][v6.f.s] == -1){
+					q.push(v6);
+					distancia[v6.s][v6.f.f][v6.f.s] = 1+distancia[act.s][act.f.f][act.f.s];
+				}
+			}
+		}
+		if(distancia[lFin][xFin][yFin] == -1){
+			cout<<"Trapped!"<<endl;
+		}
+		else{
+			cout<<"Escaped in "<<distancia[lFin][xFin][yFin]<<" minute(s)."<<endl;
+		}
+	}
+	
+	
+	return 0;
+}   
+
+
+
+
+
+
+
+
+
+
+
