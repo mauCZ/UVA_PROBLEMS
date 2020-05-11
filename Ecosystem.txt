@@ -1,0 +1,76 @@
+#include <iostream>
+#include <vector>
+#include <fstream>
+#include <algorithm>
+#include <map>
+#include <set>
+#include <unordered_map>
+#include <iomanip>
+#include <math.h>
+#include <queue>
+#include <stack>
+#include <bitset>
+using namespace std;
+ 
+#define pb push_back
+#define f first
+#define s second
+#define endl '\n'
+#define EPS 1e-9
+#define PI acos(-1)
+ 
+using ll = long long;
+using pll = pair<ll,ll>;
+using ii = pair<ll,ll>;
+using iii = pair<pair<int,int>,int>;
+using viii = vector<iii>;
+using vi = vector<int>;
+using vii = vector<ii>;
+using vll = vector<ll>;
+using ui = unsigned int;
+
+
+int main() {
+    ofstream out("output.txt");
+    ios_base::sync_with_stdio(false);
+	
+	int n;
+	int cont = 0;
+	while(cin>>n){
+		int m[n+1][n+1];
+		for(int i =1;i<=n;i++){
+			for(int j=1;j<=n;j++){
+				cin>>m[i][j];
+			}
+		}
+		bool control[n+1];
+		vector<iii> r;
+		
+		for(int i =0;i<=n;i++) control[i] = false;
+		for(int i =1;i<=n;i++){
+			control[i] = true;
+			for(int j =1;j<=n;j++){
+				if(!control[j]){
+					control[j] = true;
+					for(int k = 1;k<=n;k++){
+						if(!control[k]){
+							if(((i<j&&j<k) || (i>j&&j>k)) && ((m[i][j]&&m[j][k]&&m[k][i]))){
+								r.push_back({{i,j},k});
+							}
+						}
+					}
+					control[j] = false;
+				}
+				
+			}
+			control[i] = false;
+		}
+		for(int i =0;i<r.size();i++){
+			cout<<r[i].f.f<<" "<<r[i].f.s<<" "<<r[i].s<<endl;
+		}
+		cout<<"total:"<<r.size()<<endl<<endl;
+	}
+		
+    return 0;
+}   
+
