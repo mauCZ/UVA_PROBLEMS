@@ -1,0 +1,68 @@
+#include <iostream>
+#include <vector>
+#include <fstream>
+#include <algorithm>
+#include <map>
+#include <set>
+#include <unordered_map>
+#include <iomanip>
+#include <math.h>
+#include <queue>
+#include <stack>
+#include <bitset>
+using namespace std;
+ 
+#define pb push_back
+#define f first
+#define s second
+#define endl '\n'
+#define EPS 1e-9
+#define PI acos(-1)
+ 
+using ll = long long;
+using pll = pair<ll,ll>;
+using ii = pair<ll,ll>;
+using iii = pair<pair<int,int>,int>;
+using viii = vector<iii>;
+using vi = vector<int>;
+using vii = vector<ii>;
+using vll = vector<ll>;
+using ui = unsigned int;
+
+
+int main() {
+    ofstream out("output.txt");
+    ios_base::sync_with_stdio(false);
+	
+
+	int n;
+	while(cin>>n){
+		vi ini(n);
+		vi fin(n);
+		for(int i =0;i<n;i++) cin>>ini[i];
+		for(int i =0;i<n;i++) cin>>fin[i];
+		int total =0;
+		while(true){
+			int i =0;
+			while(ini[i] == fin[i] && i<n){
+				i++;
+			}
+			if(i == n){
+				break;
+			}
+			int j =i;
+			while(j<n && fin[i] != ini[j]){
+				j++;
+			}
+			total += (j-i);
+			int elem = ini[j];
+			ini.erase(ini.begin()+j);
+			ini.insert(ini.begin()+i,elem);
+			
+		}
+		cout<<total<<endl;
+	}
+	
+    return 0;
+}   
+
