@@ -1,0 +1,109 @@
+#include <iostream>
+#include <vector>
+#include <fstream>
+#include <algorithm>
+#include <map>
+#include <set>
+#include <unordered_map>
+#include <iomanip>
+#include <math.h>
+#include <queue>
+#include <stack>
+#include <bitset>
+#include <sstream>
+using namespace std;
+
+#define pb push_back
+#define f first
+#define s second
+#define endl '\n'
+#define EPS 1e-9
+#define PI acos(-1)
+ 
+using ll = long long;
+using pll = pair<ll,ll>;
+using ii = pair<ll,ll>;
+using iii = pair<pair<int,int>,int>;
+using viii = vector<iii>;
+using vi = vector<int>;
+using vii = vector<ii>;
+using vll = vector<ll>;
+using ui = unsigned int;
+
+bool cmp(pair<pair<char,char>,int> a,pair<pair<char,char>,int> b){
+	return a.second < b.second;
+}
+map<char,char> padre;
+char find_set(char a){
+	return padre[a] = (padre[a] == a? a:find_set(padre[a]));
+}
+void union_set(char a,char b){
+	char p1 = find_set(a);
+	char p2 = find_set(b);
+	if(p1!=p2){
+		padre[p1] = p2;
+	}
+}
+int main() {
+    ofstream out("output.txt");
+    ios_base::sync_with_stdio(false);
+	
+	int t;
+	cin>>t;
+	string s;
+	istringstream str;
+	for(int k=1;k<=t;k++){
+		int n;
+		cin>>n;
+		cin.ignore();
+		vector<pair<pair<char,char>,int>> aristas;
+		set< pair<pair<char,char>,int> > s1;
+		for(int i ='A';i<'A'+n;i++){
+			str.clear();
+			getline(cin,s);
+			str.str(s);
+			char a,b;
+			int peso;
+			str>>peso;
+			if(peso != 0){
+				a = min((char)i,'A');
+				b = max((char)i,'A');
+				s1.insert({{a,b},peso});
+			}
+			int j =1;
+			while(str>>b>>peso){
+				if(peso!=0 ){
+					a = min((char)i,(char)(j+'A'));
+					b = max((char)i,(char)(j+'A'));
+					s1.insert({{a,b},peso});
+				}
+				j++;
+			}
+		}
+		for(auto it = s1.begin();it!=s1.end();it++){
+			//cout<<"aca "<<(it->f).f<<" "<<(it->f).s<<" "<<it->s<<endl;
+			aristas.push_back({{(it->f).f,(it->f).s},it->s});
+		}
+		sort(aristas.begin(),aristas.end(),cmp);
+		pair<pair<char,char>,int> act;
+		padre.clear();
+		for(int i =0;i<n;i++){
+			padre['A'+i] = ('A'+i);
+		}
+		vector<pair<pair<char,char>,int>> res;
+		for(int i =0;i<aristas.size();i++){
+			act = aristas[i];
+			if(find_set(act.f.f) != find_set(act.f.s)){
+				res.push_back(act);
+				union_set(act.f.f,act.f.s);
+			}
+		}
+		cout<<"Case "<<k<<":\n";
+		for(int i =0;i<res.size();i++){
+			cout<<res[i].f.f<<"-"<<res[i].f.s<<" "<<res[i].s<<endl;
+		}
+		
+	}
+    return 0;
+}   
+
